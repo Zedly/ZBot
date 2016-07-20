@@ -5,7 +5,7 @@
  */
 package zedly.zbot.entity;
 
-import zedly.zbot.api.entity.Creature;
+import zedly.zbot.entity.Creature;
 
 /**
  *

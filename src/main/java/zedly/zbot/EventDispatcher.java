@@ -1,13 +1,13 @@
 package zedly.zbot;
 
-import zedly.zbot.api.event.EventHandler;
-import zedly.zbot.api.event.Listener;
+import zedly.zbot.event.EventHandler;
+import zedly.zbot.event.Listener;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.event.Event;
 
 public class EventDispatcher {
 

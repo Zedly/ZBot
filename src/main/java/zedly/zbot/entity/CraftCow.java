@@ -1,7 +1,7 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.Cow;
+import zedly.zbot.entity.Cow;
 
 public class CraftCow extends CraftAnimal implements Cow {
 

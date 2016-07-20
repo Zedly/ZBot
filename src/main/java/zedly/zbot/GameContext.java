@@ -16,7 +16,6 @@ import zedly.zbot.network.ThreadConnectionWatcher;
 import zedly.zbot.network.ThreadDown;
 import zedly.zbot.network.ThreadLocationUpdater;
 import zedly.zbot.network.ThreadUp;
-import zedly.zbot.api.self.Self;
 import zedly.zbot.network.ThreadChatSender;
 import zedly.zbot.plugin.ZBotPlugin;
 

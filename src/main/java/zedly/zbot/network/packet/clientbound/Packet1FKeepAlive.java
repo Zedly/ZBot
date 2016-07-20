@@ -1,7 +1,7 @@
 package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
-import zedly.zbot.api.event.KeepAliveEvent;
+import zedly.zbot.event.KeepAliveEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 import zedly.zbot.network.packet.serverbound.Packet0BKeepAlive;
 

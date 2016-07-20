@@ -2,16 +2,16 @@ package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
 import zedly.zbot.Location;
-import zedly.zbot.api.entity.Entity;
+import zedly.zbot.entity.Entity;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import zedly.zbot.api.entity.Player;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.EntityOnFireEvent;
-import zedly.zbot.api.event.entity.PlayerSneakEvent;
-import zedly.zbot.api.event.entity.PlayerSprintEvent;
+import zedly.zbot.entity.Player;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.EntityOnFireEvent;
+import zedly.zbot.event.entity.PlayerSneakEvent;
+import zedly.zbot.event.entity.PlayerSprintEvent;
 
 public abstract class CraftEntity implements Entity {
 

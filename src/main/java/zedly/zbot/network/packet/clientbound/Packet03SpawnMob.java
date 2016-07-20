@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 import zedly.zbot.GameContext;
-import zedly.zbot.api.event.entity.EntitySpawnEvent;
+import zedly.zbot.event.entity.EntitySpawnEvent;
 import zedly.zbot.entity.CraftEntity;
 import zedly.zbot.entity.CraftUnknown;
 import zedly.zbot.Location;

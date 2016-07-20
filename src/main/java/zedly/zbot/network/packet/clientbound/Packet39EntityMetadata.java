@@ -7,14 +7,15 @@ package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.entity.CraftEntity;
-import zedly.zbot.entity.EntityMeta;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.EntityMetadataEvent;
+import zedly.zbot.entity.EntityMeta;
+import zedly.zbot.entity.EntityMeta;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.EntityMetadataEvent;
 
 public class Packet39EntityMetadata implements ClientBoundPacket {
 

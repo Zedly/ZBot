@@ -5,7 +5,7 @@
  */
 package zedly.zbot.network;
 
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.inventory.ItemStack;
 import net.minecraft.server.NBTBase;
 import java.io.DataOutputStream;
 import java.io.IOException;

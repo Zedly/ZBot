@@ -6,11 +6,11 @@
 package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
-//import zedly.zbot.api.event.entity.EntityStatusEvent;
+//import zedly.zbot.event.entity.EntityStatusEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.event.Event;
 import zedly.zbot.entity.CraftEntity;
 
 /**

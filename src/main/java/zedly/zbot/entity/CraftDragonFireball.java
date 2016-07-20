@@ -5,7 +5,7 @@
  */
 package zedly.zbot.entity;
 
-import zedly.zbot.api.entity.DragonFireball;
+import zedly.zbot.entity.DragonFireball;
 
 /**
  *

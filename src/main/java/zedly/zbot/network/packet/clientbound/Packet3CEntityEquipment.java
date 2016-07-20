@@ -5,7 +5,7 @@
  */
 package zedly.zbot.network.packet.clientbound;
 
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.inventory.ItemStack;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;

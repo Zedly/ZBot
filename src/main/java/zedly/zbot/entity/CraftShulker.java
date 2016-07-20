@@ -10,8 +10,8 @@ import java.util.List;
 import zedly.zbot.Direction;
 import zedly.zbot.EntityType;
 import zedly.zbot.Location;
-import zedly.zbot.api.entity.Shulker;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.entity.Shulker;
+import zedly.zbot.event.Event;
 
 /**
  *

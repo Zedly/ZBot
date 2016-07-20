@@ -8,12 +8,12 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.block.Block;
-import zedly.zbot.api.entity.Enderman;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.EndermanBlockChangeEvent;
-import zedly.zbot.api.event.entity.EndermanScreamEvent;
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.block.Block;
+import zedly.zbot.entity.Enderman;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.EndermanBlockChangeEvent;
+import zedly.zbot.event.entity.EndermanScreamEvent;
+import zedly.zbot.inventory.ItemStack;
 import zedly.zbot.inventory.CraftItemStack;
 
 /**

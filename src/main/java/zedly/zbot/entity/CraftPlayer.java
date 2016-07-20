@@ -8,10 +8,10 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.Player;
+import zedly.zbot.entity.Player;
 
 import java.util.UUID;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.event.Event;
 
 public class CraftPlayer extends CraftLivingEntity implements Player {
 

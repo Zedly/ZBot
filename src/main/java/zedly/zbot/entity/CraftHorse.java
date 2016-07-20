@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.Horse;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.entity.Horse;
+import zedly.zbot.event.Event;
 
 /**
  *

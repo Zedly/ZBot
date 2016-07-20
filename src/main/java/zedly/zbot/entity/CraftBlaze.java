@@ -8,9 +8,9 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.Blaze;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.BlazeChargeEvent;
+import zedly.zbot.entity.Blaze;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.BlazeChargeEvent;
 
 /**
  *

@@ -5,7 +5,7 @@
  */
 package zedly.zbot.entity;
 
-import zedly.zbot.api.entity.Projectile;
+import zedly.zbot.entity.Projectile;
 
 /**
  *

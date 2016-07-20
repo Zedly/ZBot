@@ -6,8 +6,8 @@
 package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
-import zedly.zbot.api.event.*;
-import zedly.zbot.api.event.entity.EntityArrowHitEvent;
+import zedly.zbot.event.*;
+import zedly.zbot.event.entity.EntityArrowHitEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;

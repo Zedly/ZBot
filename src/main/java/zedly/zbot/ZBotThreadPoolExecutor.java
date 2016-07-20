@@ -1,9 +1,6 @@
 package zedly.zbot;
 
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.event.Event;
 import zedly.zbot.network.packet.clientbound.ClientBoundPacket;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;

@@ -4,7 +4,7 @@ import zedly.zbot.Location;
 import zedly.zbot.GameContext;
 import zedly.zbot.entity.CraftEntity;
 import zedly.zbot.environment.ObjectData;
-import zedly.zbot.api.event.entity.EntitySpawnEvent;
+import zedly.zbot.event.entity.EntitySpawnEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;

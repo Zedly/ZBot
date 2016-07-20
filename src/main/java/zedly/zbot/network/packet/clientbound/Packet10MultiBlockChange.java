@@ -7,7 +7,7 @@ package zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.GameContext;
-import zedly.zbot.api.event.block.BlockChangeEvent;
+import zedly.zbot.event.block.BlockChangeEvent;
 import zedly.zbot.Location;
 import zedly.zbot.network.ExtendedDataInputStream;
 

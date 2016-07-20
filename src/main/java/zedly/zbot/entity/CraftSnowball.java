@@ -6,7 +6,7 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.Snowball;
+import zedly.zbot.entity.Snowball;
 
 /**
  *

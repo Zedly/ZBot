@@ -2,7 +2,7 @@ package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.Util;
-import zedly.zbot.api.event.ChatEvent;
+import zedly.zbot.event.ChatEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;

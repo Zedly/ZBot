@@ -5,8 +5,8 @@
  */
 package zedly.zbot.inventory;
 
-import zedly.zbot.api.block.Material;
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.block.Material;
+import zedly.zbot.inventory.ItemStack;
 import net.minecraft.server.NBTBase;
 
 /**

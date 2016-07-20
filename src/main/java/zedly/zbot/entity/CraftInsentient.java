@@ -7,8 +7,8 @@ package zedly.zbot.entity;
 
 import java.util.HashMap;
 import java.util.List;
-import zedly.zbot.api.entity.Insentient;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.entity.Insentient;
+import zedly.zbot.event.Event;
 
 /**
  *

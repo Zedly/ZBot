@@ -1,6 +1,6 @@
 package zedly.zbot.block;
 
-import zedly.zbot.api.block.Block;
+import zedly.zbot.block.Block;
 import zedly.zbot.Location;
 
 public class CraftBlock implements Block {

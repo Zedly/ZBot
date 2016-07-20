@@ -6,8 +6,8 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.api.block.Material;
-import zedly.zbot.api.entity.DragonEgg;
+import zedly.zbot.block.Material;
+import zedly.zbot.entity.DragonEgg;
 
 /**
  *

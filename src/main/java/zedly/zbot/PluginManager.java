@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 import zedly.zbot.plugin.ZBotPlugin;
-import zedly.zbot.api.self.Self;
+import zedly.zbot.self.Self;
 
 /**
  *

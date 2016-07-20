@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.Direction;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.block.Block;
-import zedly.zbot.api.entity.Minecart;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.block.Block;
+import zedly.zbot.entity.Minecart;
+import zedly.zbot.event.Event;
+import zedly.zbot.inventory.ItemStack;
 import zedly.zbot.inventory.CraftItemStack;
 
 /**

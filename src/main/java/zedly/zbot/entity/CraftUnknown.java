@@ -8,8 +8,8 @@ package zedly.zbot.entity;
 import zedly.zbot.EntityType;
 import java.util.HashMap;
 import java.util.List;
-import zedly.zbot.api.entity.Unknown;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.entity.Unknown;
+import zedly.zbot.event.Event;
 
 /**
  * Fallback class for unimplemented entities

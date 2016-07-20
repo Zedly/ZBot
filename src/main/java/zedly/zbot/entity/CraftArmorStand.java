@@ -8,10 +8,10 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.ArmorStand;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.EntityHealthChangeEvent;
-import zedly.zbot.api.event.entity.EntityPotionEffectEvent;
+import zedly.zbot.entity.ArmorStand;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.EntityHealthChangeEvent;
+import zedly.zbot.event.entity.EntityPotionEffectEvent;
 
 /**
  *

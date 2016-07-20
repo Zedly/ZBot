@@ -8,10 +8,10 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.Creeper;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.CreeperChargeEvent;
-import zedly.zbot.api.event.entity.CreeperFuseEvent;
+import zedly.zbot.entity.Creeper;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.CreeperChargeEvent;
+import zedly.zbot.event.entity.CreeperFuseEvent;
 
 /**
  *

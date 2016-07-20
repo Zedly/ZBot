@@ -6,7 +6,7 @@
 package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
-import zedly.zbot.api.event.UnloadChunkEvent;
+import zedly.zbot.event.UnloadChunkEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;

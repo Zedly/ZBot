@@ -5,7 +5,7 @@
  */
 package zedly.zbot.entity;
 
-import zedly.zbot.api.entity.Golem;
+import zedly.zbot.entity.Golem;
 
 /**
  *

@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
 import zedly.zbot.Location;
-import zedly.zbot.api.block.Material;
-import zedly.zbot.api.entity.FallingBlock;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.block.Material;
+import zedly.zbot.entity.FallingBlock;
+import zedly.zbot.event.Event;
 
 /**
  *

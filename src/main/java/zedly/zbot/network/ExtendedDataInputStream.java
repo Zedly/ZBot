@@ -1,7 +1,7 @@
 package zedly.zbot.network;
 
-import zedly.zbot.entity.EntityMeta;
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.entity.CraftEntityMeta;
+import zedly.zbot.inventory.ItemStack;
 import net.minecraft.server.NBTBase;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.UUID;
 import zedly.zbot.Location;
+import zedly.zbot.entity.EntityMeta;
 import zedly.zbot.inventory.CraftItemStack;
 import zedly.zbot.environment.CraftChunk;
 
@@ -118,7 +119,7 @@ public class ExtendedDataInputStream extends DataInputStream {
             }
             int type = read();
             try {
-                EntityMeta emd = EntityMeta.getByType(type);
+                CraftEntityMeta emd = CraftEntityMeta.getByType(type);
                 emd.read(this);
                 metaMap.put(id, emd);
             } catch (Exception ex) {

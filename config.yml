@@ -1,9 +1,10 @@
+#onlineMode: true
+
 #user: brainibot@outlook.com
 #password: Forbotssake
 
 user: wickersoft@online.de
 password: bot-nao-pls-k-thx
-onlineMode: true
 
 #user: Sonat0r
 #password: 911wouldbang
@@ -11,16 +12,12 @@ onlineMode: true
 #user: ridingaroundonabikeenough@outlook.com
 #password: veresen1
 
-#user: SayakaMiki_
-#onlineMode: false
+user: SayakaMiki_
+onlineMode: false
 
 
-
-#serverIp: st-ho.de
-#serverIp: 127.0.0.1
-#serverIp: 25.31.98.199
-serverIp: 85.131.153.100
-#serverIp: 134.255.208.198
+serverIp: 127.0.0.1
+#serverIp: 85.131.153.100
 
 
 serverPort: 25565

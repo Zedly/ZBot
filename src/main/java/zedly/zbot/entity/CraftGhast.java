@@ -8,9 +8,9 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.Ghast;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.GhastChargeEvent;
+import zedly.zbot.entity.Ghast;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.GhastChargeEvent;
 import zedly.zbot.inventory.CraftItemStack;
 
 /**

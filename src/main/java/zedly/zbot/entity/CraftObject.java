@@ -9,7 +9,7 @@ package zedly.zbot.entity;
  *
  * @author Dennis
  */
-public abstract class CraftObject extends CraftEntity implements zedly.zbot.api.entity.Object {
+public abstract class CraftObject extends CraftEntity implements zedly.zbot.entity.Object {
 
     protected int objectData;
     protected float[] velocity = new float[3];

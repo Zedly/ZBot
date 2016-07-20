@@ -1,7 +1,7 @@
 package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
-import zedly.zbot.api.event.TabCompleteEvent;
+import zedly.zbot.event.TabCompleteEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;

@@ -3,7 +3,7 @@ package zedly.zbot.entity;
 import java.io.IOException;
 import java.util.HashMap;
 import zedly.zbot.Location;
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.inventory.ItemStack;
 
 import java.util.UUID;
 import zedly.zbot.Direction;
@@ -11,12 +11,12 @@ import zedly.zbot.Util;
 import zedly.zbot.inventory.CraftItemStack;
 import zedly.zbot.network.ExtendedDataInputStream;
 
-public abstract class EntityMeta {
+public abstract class CraftEntityMeta implements EntityMeta {
 
     private static final HashMap<Integer, Class> dataMap = new HashMap<>();
 
-    public static EntityMeta getByType(int type) throws Exception {
-        return (EntityMeta) dataMap.get(type).newInstance();
+    public static CraftEntityMeta getByType(int type) throws Exception {
+        return (CraftEntityMeta) dataMap.get(type).newInstance();
     }
 
     public abstract void read(ExtendedDataInputStream edis) throws IOException;
@@ -76,7 +76,7 @@ public abstract class EntityMeta {
         return ((OptionalUUIDMeta) this).uuidValue;
     }
 
-    public static class IntMeta extends EntityMeta {
+    public static class IntMeta extends CraftEntityMeta {
 
         protected int intValue;
 
@@ -102,7 +102,7 @@ public abstract class EntityMeta {
         }
     }
 
-    public static class FloatMeta extends EntityMeta {
+    public static class FloatMeta extends CraftEntityMeta {
 
         private float floatValue;
 
@@ -116,7 +116,7 @@ public abstract class EntityMeta {
         }
     }
 
-    public static class StringMeta extends EntityMeta {
+    public static class StringMeta extends CraftEntityMeta {
 
         public String stringValue;
 
@@ -142,7 +142,7 @@ public abstract class EntityMeta {
         }
     }
 
-    public static class ItemStackMeta extends EntityMeta {
+    public static class ItemStackMeta extends CraftEntityMeta {
 
         private CraftItemStack itemStackValue;
 
@@ -156,7 +156,7 @@ public abstract class EntityMeta {
         }
     }
 
-    public static class BooleanMeta extends EntityMeta {
+    public static class BooleanMeta extends CraftEntityMeta {
 
         private boolean booleanValue;
 
@@ -170,7 +170,7 @@ public abstract class EntityMeta {
         }
     }
 
-    public static class VectorMeta extends EntityMeta {
+    public static class VectorMeta extends CraftEntityMeta {
 
         private final float[] vector = new float[3];
 
@@ -186,7 +186,7 @@ public abstract class EntityMeta {
         }
     }
 
-    public static class LocationMeta extends EntityMeta {
+    public static class LocationMeta extends CraftEntityMeta {
 
         public Location location;
 
@@ -217,7 +217,7 @@ public abstract class EntityMeta {
         }
     }
 
-    public static class OptionalUUIDMeta extends EntityMeta {
+    public static class OptionalUUIDMeta extends CraftEntityMeta {
 
         private boolean booleanValue;
         private UUID uuidValue;

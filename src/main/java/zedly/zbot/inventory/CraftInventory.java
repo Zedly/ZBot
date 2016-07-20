@@ -6,8 +6,8 @@
 package zedly.zbot.inventory;
 
 import zedly.zbot.GameContext;
-import zedly.zbot.api.inventory.ItemStack;
-import zedly.zbot.api.inventory.Inventory;
+import zedly.zbot.inventory.ItemStack;
+import zedly.zbot.inventory.Inventory;
 import zedly.zbot.network.packet.serverbound.Packet07ClickWindow;
 
 /**

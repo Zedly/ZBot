@@ -9,8 +9,8 @@ import zedly.zbot.EntityType;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.WoolColor;
-import zedly.zbot.api.entity.Sheep;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.entity.Sheep;
+import zedly.zbot.event.Event;
 
 /**
  *

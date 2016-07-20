@@ -8,7 +8,7 @@ package zedly.zbot.network.packet.clientbound;
 import java.io.IOException;
 import zedly.zbot.Location;
 import zedly.zbot.GameContext;
-import zedly.zbot.api.event.SelfTeleportEvent;
+import zedly.zbot.event.SelfTeleportEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 import zedly.zbot.network.packet.serverbound.Packet00TeleportConfirm;
 

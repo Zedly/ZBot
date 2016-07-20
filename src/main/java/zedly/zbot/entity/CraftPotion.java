@@ -1,17 +1,15 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.Potion;
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.inventory.CraftItemStack;
+import zedly.zbot.event.Event;
 
 public class CraftPotion extends CraftProjectile implements Potion {
 
-    protected CraftItemStack itemStack;
+    protected ItemStack itemStack;
 
     @Override
     public EntityType getType() {

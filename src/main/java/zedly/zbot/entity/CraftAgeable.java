@@ -7,9 +7,9 @@ package zedly.zbot.entity;
 
 import java.util.HashMap;
 import java.util.List;
-import zedly.zbot.api.entity.Ageable;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.EntityGrowUpEvent;
+import zedly.zbot.entity.Ageable;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.EntityGrowUpEvent;
 
 /**
  *

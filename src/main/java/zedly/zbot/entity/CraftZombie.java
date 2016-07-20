@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
 import zedly.zbot.VillagerProfession;
-import zedly.zbot.api.entity.Zombie;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.entity.Zombie;
+import zedly.zbot.event.Event;
 
 /**
  *

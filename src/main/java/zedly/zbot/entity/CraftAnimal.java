@@ -5,9 +5,9 @@
  */
 package zedly.zbot.entity;
 
-import zedly.zbot.api.entity.Animal;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.EntityInLoveEvent;
+import zedly.zbot.entity.Animal;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.EntityInLoveEvent;
 
 /**
  *

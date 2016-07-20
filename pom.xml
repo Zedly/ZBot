@@ -29,6 +29,11 @@
     </build>
     
     <dependencies>
+        <dependency>
+            <groupId>zedly</groupId>
+            <artifactId>ZBotAPI</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
         <dependency>
             <groupId>org.bouncycastle</groupId>

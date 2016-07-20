@@ -8,10 +8,10 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.api.entity.ItemFrame;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.ItemFrameContentEvent;
-import zedly.zbot.api.inventory.ItemStack;
+import zedly.zbot.entity.ItemFrame;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.ItemFrameContentEvent;
+import zedly.zbot.inventory.ItemStack;
 
 /**
  *

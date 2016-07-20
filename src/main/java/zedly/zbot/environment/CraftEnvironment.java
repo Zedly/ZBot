@@ -8,13 +8,13 @@ package zedly.zbot.environment;
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.Collections;
-import zedly.zbot.api.environment.Environment;
+import zedly.zbot.environment.Environment;
 import zedly.zbot.entity.CraftEntity;
 
 import java.util.HashMap;
 import java.util.UUID;
 import zedly.zbot.Location;
-import zedly.zbot.api.entity.Entity;
+import zedly.zbot.entity.Entity;
 import zedly.zbot.block.CraftBlock;
 import zedly.zbot.entity.*;
 import zedly.zbot.network.ExtendedDataInputStream;

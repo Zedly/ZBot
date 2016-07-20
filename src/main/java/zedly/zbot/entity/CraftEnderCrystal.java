@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
 import zedly.zbot.Location;
-import zedly.zbot.api.entity.EnderCrystal;
-import zedly.zbot.api.event.Event;
+import zedly.zbot.entity.EnderCrystal;
+import zedly.zbot.event.Event;
 
 /**
  *

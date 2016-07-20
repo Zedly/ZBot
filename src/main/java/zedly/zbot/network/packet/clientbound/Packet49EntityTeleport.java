@@ -9,7 +9,7 @@ import java.io.IOException;
 import zedly.zbot.GameContext;
 import zedly.zbot.Location;
 import zedly.zbot.entity.CraftEntity;
-import zedly.zbot.api.event.entity.EntityTeleportEvent;
+import zedly.zbot.event.entity.EntityTeleportEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**

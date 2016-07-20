@@ -13,7 +13,7 @@ import zedly.zbot.GameContext;
 import zedly.zbot.entity.CraftPlayer;
 import zedly.zbot.environment.Data;
 import zedly.zbot.entity.EntityMeta;
-import zedly.zbot.api.event.PlayerSpawnEvent;
+import zedly.zbot.event.PlayerSpawnEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**

@@ -8,9 +8,9 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import zedly.zbot.api.entity.Tameable;
-import zedly.zbot.api.event.Event;
-import zedly.zbot.api.event.entity.EntityTameEvent;
+import zedly.zbot.entity.Tameable;
+import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.EntityTameEvent;
 
 /**
  *

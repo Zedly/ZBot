@@ -2,7 +2,7 @@ package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.entity.CraftEntity;
-import zedly.zbot.api.event.entity.EntityMoveEvent;
+import zedly.zbot.event.entity.EntityMoveEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;
