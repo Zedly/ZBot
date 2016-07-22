@@ -1,4 +1,4 @@
-#onlineMode: true
+onlineMode: true
 
 #user: brainibot@outlook.com
 #password: Forbotssake
@@ -12,12 +12,12 @@ password: bot-nao-pls-k-thx
 #user: ridingaroundonabikeenough@outlook.com
 #password: veresen1
 
-user: SayakaMiki_
-onlineMode: false
+#user: SayakaMiki_
+#onlineMode: false
 
 
-serverIp: 127.0.0.1
-#serverIp: 85.131.153.100
+#serverIp: 127.0.0.1
+serverIp: 85.131.153.100
 
 
 serverPort: 25565

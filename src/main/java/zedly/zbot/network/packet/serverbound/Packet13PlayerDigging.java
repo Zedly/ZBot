@@ -20,11 +20,11 @@ public class Packet13PlayerDigging implements ServerBoundPacket {
     int z;
     byte face;
 
-    public Packet13PlayerDigging(byte status, int x, int y, int z, byte face) {
+    public Packet13PlayerDigging(int status, int x, int y, int z, int face) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.face = face;
+        this.face = (byte) face;
     }
 
     @Override
