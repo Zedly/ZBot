@@ -14,13 +14,14 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  * @author Dennis
  */
 public class Packet13PlayerDigging implements ServerBoundPacket {
-    byte status;
+    int status;
     int x;
     int y;
     int z;
     byte face;
 
     public Packet13PlayerDigging(int status, int x, int y, int z, int face) {
+        this.status = status;
         this.x = x;
         this.y = y;
         this.z = z;

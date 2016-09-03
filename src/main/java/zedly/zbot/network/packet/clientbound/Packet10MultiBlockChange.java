@@ -16,6 +16,7 @@ import zedly.zbot.network.ExtendedDataInputStream;
  * @author Dennis
  */
 public class Packet10MultiBlockChange implements ClientBoundPacket {
+
     private int chunkX;
     private int chunkZ;
     private int dataSize;
@@ -34,15 +35,15 @@ public class Packet10MultiBlockChange implements ClientBoundPacket {
             blockIds[i] = dis.readVarInt();
         }
     }
-    
+
     @Override
     public void process(GameContext context) {
-        for(int i = 0; i < blockPos.length; i++) {
-            int x = chunkX * 16 + (blockPos[i] >> 12);
+        for (int i = 0; i < blockPos.length; i++) {
+            int x = chunkX * 16 + ((blockPos[i] >> 12) & 0xF);
             int y = blockPos[i] & 0xFF;
-            int z = chunkZ * 16 + (blockPos[i] >> 8) & 0xF;
+            int z = chunkZ * 16 + ((blockPos[i] >> 8) & 0xF);
             context.getMainThread().fireEvent(new BlockChangeEvent(new Location(x, y, z), blockIds[i]));
-            context.getSelf().getEnvironment().setBlockAt(x, y, z, blockIds[i] >> 4, blockIds[i] & 0xF);
+            context.getSelf().getEnvironment().setBlockAt(x, y, z, (blockIds[i] >> 4), blockIds[i] & 0xF);
         }
     }
 }

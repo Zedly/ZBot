@@ -139,9 +139,9 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void breakBlock(int x, int y, int z, int millis, Runnable callback) {
-        context.getUpThread().sendPacket(new Packet13PlayerDigging(0, x, y, z, 0));
+        context.getUpThread().sendPacket(new Packet13PlayerDigging(0, x, y, z, 1));
         context.getMainThread().schedule(() -> {
-            context.getUpThread().sendPacket(new Packet13PlayerDigging(2, x, y, z, 0));
+            context.getUpThread().sendPacket(new Packet13PlayerDigging(2, x, y, z, 1));
         }, millis, TimeUnit.MILLISECONDS);
         callback.run();
     }
