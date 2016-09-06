@@ -155,6 +155,17 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void breakBlock(Location loc, int millis, Runnable callback) {
         breakBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), millis, callback);
     }
+    
+    @Override
+    public void clickBlock(Location loc) {
+        clickBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+    
+    @Override
+    public void clickBlock(int x, int y, int z) {
+        context.getUpThread().sendPacket(new Packet13PlayerDigging(0, x, y, z, 0));
+        context.getUpThread().sendPacket(new Packet13PlayerDigging(1, x, y, z, 0));    
+    }
 
     @Override
     public void placeBlock(int x, int y, int z) {
