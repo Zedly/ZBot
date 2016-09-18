@@ -21,10 +21,12 @@ public class ZBotThreadPoolExecutor extends ScheduledThreadPoolExecutor {
 
     public void processPacket(ClientBoundPacket p) {
         execute(() -> {
-            try {
-                p.process(context);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            synchronized (context.getSelf()) {
+                try {
+                    p.process(context);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }

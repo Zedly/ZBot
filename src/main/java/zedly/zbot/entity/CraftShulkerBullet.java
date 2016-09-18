@@ -20,7 +20,7 @@ public class CraftShulkerBullet extends CraftFireball implements ShulkerBullet {
     }
 
     @Override
-    public boolean hasGravity() {
+    public synchronized boolean hasGravity() {
         return true;
     }
     

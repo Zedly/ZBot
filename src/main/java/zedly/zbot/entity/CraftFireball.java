@@ -20,7 +20,7 @@ public class CraftFireball extends CraftProjectile implements Fireball {
     }
 
     @Override
-    public boolean hasGravity() {
+    public synchronized boolean hasGravity() {
         return false;
     }
     

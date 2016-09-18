@@ -23,7 +23,7 @@ public class CraftWolf extends CraftTameable implements Wolf {
     protected WoolColor collarColor = WoolColor.RED;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(15)) {
             damageTaken = metaMap.get(15).asFloat();
@@ -42,17 +42,17 @@ public class CraftWolf extends CraftTameable implements Wolf {
     }
 
     @Override
-    public float getDamageTaken() {
+    public synchronized float getDamageTaken() {
         return damageTaken;
     }
 
     @Override
-    public boolean isBegging() {
+    public synchronized boolean isBegging() {
         return begging;
     }
 
     @Override
-    public WoolColor getCollarColor() {
+    public synchronized WoolColor getCollarColor() {
         return collarColor;
     }
 

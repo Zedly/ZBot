@@ -19,7 +19,7 @@ public class CraftWither extends CraftMonster implements Wither {
 
     int target1 = 0, target2 = 0, target3 = 0, invulnerableTime = 0;
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             target1 = metaMap.get(12).asInt();
@@ -42,42 +42,42 @@ public class CraftWither extends CraftMonster implements Wither {
     }
 
     @Override
-    public boolean isFirstHeadTargeting() {
+    public synchronized boolean isFirstHeadTargeting() {
         return target1 != 0;
     }
 
     @Override
-    public int getFirstHeadTargetId() {
+    public synchronized int getFirstHeadTargetId() {
         return target1;
     }
 
     @Override
-    public boolean isSecondHeadTargeting() {
+    public synchronized boolean isSecondHeadTargeting() {
         return target3 != 0;
     }
 
     @Override
-    public int getSecondHeadTargetId() {
+    public synchronized int getSecondHeadTargetId() {
         return target2;
     }
 
     @Override
-    public boolean isThirdHeadTargeting() {
+    public synchronized boolean isThirdHeadTargeting() {
         return target3 != 0;
     }
 
     @Override
-    public int getThirdHeadTargetId() {
+    public synchronized int getThirdHeadTargetId() {
         return target3;
     }
 
     @Override
-    public int[] getTargetIds() {
+    public synchronized int[] getTargetIds() {
         return new int[] {target1, target2, target3};
     }
 
     @Override
-    public int getInvulnerableTime() {
+    public synchronized int getInvulnerableTime() {
         return invulnerableTime;
     }
 

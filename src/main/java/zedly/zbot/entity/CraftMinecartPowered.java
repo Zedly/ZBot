@@ -19,7 +19,7 @@ public class CraftMinecartPowered extends CraftMinecart implements MinecartPower
 
     protected boolean powered;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             powered = metaMap.get(12).asBoolean();
@@ -33,7 +33,7 @@ public class CraftMinecartPowered extends CraftMinecart implements MinecartPower
     }
     
     @Override
-    public boolean isPowered() {
+    public synchronized boolean isPowered() {
         return powered;
     }
     

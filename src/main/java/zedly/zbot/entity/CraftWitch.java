@@ -19,7 +19,7 @@ public class CraftWitch extends CraftMonster implements Witch {
 
     protected boolean aggressive;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if(metaMap.containsKey(12)) {
             aggressive = metaMap.get(12).asBoolean();
@@ -33,7 +33,7 @@ public class CraftWitch extends CraftMonster implements Witch {
     }
 
     @Override
-    public boolean isAggressive() {
+    public synchronized boolean isAggressive() {
         return aggressive;
     }
     

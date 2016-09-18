@@ -27,7 +27,7 @@ public class PluginManager {
     private final HashMap<String, ZBotPlugin> plugins = new HashMap<>();
     private final Yaml yaml = new Yaml();
 
-    public void loadPlugins() {
+    public synchronized void loadPlugins() {
         try {
             File pluginDir = new File("plugins");
             if (!pluginDir.exists()) {
@@ -97,7 +97,7 @@ public class PluginManager {
         }
     }
 
-    public void enablePlugins(Self self) {
+    public synchronized void enablePlugins(Self self) {
         for (String pluginName : plugins.keySet()) {
             ZBotPlugin plugin = plugins.get(pluginName);
             try {
@@ -109,7 +109,7 @@ public class PluginManager {
         }
     }
 
-    public void disablePlugins() {
+    public synchronized void disablePlugins() {
         for (String pluginName : plugins.keySet()) {
             ZBotPlugin plugin = plugins.get(pluginName);
             try {
@@ -121,7 +121,7 @@ public class PluginManager {
         }
     }
     
-    public void onJoin() {
+    public synchronized void onJoin() {
         for (String pluginName : plugins.keySet()) {
             ZBotPlugin plugin = plugins.get(pluginName);
             try {
@@ -133,7 +133,7 @@ public class PluginManager {
         }
     }
     
-    public void onQuit() {
+    public synchronized void onQuit() {
         for (String pluginName : plugins.keySet()) {
             ZBotPlugin plugin = plugins.get(pluginName);
             try {

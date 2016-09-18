@@ -20,7 +20,7 @@ public class CraftArrowTipped extends CraftArrow implements ArrowTipped {
 
     private WoolColor color = WoolColor.WHITE;
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(7)) {
             color = WoolColor.values()[metaMap.get(7).asInt()];
@@ -34,7 +34,7 @@ public class CraftArrowTipped extends CraftArrow implements ArrowTipped {
     }
 
     @Override
-    public WoolColor getColor() {
+    public synchronized WoolColor getColor() {
         return color;
     }
 

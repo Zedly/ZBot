@@ -20,7 +20,7 @@ public class CraftBlaze extends CraftMonster implements Blaze {
 
     protected boolean charging;
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             charging = metaMap.get(12).asBoolean();
@@ -37,7 +37,7 @@ public class CraftBlaze extends CraftMonster implements Blaze {
     }
 
     @Override
-    public boolean isCharging() {
+    public synchronized boolean isCharging() {
         return charging;
     }
 

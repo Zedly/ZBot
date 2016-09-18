@@ -108,7 +108,7 @@ public class GameContext {
         return threadDown;
     }
 
-    public EventDispatcher getEventDispatcher() {
+    public synchronized EventDispatcher getEventDispatcher() {
         return eventDispatcher;
     }
 
@@ -169,7 +169,7 @@ public class GameContext {
         return futureIndex++;
     }
 
-    public PluginManager getPluginManager() {
+    public synchronized PluginManager getPluginManager() {
         return pluginManager;
     }
 

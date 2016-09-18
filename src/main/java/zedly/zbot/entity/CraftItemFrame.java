@@ -22,7 +22,7 @@ public class CraftItemFrame extends CraftHanging implements ItemFrame {
     protected ItemStack itemStack;
     protected int rotation;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             ItemStack nItemStack = metaMap.get(6).asSlot();
@@ -41,12 +41,12 @@ public class CraftItemFrame extends CraftHanging implements ItemFrame {
     }
 
     @Override
-    public ItemStack getItemStack() {
+    public synchronized ItemStack getItemStack() {
         return itemStack;
     }
 
     @Override
-    public int getRotation() {
+    public synchronized int getRotation() {
         return rotation;
     }
 

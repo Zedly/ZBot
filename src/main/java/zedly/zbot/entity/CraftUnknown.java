@@ -19,18 +19,18 @@ public class CraftUnknown extends CraftEntity implements Unknown {
     
     protected int typeId;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         //do additional stuff
         return list;
     }
     
-    public void setEntityTypeId(int id) {
+    public synchronized void setEntityTypeId(int id) {
         this.typeId = id;
     }
     
     @Override
-    public int getEntityTypeId() {
+    public synchronized int getEntityTypeId() {
         return typeId;
     }
     

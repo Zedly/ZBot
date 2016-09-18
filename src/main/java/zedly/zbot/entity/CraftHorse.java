@@ -26,7 +26,7 @@ public class CraftHorse extends CraftAnimal implements Horse {
     int armor = 0;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(13)) {
             int d = metaMap.get(13).asInt();
@@ -58,57 +58,57 @@ public class CraftHorse extends CraftAnimal implements Horse {
     }
 
     @Override
-    public boolean isTame() {
+    public synchronized boolean isTame() {
         return tame;
     }
 
     @Override
-    public boolean isSaddled() {
+    public synchronized boolean isSaddled() {
         return saddled;
     }
 
     @Override
-    public boolean hasChest() {
+    public synchronized boolean hasChest() {
         return chest;
     }
 
     @Override
-    public boolean isBred() {
+    public synchronized boolean isBred() {
         return bred;
     }
 
     @Override
-    public boolean isRearing() {
+    public synchronized boolean isRearing() {
         return rearing;
     }
 
     @Override
-    public boolean isMouthOpen() {
+    public synchronized boolean isMouthOpen() {
         return mouthOpen;
     }
 
     @Override
-    public int getVariant() {
+    public synchronized int getVariant() {
         return variant;
     }
 
     @Override
-    public int getStyle() {
+    public synchronized int getStyle() {
         return style;
     }
 
     @Override
-    public boolean hasOwner() {
+    public synchronized boolean hasOwner() {
         return owner != null;
     }
 
     @Override
-    public UUID getOwner() {
+    public synchronized UUID getOwner() {
         return owner;
     }
 
     @Override
-    public int getArmor() {
+    public synchronized int getArmor() {
         return armor;
     }
 

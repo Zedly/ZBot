@@ -19,7 +19,7 @@ public abstract class CraftInsentient extends CraftLivingEntity implements Insen
     private boolean hasAI = true;
     private boolean leftHanded = false;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if(metaMap.containsKey(11)) {
             int d = metaMap.get(11).asInt();
@@ -29,11 +29,11 @@ public abstract class CraftInsentient extends CraftLivingEntity implements Insen
         return list;
     }
 
-    public boolean hasAI() {
+    public synchronized boolean hasAI() {
         return hasAI;
     }
 
-    public boolean isLeftHanded() {
+    public synchronized boolean isLeftHanded() {
         return leftHanded;
     }
 }

@@ -20,7 +20,7 @@ public class CraftArrow extends CraftProjectile implements Arrow {
     protected boolean critical;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             critical = metaMap.get(6).asInt() != 0;
@@ -34,12 +34,12 @@ public class CraftArrow extends CraftProjectile implements Arrow {
     }
 
     @Override
-    public boolean isCritical() {
+    public synchronized boolean isCritical() {
         return critical;
     }
 
     @Override
-    public boolean hasGravity() {
+    public synchronized boolean hasGravity() {
         return true;
     }
 

@@ -14,15 +14,15 @@ public abstract class CraftObject extends CraftEntity implements zedly.zbot.enti
     protected int objectData;
     protected float[] velocity = new float[3];
 
-    public void setVelocity(float[] velocity) {
+    public synchronized void setVelocity(float[] velocity) {
         this.velocity = velocity;
     }
 
-    public void setObjectData(int objectData) {
+    public synchronized void setObjectData(int objectData) {
         this.objectData = objectData;
     }
 
-    public float[] getVelocity() {
+    public synchronized float[] getVelocity() {
         return velocity;
     }
 

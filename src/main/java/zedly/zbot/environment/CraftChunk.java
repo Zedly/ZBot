@@ -92,7 +92,7 @@ public class CraftChunk implements Chunk {
         this.blockLight = new byte[4096];
     }
     
-    public CraftBlock getBlockAt(int x, int y, int z) {
+    public synchronized CraftBlock getBlockAt(int x, int y, int z) {
         int id = blockIds[256 * y + 16 * z + x];
         int data = blockData[256 * y + 16 * z + x];
         int slight = skyLight[256 * y + 16 * z + x];
@@ -100,7 +100,7 @@ public class CraftChunk implements Chunk {
         return new CraftBlock(x, y, z, id, data, blight, slight);
     }
     
-    public void setBlockAt(int x, int y, int z, int typeId, int blockData) {
+    public synchronized void setBlockAt(int x, int y, int z, int typeId, int blockData) {
         blockIds[256 * y + 16 * z + x] = (short) typeId;
         this.blockData[256 * y + 16 * z + x] = (byte) blockData;
     }

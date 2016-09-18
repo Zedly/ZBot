@@ -15,7 +15,7 @@ import zedly.zbot.event.entity.EntityInLoveEvent;
  */
 public abstract class CraftAnimal extends CraftAgeable implements Animal {
 
-    public Event setStatus(int status) {
+    public synchronized Event setStatus(int status) {
         if (status == 18) {
             return new EntityInLoveEvent(this);
         } else {

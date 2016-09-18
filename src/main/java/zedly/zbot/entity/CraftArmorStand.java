@@ -38,7 +38,7 @@ public class CraftArmorStand extends CraftObject implements ArmorStand {
     protected float[] leftLegRotation = {0, 0, 0};
     protected float[] rightLegRotation = {0, 0, 0};
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         
         if (metaMap.containsKey(6)) {
@@ -97,87 +97,87 @@ public class CraftArmorStand extends CraftObject implements ArmorStand {
     }
 
     @Override
-    public boolean isSmall() {
+    public synchronized boolean isSmall() {
         return small;
     }
 
     @Override
-    public boolean hasGravity() {
+    public synchronized boolean hasGravity() {
         return gravity;
     }
 
     @Override
-    public boolean hasArms() {
+    public synchronized boolean hasArms() {
         return arms;
     }
 
     @Override
-    public boolean hasBasePlate() {
+    public synchronized boolean hasBasePlate() {
         return basePlate;
     }
 
     @Override
-    public boolean hasMarker() {
+    public synchronized boolean hasMarker() {
         return basePlate;
     }
 
     @Override
-    public float[] getHeadRotation() {
+    public synchronized float[] getHeadRotation() {
         return new float[]{headRotation[0], headRotation[1], headRotation[2]};
     }
 
     @Override
-    public float[] getBodyRotation() {
+    public synchronized float[] getBodyRotation() {
         return new float[]{bodyRotation[0], bodyRotation[1], bodyRotation[2]};
     }
 
     @Override
-    public float[] getLeftArmRotation() {
+    public synchronized float[] getLeftArmRotation() {
         return new float[]{leftArmRotation[0], leftArmRotation[1], leftArmRotation[2]};
     }
 
     @Override
-    public float[] getRightArmRotation() {
+    public synchronized float[] getRightArmRotation() {
         return new float[]{rightArmRotation[0], rightArmRotation[1], rightArmRotation[2]};
     }
 
     @Override
-    public float[] getLeftLegRotation() {
+    public synchronized float[] getLeftLegRotation() {
         return new float[]{leftLegRotation[0], leftLegRotation[1], leftLegRotation[2]};
     }
 
     @Override
-    public float[] getRightLegRotation() {
+    public synchronized float[] getRightLegRotation() {
         return new float[]{rightLegRotation[0], rightLegRotation[1], rightLegRotation[2]};
     }
 
     @Override
-    public boolean isLeftHandActive() {
+    public synchronized boolean isLeftHandActive() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean isHandActive() {
+    public synchronized boolean isHandActive() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public float getHealth() {
+    public synchronized float getHealth() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int getPotionEffectColor() {
+    public synchronized int getPotionEffectColor() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean isPotionEffectAmbient() {
+    public synchronized boolean isPotionEffectAmbient() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int getArrowsStuck() {
+    public synchronized int getArrowsStuck() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

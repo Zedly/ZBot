@@ -20,7 +20,7 @@ public class CraftIronGolem extends CraftGolem implements IronGolem {
     boolean playerCreated = false;
     
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(13)) {
             playerCreated = metaMap.get(13).asInt() != 0;
@@ -33,7 +33,7 @@ public class CraftIronGolem extends CraftGolem implements IronGolem {
     }
 
     @Override
-    public boolean isPlayerCreated() {
+    public synchronized boolean isPlayerCreated() {
         return playerCreated;
     }
     

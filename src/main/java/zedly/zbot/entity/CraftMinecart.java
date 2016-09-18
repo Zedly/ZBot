@@ -28,7 +28,7 @@ public class CraftMinecart extends CraftObject implements Minecart {
     int blockYPosition;
     boolean showBlock;
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             shakingPower = metaMap.get(6).asInt();
@@ -58,32 +58,32 @@ public class CraftMinecart extends CraftObject implements Minecart {
     }
 
     @Override
-    public int getShakingPower() {
+    public synchronized int getShakingPower() {
         return shakingPower;
     }
 
     @Override
-    public int getShakeDirection() {
+    public synchronized int getShakeDirection() {
         return shakingDirection;
     }
 
     @Override
-    public float getShakingMultiplier() {
+    public synchronized float getShakingMultiplier() {
         return shakingMultiplier;
     }
 
     @Override
-    public ItemStack getBlock() {
+    public synchronized ItemStack getBlock() {
         return blockInCart;
     }
 
     @Override
-    public int getBlockYPosition() {
+    public synchronized int getBlockYPosition() {
         return blockYPosition;
     }
 
     @Override
-    public boolean isBlockVisibile() {
+    public synchronized boolean isBlockVisibile() {
         return showBlock;
     }
 

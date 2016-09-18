@@ -19,7 +19,7 @@ public class CraftMinecartCommandBlock extends CraftMinecart implements Minecart
 
     protected String command, lastOutput;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             command = metaMap.get(12).asString();
@@ -36,12 +36,12 @@ public class CraftMinecartCommandBlock extends CraftMinecart implements Minecart
     }
 
     @Override
-    public String getLastOutput() {
+    public synchronized String getLastOutput() {
         return lastOutput;
     }
 
     @Override
-    public String getCommand() {
+    public synchronized String getCommand() {
         return command;
     }
     

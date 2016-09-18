@@ -11,8 +11,6 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 import zedly.zbot.GameContext;
 import zedly.zbot.ZBotThreadPoolExecutor;
-import zedly.zbot.network.packet.clientbound.Packet03SpawnMob;
-import zedly.zbot.network.packet.clientbound.Packet39EntityMetadata;
 
 public class ThreadDown extends Thread {
 

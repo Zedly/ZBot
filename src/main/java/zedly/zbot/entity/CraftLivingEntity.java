@@ -25,7 +25,7 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
     protected boolean potionEffectAmbient = false;
     protected int arrowsStuck = 0;
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             int d = metaMap.get(6).asInt();
@@ -51,32 +51,32 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
     }
 
     @Override
-    public boolean isHandActive() {
+    public synchronized boolean isHandActive() {
         return handActive;
     }
 
     @Override
-    public boolean isLeftHandActive() {
+    public synchronized boolean isLeftHandActive() {
         return leftHandActive;
     }
 
     @Override
-    public float getHealth() {
+    public synchronized float getHealth() {
         return health;
     }
 
     @Override
-    public int getPotionEffectColor() {
+    public synchronized int getPotionEffectColor() {
         return potionEffectColor;
     }
 
     @Override
-    public boolean isPotionEffectAmbient() {
+    public synchronized boolean isPotionEffectAmbient() {
         return potionEffectAmbient;
     }
 
     @Override
-    public int getArrowsStuck() {
+    public synchronized int getArrowsStuck() {
         return arrowsStuck;
     }
 

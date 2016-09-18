@@ -28,26 +28,26 @@ public class CraftInventory implements Inventory {
         this.context = context;
     }
 
-    public ItemStack getSlot(int i) {
+    public synchronized ItemStack getSlot(int i) {
         if(i == -1) {
             return itemOnCursor;
         }
         return items[i];
     }
 
-    public int getSelectedSlot() {
+    public synchronized int getSelectedSlot() {
         return selectedSlot;
     }
 
-    public ItemStack getItemInHand() {
+    public synchronized ItemStack getItemInHand() {
         return items[selectedSlot];
     }
 
-    public ItemStack getItemOnCursor() {
+    public synchronized ItemStack getItemOnCursor() {
         return itemOnCursor;
     }
     
-    public void clickSlot(int slot, int mode, int button) {
+    public synchronized void clickSlot(int slot, int mode, int button) {
         if (slot == -999) {
             context.getUpThread().sendPacket(new Packet07ClickWindow((byte) activeWindowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, nullItem));
         } else {
@@ -58,7 +58,7 @@ public class CraftInventory implements Inventory {
         }
     }
 
-    public void setSlot(int i, ItemStack is) {
+    public synchronized void setSlot(int i, ItemStack is) {
         if (i == -1) {
             itemOnCursor = is;
         } else {
@@ -66,11 +66,11 @@ public class CraftInventory implements Inventory {
         }
     }
 
-    public void selectSlot(int i) {
+    public synchronized void selectSlot(int i) {
         selectedSlot = 35 + i;
     }
 
-    public void reset() {
+    public synchronized void reset() {
         for (int i = 0; i < items.length; i++) {
             items[i] = null;
         }

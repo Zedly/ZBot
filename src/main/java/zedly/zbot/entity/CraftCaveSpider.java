@@ -19,7 +19,7 @@ public class CraftCaveSpider extends CraftMonster implements CaveSpider {
     
     protected boolean climbing;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if(metaMap.containsKey(12)) {
             climbing = metaMap.get(12).asInt() != 0;
@@ -33,7 +33,7 @@ public class CraftCaveSpider extends CraftMonster implements CaveSpider {
     }
 
     @Override
-    public boolean isClimbing() {
+    public synchronized boolean isClimbing() {
         return climbing;
     }
     

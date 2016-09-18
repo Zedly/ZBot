@@ -17,7 +17,7 @@ public class CraftPotion extends CraftProjectile implements Potion {
     }
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             itemStack = metaMap.get(6).asSlot();
@@ -26,7 +26,7 @@ public class CraftPotion extends CraftProjectile implements Potion {
     }
 
     @Override
-    public ItemStack getItemStack() {
+    public synchronized ItemStack getItemStack() {
         return itemStack;
     }
     

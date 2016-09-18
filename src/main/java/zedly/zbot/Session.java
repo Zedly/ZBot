@@ -22,7 +22,7 @@ public class Session {
         onlineMode = true;
     }
 
-    public boolean renew() {
+    public synchronized boolean renew() {
         try {
             //System.out.println("Logging in as " + username + "...");
             HTTP.HTTPResponse http = HTTP.https("https://authserver.mojang.com/authenticate", "{\r\n"
@@ -51,19 +51,19 @@ public class Session {
         return true;
     }
 
-    public String getAccessToken() {
+    public synchronized String getAccessToken() {
         return accessToken;
     }
 
-    public String getActualUsername() {
+    public synchronized String getActualUsername() {
         return actualUsername;
     }
 
-    public String getProfileID() {
+    public synchronized String getProfileID() {
         return profileID;
     }
 
-    public boolean isOnlineMode() {
+    public synchronized boolean isOnlineMode() {
         return onlineMode;
     }
 }

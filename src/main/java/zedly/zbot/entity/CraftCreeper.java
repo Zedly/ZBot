@@ -23,7 +23,7 @@ public class CraftCreeper extends CraftMonster implements Creeper {
     protected boolean charged;
     protected boolean lit;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if(metaMap.containsKey(12)) {
             state = metaMap.get(12).asInt();
@@ -47,17 +47,17 @@ public class CraftCreeper extends CraftMonster implements Creeper {
     }
 
     @Override
-    public boolean isIdle() {
+    public synchronized boolean isIdle() {
         return state == -1;
     }
 
     @Override
-    public boolean isCharged() {
+    public synchronized boolean isCharged() {
         return charged;
     }
 
     @Override
-    public boolean isIgnited() {
+    public synchronized boolean isIgnited() {
         return lit;
     }
     

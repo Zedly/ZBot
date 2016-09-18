@@ -20,7 +20,7 @@ public class CraftSkeleton extends CraftMonster implements Skeleton {
     boolean witherSkeleton = false;
     boolean swingingArms = false;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if(metaMap.containsKey(12)) {
             witherSkeleton = metaMap.get(12).asInt() != 0;
@@ -37,12 +37,12 @@ public class CraftSkeleton extends CraftMonster implements Skeleton {
     }
 
     @Override
-    public boolean isWitherSkeleton() {
+    public synchronized boolean isWitherSkeleton() {
         return witherSkeleton;
     }
 
     @Override
-    public boolean isSwingingArms() {
+    public synchronized boolean isSwingingArms() {
         return swingingArms;
     }
     

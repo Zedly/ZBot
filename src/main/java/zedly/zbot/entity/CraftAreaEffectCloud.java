@@ -27,7 +27,7 @@ public class CraftAreaEffectCloud extends CraftObject implements AreaEffectCloud
         return EntityType.CLOUD;
     }
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             radius = metaMap.get(6).asFloat();
@@ -45,22 +45,22 @@ public class CraftAreaEffectCloud extends CraftObject implements AreaEffectCloud
     }
 
     @Override
-    public float getRadius() {
+    public synchronized float getRadius() {
         return radius;
     }
 
     @Override
-    public int getColorId() {
+    public synchronized int getColorId() {
         return colorId;
     }
 
     @Override
-    public boolean isPoint() {
+    public synchronized boolean isPoint() {
         return ignoreRadius;
     }
 
     @Override
-    public int getParticleId() {
+    public synchronized int getParticleId() {
         return particleId;
     }
 

@@ -21,7 +21,7 @@ public class CraftGhast extends CraftFlying implements Ghast {
 
     protected boolean attacking;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             attacking = metaMap.get(12).asBoolean();
@@ -38,7 +38,7 @@ public class CraftGhast extends CraftFlying implements Ghast {
     }
 
     @Override
-    public boolean isAttacking() {
+    public synchronized boolean isAttacking() {
         return attacking;
     }
 

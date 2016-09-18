@@ -19,7 +19,7 @@ public class CraftPrimedTNT extends CraftObject implements PrimedTNT {
 
     protected int fuseTicks;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             fuseTicks = metaMap.get(6).asInt();
@@ -33,7 +33,7 @@ public class CraftPrimedTNT extends CraftObject implements PrimedTNT {
     }
 
     @Override
-    public int getFuseTime() {
+    public synchronized int getFuseTime() {
         return fuseTicks;
     }
     

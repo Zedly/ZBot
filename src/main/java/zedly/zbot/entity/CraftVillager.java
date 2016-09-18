@@ -21,7 +21,7 @@ public class CraftVillager extends CraftAgeable implements Villager {
     protected VillagerProfession type;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(13)) {
             type = VillagerProfession.getById(metaMap.get(13).asInt());
@@ -34,7 +34,7 @@ public class CraftVillager extends CraftAgeable implements Villager {
     }
 
     @Override
-    public VillagerProfession getProfession() {
+    public synchronized VillagerProfession getProfession() {
         return type;
     }
 

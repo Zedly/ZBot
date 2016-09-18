@@ -20,7 +20,7 @@ public class CraftFireCharge extends CraftProjectile implements FireCharge {
     }
 
     @Override
-    public boolean hasGravity() {
+    public synchronized boolean hasGravity() {
         return true;
     }
     

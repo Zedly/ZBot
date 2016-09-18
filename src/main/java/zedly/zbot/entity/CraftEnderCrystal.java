@@ -21,7 +21,7 @@ public class CraftEnderCrystal extends CraftObject implements EnderCrystal {
     protected Location beamTarget;
     
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             beamTarget = metaMap.get(6).asLocation();
@@ -35,12 +35,12 @@ public class CraftEnderCrystal extends CraftObject implements EnderCrystal {
     }
 
     @Override
-    public Location getBeamTarget() {
+    public synchronized Location getBeamTarget() {
         return beamTarget;
     }
 
     @Override
-    public boolean hasBeamTarget() {
+    public synchronized boolean hasBeamTarget() {
         return beamTarget != null;
     }
     

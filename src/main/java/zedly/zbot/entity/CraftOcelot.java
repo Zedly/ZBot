@@ -20,7 +20,7 @@ public class CraftOcelot extends CraftTameable implements Ocelot {
     protected int ocelotType = 0;
     
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(15)) {
             ocelotType = metaMap.get(15).asInt();
@@ -32,7 +32,7 @@ public class CraftOcelot extends CraftTameable implements Ocelot {
         return EntityType.BAT;
     }
     
-    public int getOcelotType() {
+    public synchronized int getOcelotType() {
         return ocelotType;
     }
     

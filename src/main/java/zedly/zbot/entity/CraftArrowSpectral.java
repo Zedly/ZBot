@@ -15,7 +15,7 @@ import zedly.zbot.entity.ArrowSpectral;
 public class CraftArrowSpectral extends CraftArrow implements ArrowSpectral {
 
     @Override
-    public EntityType getType() {
+    public synchronized EntityType getType() {
         return EntityType.SPECTRAL_ARROW;
     }
 

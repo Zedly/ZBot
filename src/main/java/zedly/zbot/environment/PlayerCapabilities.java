@@ -23,7 +23,7 @@ public class PlayerCapabilities
     private float flySpeed = 0.05F;
     private float walkSpeed = 0.1F;
 
-    public void writeCapabilitiesToNBT(NBTTagCompound par1NBTTagCompound)
+    public synchronized void writeCapabilitiesToNBT(NBTTagCompound par1NBTTagCompound)
     {
         NBTTagCompound var2 = new NBTTagCompound();
         var2.setBoolean("invulnerable", this.disableDamage);
@@ -36,7 +36,7 @@ public class PlayerCapabilities
         par1NBTTagCompound.setTag("abilities", var2);
     }
 
-    public void readCapabilitiesFromNBT(NBTTagCompound par1NBTTagCompound)
+    public synchronized void readCapabilitiesFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         if (par1NBTTagCompound.hasKey("abilities"))
         {
@@ -59,22 +59,22 @@ public class PlayerCapabilities
         }
     }
 
-    public float getFlySpeed()
+    public synchronized float getFlySpeed()
     {
         return this.flySpeed;
     }
 
-    public void setFlySpeed(float par1)
+    public synchronized void setFlySpeed(float par1)
     {
         this.flySpeed = par1;
     }
 
-    public float getWalkSpeed()
+    public synchronized float getWalkSpeed()
     {
         return this.walkSpeed;
     }
 
-    public void func_82877_b(float par1)
+    public synchronized void setWalkSpeed(float par1)
     {
         this.walkSpeed = par1;
     }

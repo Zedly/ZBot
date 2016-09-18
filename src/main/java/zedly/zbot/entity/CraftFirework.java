@@ -16,11 +16,11 @@ import zedly.zbot.inventory.ItemStack;
  *
  * @author Dennis
  */
-public class CraftFirework extends CraftEntity implements Firework {
+public class CraftFirework extends CraftObject implements Firework {
 
     ItemStack fireworkItem;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             fireworkItem = metaMap.get(6).asSlot();
@@ -34,7 +34,7 @@ public class CraftFirework extends CraftEntity implements Firework {
     }
 
     @Override
-    public ItemStack getItemStack() {
+    public synchronized ItemStack getItemStack() {
         return fireworkItem;
     }
     

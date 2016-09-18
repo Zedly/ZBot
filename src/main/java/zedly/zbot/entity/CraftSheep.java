@@ -22,7 +22,7 @@ public class CraftSheep extends CraftAnimal implements Sheep {
     protected WoolColor color = WoolColor.WHITE;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(13)) {
             int d = metaMap.get(13).asInt();
@@ -33,12 +33,12 @@ public class CraftSheep extends CraftAnimal implements Sheep {
     }
 
     @Override
-    public WoolColor getColor() {
+    public synchronized WoolColor getColor() {
         return color;
     }
 
     @Override
-    public boolean isSheared() {
+    public synchronized boolean isSheared() {
         return sheared;
     }
     

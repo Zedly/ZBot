@@ -19,27 +19,27 @@ public class CraftBlock implements Block {
     }
 
     @Override
-    public Location getLocation() {
+    public synchronized Location getLocation() {
         return new Location(x, y, z);
     }
     
     @Override
-    public int getTypeId() {
+    public synchronized int getTypeId() {
         return typeId;
     }
     
     @Override
-    public int getData() {
+    public synchronized int getData() {
         return blockData;
     }
     
     @Override
-    public int getBlockLight() {
+    public synchronized int getBlockLight() {
         return blockLight;
     }
     
     @Override
-    public int getSkyLight() {
+    public synchronized int getSkyLight() {
         return skyLight;
     }
 }

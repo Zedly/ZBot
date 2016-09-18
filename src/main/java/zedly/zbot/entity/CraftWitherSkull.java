@@ -19,7 +19,7 @@ public class CraftWitherSkull extends CraftFireball implements WitherSkull {
 
     protected boolean invulnerable = false;
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             invulnerable = metaMap.get(6).asBoolean();
@@ -33,7 +33,7 @@ public class CraftWitherSkull extends CraftFireball implements WitherSkull {
     }
 
     @Override
-    public boolean isInvulnerable() {
+    public synchronized boolean isInvulnerable() {
         return invulnerable;
     }
 

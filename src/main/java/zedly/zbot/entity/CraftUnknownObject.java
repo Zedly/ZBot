@@ -21,12 +21,12 @@ public class CraftUnknownObject extends CraftObject implements Unknown {
         return EntityType.UNKNOWN;
     }
 
-    public void setEntityTypeId(int id) {
+    public synchronized void setEntityTypeId(int id) {
         this.typeId = id;
     }
 
     @Override
-    public int getEntityTypeId() {
+    public synchronized int getEntityTypeId() {
         return typeId;
     }
 

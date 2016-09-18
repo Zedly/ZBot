@@ -22,7 +22,7 @@ public abstract class CraftTameable extends CraftAnimal implements Tameable {
     protected UUID owner;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(13)) {
             int d = metaMap.get(13).asInt();
@@ -40,27 +40,27 @@ public abstract class CraftTameable extends CraftAnimal implements Tameable {
     }
 
     @Override
-    public boolean isSittng() {
+    public synchronized boolean isSittng() {
         return sitting;
     }
 
     @Override
-    public boolean isAngry() {
+    public synchronized boolean isAngry() {
         return angry;
     }
 
     @Override
-    public boolean isTamed() {
+    public synchronized boolean isTamed() {
         return tamed;
     }
 
     @Override
-    public boolean hasOwner() {
+    public synchronized boolean hasOwner() {
         return owner != null;
     }
 
     @Override
-    public UUID getOwner() {
+    public synchronized UUID getOwner() {
         return owner;
     }
 

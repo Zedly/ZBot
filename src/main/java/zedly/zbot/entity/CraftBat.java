@@ -20,7 +20,7 @@ public class CraftBat extends CraftAmbient implements Bat {
     protected boolean hanging;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             hanging = metaMap.get(12).asInt() != 0;
@@ -33,7 +33,7 @@ public class CraftBat extends CraftAmbient implements Bat {
     }
 
     @Override
-    public boolean isHanging() {
+    public synchronized boolean isHanging() {
         return hanging;
     }
 

@@ -68,12 +68,12 @@ public class CraftSelf extends CraftPlayer implements Self {
     }
 
     @Override
-    public ClientSettings getClientSettings() {
+    public synchronized ClientSettings getClientSettings() {
         return clientSettings;
     }
 
     @Override
-    public void setClientSettings(ClientSettings clientSettings) {
+    public synchronized void setClientSettings(ClientSettings clientSettings) {
         this.clientSettings = clientSettings;
         if (context.getSession().isOnlineMode()) {
             context.getUpThread().sendPacket(new Packet04ClientSettings(clientSettings));
@@ -86,7 +86,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     }
 
     @Override
-    public CraftInventory getInventory() {
+    public synchronized CraftInventory getInventory() {
         return inventory;
     }
 
@@ -142,8 +142,8 @@ public class CraftSelf extends CraftPlayer implements Self {
         context.getUpThread().sendPacket(new Packet13PlayerDigging(0, x, y, z, 1));
         context.getMainThread().schedule(() -> {
             context.getUpThread().sendPacket(new Packet13PlayerDigging(2, x, y, z, 1));
+            callback.run();
         }, millis, TimeUnit.MILLISECONDS);
-        callback.run();
     }
 
     @Override

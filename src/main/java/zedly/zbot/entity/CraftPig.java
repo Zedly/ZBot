@@ -20,7 +20,7 @@ public class CraftPig extends CraftAnimal implements Pig {
     protected boolean saddle = false;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(13)) {
             saddle = metaMap.get(13).asBoolean();
@@ -33,7 +33,7 @@ public class CraftPig extends CraftAnimal implements Pig {
     }
 
     @Override
-    public boolean hasSaddle() {
+    public synchronized boolean hasSaddle() {
         return saddle;
     }
 }

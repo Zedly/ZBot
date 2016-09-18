@@ -19,7 +19,7 @@ public class CraftSlime extends CraftInsentient implements Slime {
 
     int size;
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             size = metaMap.get(12).asInt();
@@ -33,7 +33,7 @@ public class CraftSlime extends CraftInsentient implements Slime {
     }
 
     @Override
-    public int getSize() {
+    public synchronized int getSize() {
         return size;
     }
 

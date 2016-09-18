@@ -19,7 +19,7 @@ public class CraftFishingHook extends CraftProjectile implements FishingHook {
 
     protected int hookedEntityId = 0;
     
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if(metaMap.containsKey(6)) {
             hookedEntityId = metaMap.get(6).asInt();
@@ -33,12 +33,12 @@ public class CraftFishingHook extends CraftProjectile implements FishingHook {
     }
 
     @Override
-    public boolean hasHookedEntity() {
+    public synchronized boolean hasHookedEntity() {
         return hookedEntityId != 0;
     }
 
     @Override
-    public int getHookedEntityId() {
+    public synchronized int getHookedEntityId() {
         return hookedEntityId;
     }   
     

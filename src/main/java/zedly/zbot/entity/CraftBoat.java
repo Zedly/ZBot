@@ -23,7 +23,7 @@ public class CraftBoat extends CraftObject implements Boat {
     protected int type = 0;
 
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(6)) {
             timeSinceLastHit = metaMap.get(6).asInt();
@@ -46,22 +46,22 @@ public class CraftBoat extends CraftObject implements Boat {
     }
 
     @Override
-    public int getTimeSinceLastHit() {
+    public synchronized int getTimeSinceLastHit() {
         return timeSinceLastHit;
     }
 
     @Override
-    public int getForwardDirection() {
+    public synchronized int getForwardDirection() {
         return forwardDirection;
     }
 
     @Override
-    public float getDamageTaken() {
+    public synchronized float getDamageTaken() {
         return damageTaken;
     }
 
     @Override
-    public int getTypeId() {
+    public synchronized int getTypeId() {
         return type;
     }
 

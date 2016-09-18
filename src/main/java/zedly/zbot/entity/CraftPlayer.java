@@ -24,7 +24,7 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     
     
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);       
         if (metaMap.containsKey(11)) {
             additionalHearts = metaMap.get(11).asFloat();
@@ -42,25 +42,25 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     }
 
     @Override
-    public String getCustomName() {
+    public synchronized String getCustomName() {
         return name;
     }
 
     @Override
-    public UUID getUUID() {
+    public synchronized UUID getUUID() {
         return uuid;
     }
     
-    public void setUUID(UUID uuid) {
+    public synchronized void setUUID(UUID uuid) {
         this.uuid = uuid;
     }
     
-    public void setName(String name) {
+    public synchronized void setName(String name) {
         this.name = name;
     }
 
     @Override
-    public String getName() {
+    public synchronized String getName() {
         return name;
     }
     
@@ -70,22 +70,22 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     }
 
     @Override
-    public float getAdditionalHearts() {
+    public synchronized float getAdditionalHearts() {
         return additionalHearts;
     }
 
     @Override
-    public int getScore() {
+    public synchronized int getScore() {
         return score;
     }
 
     @Override
-    public int getSkinFlags() {
+    public synchronized int getSkinFlags() {
         return skinFlags;
     }
 
     @Override
-    public boolean isLeftHanded() {
+    public synchronized boolean isLeftHanded() {
         return leftHanded;
     }
 }

@@ -3,4 +3,5 @@ plugins
 target
 .git
 nbactions.xml
+config.yml
 hs_err_pid*

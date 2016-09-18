@@ -20,7 +20,7 @@ public class CraftSnowman extends CraftGolem implements Snowman {
     protected boolean hasPumpkinHead = true;
     
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(11)) {
             hasPumpkinHead = (metaMap.get(11).asInt() & 0x10) != 0;
@@ -33,7 +33,7 @@ public class CraftSnowman extends CraftGolem implements Snowman {
     }
 
     @Override
-    public boolean hasPumpkinHead() {
+    public synchronized boolean hasPumpkinHead() {
         return hasPumpkinHead;
     }
     

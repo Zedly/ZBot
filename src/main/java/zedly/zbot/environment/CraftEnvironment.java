@@ -35,38 +35,38 @@ public class CraftEnvironment implements Environment {
     private int difficulty = 0;
 
     @Override
-    public Collection<Entity> getEntities() {
+    public synchronized Collection<Entity> getEntities() {
         return Collections.unmodifiableCollection(entities.values());
     }
 
     @Override
-    public CraftEntity getEntityById(int entityId) {
+    public synchronized CraftEntity getEntityById(int entityId) {
         return entities.get(entityId);
     }
 
-    public void addEntity(CraftEntity ent) {
+    public synchronized void addEntity(CraftEntity ent) {
         entities.put(ent.getEntityId(), ent);
     }
 
-    public void removeEntity(int entityId) {
+    public synchronized void removeEntity(int entityId) {
         entities.remove(entityId);
     }
 
     @Override
-    public String getPlayerNameByUUID(UUID uuid) {
+    public synchronized String getPlayerNameByUUID(UUID uuid) {
         return playerNameCache.get(uuid);
     }
 
-    public void addPlayerNameAndUUID(UUID uuid, String name) {
+    public synchronized void addPlayerNameAndUUID(UUID uuid, String name) {
         playerNameCache.put(uuid, name);
     }
 
-    public void resetWorld(int type) {
+    public synchronized void resetWorld(int type) {
         chunks.clear();
         this.worldType = type;
     }
 
-    public void loadChunkColumn(int x, int z, CraftChunk[] chunkArray, boolean completeWithAirChunks) {
+    public synchronized void loadChunkColumn(int x, int z, CraftChunk[] chunkArray, boolean completeWithAirChunks) {
         for (int i = 0; i < 16; i++) {
             long chunkId = toChunkLong(x, i, z);
             if (chunkArray[i] != null) {
@@ -77,7 +77,7 @@ public class CraftEnvironment implements Environment {
         }
     }
 
-    public void loadChunkColumn(byte[] rawData, int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask) {
+    public synchronized void loadChunkColumn(byte[] rawData, int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask) {
         ExtendedDataInputStream edis = new ExtendedDataInputStream(new ByteArrayInputStream(rawData));
         for (int i = 0; i < 16; i++) {
             if (((1 << i) & primaryBitMask) != 0) {
@@ -92,13 +92,13 @@ public class CraftEnvironment implements Environment {
         }
     }
 
-    public void reset(int worldType) {
+    public synchronized void reset(int worldType) {
         chunks.clear();
         this.worldType = worldType;
     }
 
     @Override
-    public CraftBlock getBlockAt(int x, int y, int z) {
+    public synchronized CraftBlock getBlockAt(int x, int y, int z) {
         int chunkX, chunkZ, blockX, blockZ;
         if (x < 0) {
             chunkX = (x + 1) / 16 - 1;
@@ -123,11 +123,11 @@ public class CraftEnvironment implements Environment {
     }
 
     @Override
-    public CraftBlock getBlockAt(Location loc) {
+    public synchronized CraftBlock getBlockAt(Location loc) {
         return getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
-    public void setBlockAt(int x, int y, int z, int typeId, int blockData) {
+    public synchronized void setBlockAt(int x, int y, int z, int typeId, int blockData) {
         int chunkX, chunkZ, blockX, blockZ;
         if (x < 0) {
             chunkX = (x + 1) / 16 - 1;
@@ -150,7 +150,7 @@ public class CraftEnvironment implements Environment {
         }
     }
 
-    public CraftEntity spawnEntity(int typeId, int entityId, Location loc) {
+    public synchronized CraftEntity spawnEntity(int typeId, int entityId, Location loc) {
         CraftEntity ce;
         if (entityTypeMap.containsKey(typeId)) {
             try {
@@ -171,7 +171,7 @@ public class CraftEnvironment implements Environment {
         return ce;
     }
 
-    public CraftEntity spawnEntity(Class<? extends CraftEntity> cl, int entityId, Location loc) {
+    public synchronized CraftEntity spawnEntity(Class<? extends CraftEntity> cl, int entityId, Location loc) {
         try {
             CraftEntity ce = (CraftEntity) cl.newInstance();
             ce.setEntityId(entityId);
@@ -184,7 +184,7 @@ public class CraftEnvironment implements Environment {
         return null;
     }
 
-    public CraftObject spawnObject(int typeId, int entityId, int objectData, Location loc) {
+    public synchronized CraftObject spawnObject(int typeId, int entityId, int objectData, Location loc) {
         if (objectTypeMap.containsKey(typeId)) {
             try {
                 CraftObject ce = (CraftObject) objectTypeMap.get(typeId).newInstance();
@@ -211,15 +211,15 @@ public class CraftEnvironment implements Environment {
         return (x & 0xFFFFFF) + ((y & 0xF) << 24) + ((z & 0xFFFFFF) << 28);
     }
 
-    public int getDifficulty() {
+    public synchronized int getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(int difficulty) {
+    public synchronized void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
 
-    public int getNumberOfLoadedChunks() {
+    public synchronized int getNumberOfLoadedChunks() {
         return chunks.size();
     }
 

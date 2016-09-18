@@ -29,43 +29,43 @@ public class CraftItemStack implements ItemStack {
     }
     
     @Override
-    public Material getType() {
+    public synchronized Material getType() {
         return Material.fromTypeId(itemId);
     }
 
     @Override
-    public int getTypeId() {
+    public synchronized int getTypeId() {
         return itemId;
     }
 
     @Override
-    public short getDamageValue() {
+    public synchronized short getDamageValue() {
         return damageValue;
     }
 
     @Override
-    public NBTBase getNbt() {
+    public synchronized NBTBase getNbt() {
         return nbt;
     }
 
     @Override
-    public byte getAmount() {
+    public synchronized byte getAmount() {
         return itemCount;
     }
 
-    public void setItemId(short itemId) {
+    public synchronized void setItemId(short itemId) {
         this.itemId = itemId;
     }
 
-    public void setDamageValue(short damageValue) {
+    public synchronized void setDamageValue(short damageValue) {
         this.damageValue = damageValue;
     }
 
-    public void setNbt(NBTBase nbt) {
+    public synchronized void setNbt(NBTBase nbt) {
         this.nbt = nbt;
     }
 
-    public void setItemCount(byte itemCount) {
+    public synchronized void setItemCount(byte itemCount) {
         this.itemCount = itemCount;
     }
 }

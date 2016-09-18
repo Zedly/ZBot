@@ -14,7 +14,7 @@ import zedly.zbot.entity.Projectile;
 public abstract class CraftProjectile extends CraftObject implements Projectile {
 
     @Override
-    public int getFiringEntityId() {
+    public synchronized int getFiringEntityId() {
         return objectData;
     }
     

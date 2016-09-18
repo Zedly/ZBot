@@ -23,7 +23,7 @@ public class CraftZombie extends CraftMonster implements Zombie {
     protected boolean converting = false;
     protected boolean holdingHandsUp = false;
 
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             baby = metaMap.get(12).asBoolean();
@@ -50,27 +50,27 @@ public class CraftZombie extends CraftMonster implements Zombie {
     }
 
     @Override
-    public boolean isBaby() {
+    public synchronized boolean isBaby() {
         return baby;
     }
 
     @Override
-    public boolean isVillager() {
+    public synchronized boolean isVillager() {
         return profession != null;
     }
 
     @Override
-    public VillagerProfession getProfession() {
+    public synchronized VillagerProfession getProfession() {
         return profession;
     }
 
     @Override
-    public boolean isConverting() {
+    public synchronized boolean isConverting() {
         return converting;
     }
 
     @Override
-    public boolean isHoldingHandsUp() {
+    public synchronized boolean isHoldingHandsUp() {
         return holdingHandsUp;
     }
 

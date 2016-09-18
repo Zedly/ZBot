@@ -25,7 +25,7 @@ public class CraftShulker extends CraftGolem implements Shulker {
     
     
     @Override
-    public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(12)) {
             direction = metaMap.get(12).asDirection();
@@ -44,17 +44,17 @@ public class CraftShulker extends CraftGolem implements Shulker {
     }
 
     @Override
-    public Direction getDirection() {
+    public synchronized Direction getDirection() {
         return direction;
     }
 
     @Override
-    public Location getAttachedLocation() {
+    public synchronized Location getAttachedLocation() {
         return attachedLocation;
     }
 
     @Override
-    public int getShieldHeight() {
+    public synchronized int getShieldHeight() {
         return shieldHeight;
     }
     
