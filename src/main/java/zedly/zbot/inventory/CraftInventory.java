@@ -49,7 +49,7 @@ public class CraftInventory implements Inventory {
     
     public synchronized void clickSlot(int slot, int mode, int button) {
         if (slot == -999) {
-            context.getUpThread().sendPacket(new Packet07ClickWindow((byte) activeWindowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, nullItem));
+            context.getUpThread().sendPacket(new Packet07ClickWindow((byte) activeWindowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, null));
         } else {
             ItemStack is = items[slot];
             items[slot] = itemOnCursor;
@@ -67,7 +67,7 @@ public class CraftInventory implements Inventory {
     }
 
     public synchronized void selectSlot(int i) {
-        selectedSlot = 35 + i;
+        selectedSlot = 36 + i;
     }
 
     public synchronized void reset() {

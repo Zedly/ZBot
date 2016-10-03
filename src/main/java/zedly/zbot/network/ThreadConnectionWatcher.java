@@ -29,6 +29,7 @@ public class ThreadConnectionWatcher extends Thread {
     private final int serverPort;
     private final GameContext context;
     private Socket sock;
+    private boolean keepAlive = true;
 
     public ThreadConnectionWatcher(GameContext context) {
         this.session = context.getSession();
@@ -151,6 +152,7 @@ public class ThreadConnectionWatcher extends Thread {
     }
 
     public synchronized void shutdown() {
+        keepAlive = false;
         interrupt();
         try {
             sock.close();

@@ -7,89 +7,93 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map.Entry;
 import zedly.zbot.event.Event;
 
 public class EventDispatcher {
 
+    private final LinkedHashMap<Listener, HashMap<Class, Collection<Method>>> permanentEventMethodCache = new LinkedHashMap<>();
+    //Kind of pointless because we are dealing with ~10 entries at all times
+    private final LinkedList<HashMap<Class, Collection<Method>>> temporaryEventMethodCache = new LinkedList<>();
+
     private final Collection<Listener> listeners = new ArrayList<>();
-    private final ArrayList<Listener> listenersToAdd = new ArrayList<>();
-    private final ArrayList<Listener> listenersToRemove = new ArrayList<>();
 
     /**
-     * Dispatch an event to the registered handlers.
+     * Totally faster than the previous method. Not.
      */
     public synchronized void dispatchEvent(Event event) {
-        while (!listenersToRemove.isEmpty()) {
-            listeners.remove(listenersToRemove.remove(0));
-        }
-        while (!listenersToAdd.isEmpty()) {
-            listeners.add(listenersToAdd.remove(0));
-        }
-        for (Listener listener : listeners) {
-            dispatchEventTo(event, listener);
-        }
-    }
-
-    private synchronized void dispatchEventTo(Event event, Listener listener) {
-        Collection<Method> methods = findMatchingEventHandlerMethods(listener, event.getClass());
-        for (Method method : methods) {
-            try {
-                // Make sure the method is accessible (JDK bug ?)
-                method.setAccessible(true);
-
-                if (method.getParameterTypes().length == 0) {
-                    method.invoke(listener);
+        // Loop through all registered Listener
+        
+        for (Entry<Listener, HashMap<Class, Collection<Method>>> eventMethodMap : permanentEventMethodCache.entrySet()) {
+            // Loop through all methods accepting this class
+            HashMap<Class, Collection<Method>> listenerMethods = eventMethodMap.getValue();
+            if (!listenerMethods.containsKey(event.getClass())) {
+                continue;
+            }
+            for (Method method : listenerMethods.get(event.getClass())) {
+                try {
+                    method.invoke(eventMethodMap.getKey(), event);
+                } catch (Exception e) {
+                    System.err.println("Could not invoke event handler!");
+                    e.printStackTrace(System.err);
                 }
-                if (method.getParameterTypes().length == 1) {
-                    method.invoke(listener, event);
-                }
-                if (method.getParameterTypes().length == 2) {
-                    method.invoke(listener, this, event);
-                }
-            } catch (Exception e) {
-                System.err.println("Could not invoke event handler!");
-                e.printStackTrace(System.err);
             }
         }
     }
 
-    /**
-     * Find all methods from the <em>handler</em> object that must be called,
-     * based on the presence of the HandleEvent annotation.
-     */
-    private Collection<Method> findMatchingEventHandlerMethods(Listener listener, Class eventClass) {
-        Method[] methods = listener.getClass().getDeclaredMethods();
-        Collection<Method> result = new ArrayList<>();
-        for (Method method : methods) {
-            if (canHandleEvent(method, eventClass)) {
-                result.add(method);
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Look for the annotation values.
-     */
-    private boolean canHandleEvent(Method method, Class<? extends Object> eventClass) {
+    private boolean canHandleEvents(Method method) {
         EventHandler handleEventAnnotation = method.getAnnotation(EventHandler.class);
         if (handleEventAnnotation != null) {
             Parameter[] params = method.getParameters();
-            if (params.length == 1 && params[0].getType() == eventClass) {
+            if (params.length == 1 && Event.class.isAssignableFrom(params[0].getType())) {
                 return true;
             }
         }
         return false;
     }
 
-    public synchronized void addHandler(Listener listener) {
-        this.listenersToAdd.add(listener);
+    public synchronized void addPermanentHandler(Listener listener) {
+        HashMap<Class, Collection<Method>> listenerMethods = generateMethodMap(listener);
+        permanentEventMethodCache.put(listener, listenerMethods);
     }
 
     /**
      * Removes an event handler.
      */
-    public synchronized void removeHandler(Listener listener) {
-        this.listenersToRemove.add(listener);
+    public synchronized void removePermanentHandler(Listener listener) {
+        permanentEventMethodCache.remove(listener);
     }
+
+    public synchronized void addTemporaryHandler(Listener listener) {
+        HashMap<Class, Collection<Method>> listenerMethods = generateMethodMap(listener);
+        temporaryEventMethodCache.add(listenerMethods);
+    }
+
+    private HashMap<Class, Collection<Method>> generateMethodMap(Listener listener) {
+        HashMap<Class, Collection<Method>> listenerMethods = new HashMap<>();
+        Method[] methods = listener.getClass().getDeclaredMethods();
+
+        Collection<Method> result;
+        for (Method method : methods) {
+            if (canHandleEvents(method)) {
+                Class eventClass = method.getParameters()[0].getType();
+                // If this event class is already present, append methods to its map entry,
+                // Otherwise add a new key
+                if (listenerMethods.containsKey(eventClass)) {
+                    result = listenerMethods.get(eventClass);
+                } else {
+                    result = new ArrayList<>();
+                    listenerMethods.put(eventClass, result);
+                }
+                method.setAccessible(true);
+                result.add(method);
+            }
+        }
+        return listenerMethods;
+    }
+
 }

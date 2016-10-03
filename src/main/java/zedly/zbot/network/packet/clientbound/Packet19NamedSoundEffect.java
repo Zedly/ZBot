@@ -6,6 +6,8 @@
 package zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
+import zedly.zbot.GameContext;
+import zedly.zbot.event.NamedSoundEffectEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**
@@ -30,5 +32,11 @@ public class Packet19NamedSoundEffect implements ClientBoundPacket {
         z = dis.readInt();
         volume = dis.readFloat();
         pitch = dis.readFloat();
+    }
+    
+    @Override
+    public void process(GameContext context) {
+        System.out.println("Debug: Sound effect " + soundName);
+        context.getEventDispatcher().dispatchEvent(new NamedSoundEffectEvent(soundName, soundCategory, x, y, z, volume, pitch));
     }
 }

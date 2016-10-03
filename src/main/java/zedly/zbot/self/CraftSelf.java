@@ -30,6 +30,7 @@ import zedly.zbot.network.packet.serverbound.Packet17HeldItemChange;
 import zedly.zbot.network.packet.serverbound.Packet19UpdateSign;
 import zedly.zbot.network.packet.serverbound.Packet1AAnimation;
 import zedly.zbot.network.packet.serverbound.Packet1CPlayerBlockPlacement;
+import zedly.zbot.network.packet.serverbound.Packet1DUseItem;
 import zedly.zbot.plugin.ZBotPlugin;
 
 /**
@@ -43,6 +44,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     protected final CraftInventory inventory;
     private final ServerConnection serverConnection;
     private ClientSettings clientSettings;
+    private CraftInventory externalInventory;
 
     public CraftSelf(GameContext context, CraftEnvironment env, ThreadLocationUpdater locationUpdater, ClientSettings clientSettings) {
         this.context = context;
@@ -155,16 +157,16 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void breakBlock(Location loc, int millis, Runnable callback) {
         breakBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), millis, callback);
     }
-    
+
     @Override
     public void clickBlock(Location loc) {
         clickBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
-    
+
     @Override
     public void clickBlock(int x, int y, int z) {
         context.getUpThread().sendPacket(new Packet13PlayerDigging(0, x, y, z, 0));
-        context.getUpThread().sendPacket(new Packet13PlayerDigging(1, x, y, z, 0));    
+        context.getUpThread().sendPacket(new Packet13PlayerDigging(1, x, y, z, 0));
     }
 
     @Override
@@ -179,7 +181,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void registerEvents(Listener listener) {
-        context.getEventDispatcher().addHandler(listener);
+        context.getEventDispatcher().addPermanentHandler(listener);
     }
 
     @Override
@@ -237,10 +239,15 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void swingArm(boolean leftHand) {
         context.getUpThread().sendPacket(new Packet1AAnimation((leftHand ? 1 : 0)));
     }
+    
+    @Override
+    public void useItem(boolean leftHand) {
+        context.getUpThread().sendPacket(new Packet1DUseItem((leftHand ? 1 : 0)));
+    }
 
     @Override
     public void unregisterEvents(Listener listener) {
-        context.getEventDispatcher().removeHandler(listener);
+        context.getEventDispatcher().removePermanentHandler(listener);
     }
 
     @Override
@@ -261,6 +268,24 @@ public class CraftSelf extends CraftPlayer implements Self {
     @Override
     public boolean isLeftHanded() {
         return clientSettings.isLeftHanded();
+    }
+
+    public boolean hasExternalInventory() {
+        return externalInventory != null;
+    }
+
+    /**
+     * @return the externalInventory
+     */
+    public CraftInventory getExternalInventory() {
+        return externalInventory;
+    }
+
+    /**
+     * @param externalInventory the externalInventory to set
+     */
+    public void setExternalInventory(CraftInventory externalInventory) {
+        this.externalInventory = externalInventory;
     }
 
 }
