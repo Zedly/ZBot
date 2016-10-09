@@ -42,7 +42,7 @@ public class StringTranslate {
                 }
             }
         } catch (IOException var7) {
-            ;
+
         }
     }
 

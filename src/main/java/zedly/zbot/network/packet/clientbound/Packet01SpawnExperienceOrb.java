@@ -9,6 +9,7 @@ import java.io.IOException;
 import zedly.zbot.GameContext;
 import zedly.zbot.Location;
 import zedly.zbot.entity.CraftEntity;
+import zedly.zbot.entity.CraftExperienceOrb;
 import zedly.zbot.entity.CraftUnknown;
 import zedly.zbot.network.ExtendedDataInputStream;
 
@@ -32,8 +33,10 @@ public class Packet01SpawnExperienceOrb implements ClientBoundPacket {
         count = dis.readShort();
     }
     
+    @Override
     public void process(GameContext context) {
-        CraftEntity ent = context.getSelf().getEnvironment().spawnEntity(CraftUnknown.class, entityID, new Location(x, y, z));
+        CraftExperienceOrb orb = (CraftExperienceOrb) context.getSelf().getEnvironment().spawnEntity(CraftExperienceOrb.class, entityID, new Location(x, y, z));
+        orb.setCount(count);
     }
     
 }

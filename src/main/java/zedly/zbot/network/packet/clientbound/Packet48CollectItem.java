@@ -8,6 +8,7 @@ package zedly.zbot.network.packet.clientbound;
 import java.io.IOException;
 import zedly.zbot.GameContext;
 import zedly.zbot.entity.Entity;
+import zedly.zbot.entity.ExperienceOrb;
 import zedly.zbot.entity.Item;
 import zedly.zbot.event.entity.EntityItemPickupEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
@@ -33,7 +34,7 @@ public class Packet48CollectItem implements ClientBoundPacket {
         if (ent == null) {
             System.err.println("Collect Item: Unknown entity ID " + collectedEntityID);
             return;
-        } else if (!(ent instanceof Item)) {
+        } else if (!(ent instanceof Item) && !(ent instanceof ExperienceOrb)) {
             System.err.println("Collect Item: Entity " + collectedEntityID + " is not an item, but a " + ent.getType());
             return;
         }

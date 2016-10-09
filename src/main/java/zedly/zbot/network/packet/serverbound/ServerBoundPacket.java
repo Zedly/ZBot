@@ -14,8 +14,12 @@ import zedly.zbot.network.ExtendedDataOutputStream;
  */
 public interface ServerBoundPacket {
 
-    public abstract int opCode();
+    int opCode();
 
-    public abstract void writePacket(ExtendedDataOutputStream dos) throws IOException;
-    
+    void writePacket(ExtendedDataOutputStream dos) throws IOException;
+
+    default int getSize() {
+        return -1;
+    }
+
 }

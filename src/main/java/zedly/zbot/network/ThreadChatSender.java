@@ -8,15 +8,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import zedly.zbot.GameContext;
 import zedly.zbot.StringUtil;
 
 public class ThreadChatSender extends Thread {
 
-    private ThreadUp up;
+    private final int maxChatLineLength = 100;
+    private final GameContext context;
     final BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in, Charset.forName("ISO-8859-1")));
 
-    public ThreadChatSender(ThreadUp up) {
-        this.up = up;
+    public ThreadChatSender(GameContext context) {
+        this.context = context;
     }
 
     public void run() {
@@ -24,7 +26,7 @@ public class ThreadChatSender extends Thread {
             String s;
             try {
                 s = bufferRead.readLine();
-                ArrayList<String> chatLines = StringUtil.wrap(s, 100);
+                ArrayList<String> chatLines = StringUtil.wrap(s, maxChatLineLength);
                 for (String line : chatLines) {
                     sendChat(line);
                     sleep(50);
@@ -36,15 +38,6 @@ public class ThreadChatSender extends Thread {
     }
 
     private synchronized void sendChat(String message) {
-        if (up != null) {
-            up.sendPacket(new Packet02ChatMessage(message));
-        } else {
-            System.err.println("No connection! Cannot send chat.");
-        }
+        context.getUpThread().sendPacket(new Packet02ChatMessage(message));
     }
-
-    public synchronized void changeUpThread(ThreadUp up) {
-        this.up = up;
-    }
-
 }

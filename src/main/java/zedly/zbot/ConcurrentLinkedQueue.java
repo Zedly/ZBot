@@ -15,21 +15,16 @@ public class ConcurrentLinkedQueue<E> {
     private Node last;
     private long size = 0;
 
-    public synchronized boolean enq(E object) {
-        if (object == null) {
-            return false;
+    public synchronized void enq(E object) {
+        Node node = new Node(object);
+        if (size == 0) {
+            first = node;
         } else {
-            Node node = new Node(object);
-            if (size == 0) {
-                first = node;
-            } else {
-                last.next = node;
-            }
-            last = node;
-            size++;
-            notify();
-            return true;
+            last.next = node;
         }
+        last = node;
+        size++;
+        notifyAll();
     }
 
     public synchronized E deq() throws InterruptedException {

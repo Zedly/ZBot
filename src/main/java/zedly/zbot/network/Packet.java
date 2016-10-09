@@ -48,45 +48,51 @@ public class Packet {
     }
 
     public static ServerBoundPacket getInstanceServerBound(int op, StreamState state) throws InstantiationException, IllegalAccessException {
-        if (state == StreamState.PLAY) {
-            return (ServerBoundPacket) serverBoundPackets.get(op).newInstance();
-        } else if (state == StreamState.LOGIN) {
-            switch (op) {
-                case 0:
-                    return new Packet00LoginStart();
-                case 1:
-                    return new Packet01EncryptionResponse();
-            }
-        } else if (state == StreamState.STATUS) {
-            switch (op) {
-                case 0:
-                    return new Packet00Request();
-                case 1:
-                    return new Packet01Ping();
-            }
+        if (null != state) switch (state) {
+            case PLAY:
+                return (ServerBoundPacket) serverBoundPackets.get(op).newInstance();
+            case LOGIN:
+                switch (op) {
+                    case 0:
+                        return new Packet00LoginStart();
+                    case 1:
+                        return new Packet01EncryptionResponse();
+                }
+            case STATUS:
+                switch (op) {
+                    case 0:
+                        return new Packet00Request();
+                    case 1:
+                        return new Packet01Ping();
+                }
+            default:
+                break;
         }
         return null;
     }
 
     public static ClientBoundPacket getInstanceClientBound(int op, StreamState state) throws InstantiationException, IllegalAccessException {
-        if (state == StreamState.PLAY) {
-            return (ClientBoundPacket) clientBoundPackets.get(op).newInstance();
-        } else if (state == StreamState.LOGIN) {
-            switch (op) {
-                case 0:
-                    return new Packet00Disconnect();
-                case 1:
-                    return new Packet01EncryptionRequest();
-                case 2:
-                    return new Packet02LoginSuccess();
-            }
-        } else if (state == StreamState.LOGIN) {
-            switch (op) {
-                case 0:
-                    return new Packet00Response();
-                case 1:
-                    return new Packet01Ping();
-            }
+        if (null != state) switch (state) {
+            case PLAY:
+                return (ClientBoundPacket) clientBoundPackets.get(op).newInstance();
+            case LOGIN:
+                switch (op) {
+                    case 0:
+                        return new Packet00Disconnect();
+                    case 1:
+                        return new Packet01EncryptionRequest();
+                    case 2:
+                        return new Packet02LoginSuccess();
+                }
+            case STATUS:
+                switch (op) {
+                    case 0:
+                        return new Packet00Response();
+                    case 1:
+                        return new Packet01Ping();
+                }
+            default:
+                break;
         }
         return null;
     }

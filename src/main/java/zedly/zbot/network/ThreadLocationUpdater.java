@@ -15,6 +15,8 @@ public class ThreadLocationUpdater extends Thread {
     private GameContext context;
     private boolean updated = false;
     private Location location;
+    private int noMovementTimer = 20;
+    private boolean alive = true;
 
     public ThreadLocationUpdater(GameContext context) {
         this.context = context;
@@ -23,26 +25,36 @@ public class ThreadLocationUpdater extends Thread {
     public void run() {
         upThread = context.getUpThread();
         try {
-            while (!isInterrupted()) {
-                if (updated) {
+            while (!isInterrupted() && getAlive()) {
+                if (updated || --noMovementTimer == 0) {
                     upThread.sendPacket(new Packet0DPlayerPositionAndLook(location));
+                    noMovementTimer = 20;
                 } else {
-                    upThread.sendPacket(new Packet0FPlayer(location.onGround()));
+                    upThread.sendPacket(new Packet0FPlayer(true));
                 }
                 updated = false;
                 synchronized (this) {
-                    wait(200);
+                    wait(50);
                 }
             }
         } catch (InterruptedException ex) {
         }
     }
 
+    private synchronized boolean getAlive() {
+        return alive;
+    }
+
+    public synchronized void exit() {
+        alive = false;
+        notifyAll();
+    }
+
     public synchronized void updatePosition(Location loc) {
         location = loc;
         updated = true;
         if (isAlive()) {
-            notify();
+            notifyAll();
         } else {
             start();
         }

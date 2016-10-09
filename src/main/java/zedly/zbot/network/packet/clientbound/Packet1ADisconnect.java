@@ -1,7 +1,7 @@
 package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
-import zedly.zbot.Util;
+import zedly.zbot.StringUtil;
 import zedly.zbot.event.SelfKickEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
@@ -15,13 +15,13 @@ public class Packet1ADisconnect implements ClientBoundPacket {
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         reason = dis.readString();
-        formattedReason = Util.stringExtract(reason, "\":\"", "\"}");
+        formattedReason = StringUtil.extract(reason, "\":\"", "\"}");
     }
 
     @Override
     public void process(GameContext context) {
         System.out.println("Kicked: " + formattedReason);
         context.getMainThread().fireEvent(new SelfKickEvent(reason, formattedReason));
-        context.closeConnection();
+        context.cleanUpConnection();
     }
 }

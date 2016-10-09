@@ -8,6 +8,7 @@ package zedly.zbot.self;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import zedly.zbot.ClientSettings;
+import zedly.zbot.ConcurrentLinkedQueue;
 import zedly.zbot.GameContext;
 import zedly.zbot.ServerConnection;
 import zedly.zbot.StringUtil;
@@ -16,6 +17,8 @@ import zedly.zbot.event.Listener;
 import zedly.zbot.inventory.CraftInventory;
 import zedly.zbot.environment.CraftEnvironment;
 import zedly.zbot.Location;
+import zedly.zbot.ai.Control;
+import zedly.zbot.ai.CraftControl;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
 import zedly.zbot.network.ThreadLocationUpdater;
@@ -43,28 +46,55 @@ public class CraftSelf extends CraftPlayer implements Self {
     protected final CraftEnvironment environment;
     protected final CraftInventory inventory;
     private final ServerConnection serverConnection;
+    private CraftControl control;
     private ClientSettings clientSettings;
     private CraftInventory externalInventory;
+    private Thread taskThread;
 
     public CraftSelf(GameContext context, CraftEnvironment env, ThreadLocationUpdater locationUpdater, ClientSettings clientSettings) {
         this.context = context;
         this.environment = env;
         this.inventory = new CraftInventory(context);
-        this.serverConnection = new ServerConnection(context.getServerIp(), context.getServerPort(), context.getSession().getActualUsername());
+        this.serverConnection = new ServerConnection(context.getServerAddress().getAddress().getHostAddress(), context.getServerAddress().getPort(), context.getSession().getActualUsername());
         this.clientSettings = clientSettings;
     }
 
     @Override
+    public Control getControl() {
+        if (control != null && control.isValid()) {
+            return null;
+        }
+        control = new CraftControl(context);
+        return control;
+    }
+
+    public boolean controlAvailable() {
+        return control != null;
+    }
+
+    public void releaseControl() {
+        control.invalidate();
+        control = null;
+    }
+
+    public void killRunningTask() {
+        taskThread.interrupt();
+    }
+
+    @Override
+    @Deprecated
     public void attackEntity(Entity ent) {
         context.getUpThread().sendPacket(new Packet0AUseEntity(ent.getEntityId()));
     }
 
     @Override
+    @Deprecated
     public void cancelTask(int i) {
         context.cancelTask(i);
     }
 
     @Override
+    @Deprecated
     public void closeWindow() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -220,9 +250,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void shutdown() {
-        context.closeConnection();
-        context.finish();
-        System.exit(0);
+        context.disconnect();
     }
 
     @Override
@@ -239,7 +267,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void swingArm(boolean leftHand) {
         context.getUpThread().sendPacket(new Packet1AAnimation((leftHand ? 1 : 0)));
     }
-    
+
     @Override
     public void useItem(boolean leftHand) {
         context.getUpThread().sendPacket(new Packet1DUseItem((leftHand ? 1 : 0)));

@@ -41,7 +41,7 @@ public class Packet0DPlayerPositionAndLook implements ServerBoundPacket {
         this.z = loc.getZ();
         this.yaw = loc.getYaw();
         this.pitch = loc.getPitch();
-        this.onGround = loc.onGround();
+        this.onGround = true;
     }
 
     @Override
