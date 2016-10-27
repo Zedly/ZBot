@@ -28,7 +28,7 @@ public class ZBot {
             return;
         }
 
-        System.out.print("Logging in.. [    ]");
+        //System.out.print("Logging in.. [    ]");
 
         if (onlineMode) {
             session = new Session(username, password);

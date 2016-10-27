@@ -29,8 +29,9 @@ public class GameContext {
 
     private final InetSocketAddress serverAddress;
     private final Session session;
-    private final CraftSelf self;
+    private CraftSelf self;
     private final PluginManager pluginManager;
+    private final ClientSettings clientSettings;
 
     private final ZBotThreadPoolExecutor mainThread;
     private final EventDispatcher eventDispatcher = new EventDispatcher();
@@ -46,12 +47,13 @@ public class GameContext {
         this.serverAddress = new InetSocketAddress(serverIp, serverPort);
         this.session = session;
         pluginManager = new PluginManager();
-        CraftEnvironment env = new CraftEnvironment();
-        self = new CraftSelf(this, env, locationUpdater, clientSettings);
         mainThread = new ZBotThreadPoolExecutor(this, 1);
+        this.clientSettings = clientSettings;
     }
 
     public void run() {
+        CraftEnvironment env = new CraftEnvironment();
+        self = new CraftSelf(this, env, locationUpdater, clientSettings);
         ThreadChatSender chatSender = new ThreadChatSender(this);
         try {
             renewSession();
@@ -60,13 +62,13 @@ public class GameContext {
             chatSender.start();
             while (reconnect) {
                 GameSocket gameSocket = new GameSocket(getServerAddress(), session);
-                System.out.print("Connecting to server..");
+                System.out.println("Connecting to server..");
                 if (!gameSocket.connect()) {
                     System.err.println("Could not connect to server. Retrying in 30 seconds");
                     sleep(30000);
                     continue;
                 }
-                System.out.print("Logging in..");
+                System.out.println("Logging in..");
                 if (!gameSocket.handshake()) {
                     System.err.println("Unable to log in!");
                     if (gameSocket.getDisconnectPacket() != null) {
@@ -75,6 +77,10 @@ public class GameContext {
                     sleep(30000);
                     continue;
                 }
+                
+                
+                
+                
                 threadUp = new ThreadUp(gameSocket);
                 threadDown = new ThreadDown(gameSocket);
                 locationUpdater = new ThreadLocationUpdater(this);
@@ -88,7 +94,7 @@ public class GameContext {
                 // Main game logic here
                 
                 
-                
+                threadUp.exit();
             }
             mainThread.shutdownNow();
             pluginManager.disablePlugins();
@@ -115,6 +121,7 @@ public class GameContext {
                 sleep(30000);
             }
         } catch (InterruptedException ex) {
+            System.err.println("Unable to get session.");
         }
     }
 

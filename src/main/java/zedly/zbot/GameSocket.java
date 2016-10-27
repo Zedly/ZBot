@@ -152,6 +152,7 @@ public class GameSocket {
                 }
             }
         } catch (IOException ex) {
+            ex.printStackTrace();
             return false;
         }
     }
@@ -227,9 +228,11 @@ public class GameSocket {
                 dataBuffer.writeVarInt(p.opCode());
                 p.writePacket(dataBuffer);
                 dataBuffer.flush();
-                size = byteBuffer.size() + 1;
+                size = byteBuffer.size();
                 outputStream.writeVarInt(size);
-                outputStream.writeVarInt(0);
+                if (compressionEnabled) {
+                    outputStream.writeVarInt(0);
+                }
                 outputStream.write(byteBuffer.toByteArray());
             } else {
                 outputStream.writeVarInt(size);
