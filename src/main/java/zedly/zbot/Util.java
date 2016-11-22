@@ -38,7 +38,7 @@ public class Util {
             }
             return unescape(result);
         } catch (IllegalStateException ex) {
-            return json.replaceAll("§[0-9a-fklmnor]", "");
+            return json.replaceAll("\u00A7[0-9a-fklmnor]", "");
         }
     }
 

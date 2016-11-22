@@ -19,7 +19,7 @@ public class Packet0FChatMessage implements ClientBoundPacket {
 
     @Override
     public void process(GameContext context) {
-        System.out.println(message.replaceAll("§.", ""));
+        System.out.println(message.replaceAll("\u00A7.", ""));
         context.getMainThread().fireEvent(new ChatEvent(message));
     }
 }
