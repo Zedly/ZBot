@@ -10,7 +10,7 @@ public class ZBot {
     private static final Yaml YAML = new Yaml();
     private static String username = "ZBot";
     private static String password = "";
-    private static short serverPort = 25565;
+    private static int serverPort = 25565;
     private static String serverIP = "127.0.0.1";
     private static boolean onlineMode = false;
     
@@ -68,7 +68,7 @@ public class ZBot {
             System.out.println("Missing field serverIp. Defaulting to 127.0.0.1");
         }
         if (map.containsKey("serverPort")) {
-            serverPort = ((Integer) map.get("serverPort")).shortValue();
+            serverPort = ((Integer) map.get("serverPort")).intValue();
         } else {
             System.out.println("Missing field serverPort. Defaulting to 25565");
         }

@@ -40,7 +40,7 @@ public class Packet03SpawnMob implements ClientBoundPacket {
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         entityID = dis.readVarInt();
         uuid = dis.readUUID();
-        type = dis.readUnsignedByte();
+        type = dis.readVarInt();
         x = dis.readDouble();
         y = dis.readDouble();
         z = dis.readDouble();

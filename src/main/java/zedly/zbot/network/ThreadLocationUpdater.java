@@ -27,7 +27,7 @@ public class ThreadLocationUpdater extends Thread {
                 if (updated) {
                     upThread.sendPacket(new Packet0DPlayerPositionAndLook(location));
                 } else {
-                    upThread.sendPacket(new Packet0FPlayer(location.onGround()));
+                    upThread.sendPacket(new Packet0FPlayer(true));
                 }
                 updated = false;
                 synchronized (this) {

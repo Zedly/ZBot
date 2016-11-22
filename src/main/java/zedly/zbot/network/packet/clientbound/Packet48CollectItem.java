@@ -20,11 +20,13 @@ public class Packet48CollectItem implements ClientBoundPacket {
 
     private int collectedEntityID;
     private int collectorEntityID;
+    private int pickupItemCount;
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         collectedEntityID = dis.readVarInt();
         collectorEntityID = dis.readVarInt();
+        pickupItemCount = dis.readVarInt();
     }
 
     @Override
@@ -39,10 +41,10 @@ public class Packet48CollectItem implements ClientBoundPacket {
         }
         Item item = (Item) ent;
         if (collectorEntityID == context.getSelf().getEntityId()) {
-            context.getEventDispatcher().dispatchEvent(new EntityItemPickupEvent(context.getSelf(), item));
+            context.getEventDispatcher().dispatchEvent(new EntityItemPickupEvent(context.getSelf(), item, pickupItemCount));
         } else {
             Entity collector = context.getSelf().getEnvironment().getEntityById(collectorEntityID);
-            context.getEventDispatcher().dispatchEvent(new EntityItemPickupEvent(collector, item));
+            context.getEventDispatcher().dispatchEvent(new EntityItemPickupEvent(collector, item, pickupItemCount));
         }
 
     }

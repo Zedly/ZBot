@@ -6,6 +6,7 @@
 package zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
+import zedly.zbot.GameContext;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**
@@ -24,5 +25,10 @@ public class Packet33Respawn implements ClientBoundPacket {
         difficulty = dis.readUnsignedByte();
         gamemode = dis.readUnsignedByte();
         levelType = dis.readString();
+    }
+    
+    @Override
+    public void process(GameContext context) {
+        context.getSelf().getEnvironment().reset(dimension);
     }
 }

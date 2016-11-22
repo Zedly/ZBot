@@ -61,11 +61,6 @@ public class CraftEnvironment implements Environment {
         playerNameCache.put(uuid, name);
     }
 
-    public synchronized void resetWorld(int type) {
-        chunks.clear();
-        this.worldType = type;
-    }
-
     public synchronized void loadChunkColumn(int x, int z, CraftChunk[] chunkArray, boolean completeWithAirChunks) {
         for (int i = 0; i < 16; i++) {
             long chunkId = toChunkLong(x, i, z);
@@ -82,7 +77,7 @@ public class CraftEnvironment implements Environment {
         for (int i = 0; i < 16; i++) {
             if (((1 << i) & primaryBitMask) != 0) {
                 try {
-                    chunks.put(toChunkLong(chunkX, i, chunkZ), edis.readChunkSection(worldType == 1));
+                    chunks.put(toChunkLong(chunkX, i, chunkZ), edis.readChunkSection(worldType == 0));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -95,6 +90,7 @@ public class CraftEnvironment implements Environment {
     public synchronized void reset(int worldType) {
         chunks.clear();
         this.worldType = worldType;
+        System.out.println("Teleported to new world: Type " + worldType);
     }
 
     @Override

@@ -113,6 +113,12 @@ public class CraftSelf extends CraftPlayer implements Self {
     }
 
     @Override
+    public void lookAt(double yaw, double pitch) {
+        Location l = getLocation();
+        context.getLocationUpdater().updatePosition(new Location(l.getX(), l.getY(), l.getZ(), yaw, pitch));
+    }
+
+    @Override
     public void moveTo(double x, double y, double z) {
         Location l = getLocation();
         context.getLocationUpdater().updatePosition(new Location(x, y, z, l.getYaw(), l.getPitch()));
@@ -239,7 +245,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void swingArm(boolean leftHand) {
         context.getUpThread().sendPacket(new Packet1AAnimation((leftHand ? 1 : 0)));
     }
-    
+
     @Override
     public void useItem(boolean leftHand) {
         context.getUpThread().sendPacket(new Packet1DUseItem((leftHand ? 1 : 0)));

@@ -19,11 +19,11 @@ public class Packet1CPlayerBlockPlacement implements ServerBoundPacket {
     int z;
     byte face;
     int hand;
-    byte cursorX;
-    byte cursorY;
-    byte cursorZ;
+    double cursorX;
+    double cursorY;
+    double cursorZ;
 
-    public Packet1CPlayerBlockPlacement(int x, int y, int z, byte face, int hand, byte cursorX, byte cursorY, byte cursorZ) {
+    public Packet1CPlayerBlockPlacement(int x, int y, int z, byte face, int hand, double cursorX, double cursorY, double cursorZ) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -40,13 +40,13 @@ public class Packet1CPlayerBlockPlacement implements ServerBoundPacket {
     }
 
     @Override
-    public void writePacket(ExtendedDataOutputStream dos) throws IOException {
-        dos.writePosition(x, y, z);
+    public void writePacket(ExtendedDataOutputStream dos) throws IOException { 
+       dos.writePosition(x, y, z);
         dos.writeVarInt(face);
         dos.writeVarInt(hand);
-        dos.writeByte(cursorX);
-        dos.writeByte(cursorY);
-        dos.writeByte(cursorZ);
+        dos.writeFloat((float) cursorX);
+        dos.writeFloat((float) cursorY);
+        dos.writeFloat((float) cursorZ);
     }
     
 }
