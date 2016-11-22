@@ -7,7 +7,7 @@ import zedly.zbot.inventory.ItemStack;
 
 import java.util.UUID;
 import zedly.zbot.Direction;
-import zedly.zbot.StringUtil;
+import zedly.zbot.Util;
 import zedly.zbot.inventory.CraftItemStack;
 import zedly.zbot.network.ExtendedDataInputStream;
 
@@ -134,7 +134,7 @@ public abstract class CraftEntityMeta implements EntityMeta {
 
         @Override
         public void read(ExtendedDataInputStream edis) throws IOException {
-            stringValue = StringUtil.interpretJson(edis.readString());
+            stringValue = Util.interpretJson(edis.readString());
         }
 
         public String toString() {

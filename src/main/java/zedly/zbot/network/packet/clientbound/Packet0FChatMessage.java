@@ -1,11 +1,11 @@
 package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
+import zedly.zbot.Util;
 import zedly.zbot.event.ChatEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;
-import zedly.zbot.StringUtil;
 
 public class Packet0FChatMessage implements ClientBoundPacket {
 
@@ -13,7 +13,7 @@ public class Packet0FChatMessage implements ClientBoundPacket {
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        message = StringUtil.interpretJson(dis.readString());
+        message = Util.interpretJson(dis.readString());
         dis.readByte();
     }
 

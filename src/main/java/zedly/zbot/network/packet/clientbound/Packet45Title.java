@@ -15,6 +15,7 @@ import zedly.zbot.network.ExtendedDataInputStream;
 public class Packet45Title implements ClientBoundPacket {
     private int action;
     private String titleText;
+    private String actionBarText;
     private String subtitleText;
     private int fadeInTime;
     private int stayTime;
@@ -31,6 +32,8 @@ public class Packet45Title implements ClientBoundPacket {
                 subtitleText = dis.readString();
                 break;
             case 2:
+                actionBarText = dis.readString();
+            case 3:
                 fadeInTime = dis.readInt();
                 stayTime = dis.readInt();
                 fadeOutTime = dis.readInt();

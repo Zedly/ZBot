@@ -8,12 +8,10 @@ public class Session {
     private String actualUsername;
     private String profileID;
     private final boolean onlineMode;
-    private final String username;
-    private final String password;
+    private String username;
+    private String password;
 
     public Session(String actualUsername) {
-        this.username = null;
-        this.password = null;
         this.actualUsername = actualUsername;
         onlineMode = false;
     }
@@ -67,22 +65,5 @@ public class Session {
 
     public synchronized boolean isOnlineMode() {
         return onlineMode;
-    }
-
-    public synchronized boolean authenticateConnection(String serverId) {
-        try {
-            HTTP.HTTPResponse http = HTTP.https("https://sessionserver.mojang.com/session/minecraft/join", "{\r\n"
-                    + "\"accessToken\": \"" + getAccessToken() + "\",\r\n"
-                    + "\"selectedProfile\": \"" + getProfileID() + "\",\r\n"
-                    + "\"serverId\": \"" + serverId + "\"\r\n"
-                    + "}");
-            //System.out.println(http.getHeaders().get(null));
-            if (http == null || http.getHeaders().get(null).get(0).contains("403")) {
-                return false;
-            }
-            return true;
-        } catch (IOException ex) {
-            return false;
-        }
     }
 }

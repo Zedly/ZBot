@@ -5,21 +5,19 @@
  */
 package zedly.zbot;
 
-import java.io.IOException;
 import zedly.zbot.self.CraftSelf;
 import zedly.zbot.environment.CraftEnvironment;
-import java.net.Socket;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import zedly.zbot.network.ThreadConnectionWatcher;
 import zedly.zbot.network.ThreadDown;
 import zedly.zbot.network.ThreadLocationUpdater;
 import zedly.zbot.network.ThreadUp;
 import zedly.zbot.network.ThreadChatSender;
 import zedly.zbot.plugin.ZBotPlugin;
-import static java.lang.Thread.sleep;
-import java.net.InetSocketAddress;
-import zedly.zbot.network.Packet.Packet00Disconnect;
 
 /**
  *
@@ -27,118 +25,87 @@ import zedly.zbot.network.Packet.Packet00Disconnect;
  */
 public class GameContext {
 
-    private final InetSocketAddress serverAddress;
+    private final String serverIp;
+    private final int serverPort;
     private final Session session;
-    private CraftSelf self;
+    private final CraftSelf self;
     private final PluginManager pluginManager;
-    private final ClientSettings clientSettings;
-
-    private final ZBotThreadPoolExecutor mainThread;
-    private final EventDispatcher eventDispatcher = new EventDispatcher();
-    private final HashMap<Integer, Future> taskFutureIds = new HashMap<>();
 
     private ThreadUp threadUp;
     private ThreadDown threadDown;
     private ThreadLocationUpdater locationUpdater;
+    private ThreadChatSender chatSender;
+    private final ThreadConnectionWatcher connectionWatcher;
+    private final ZBotThreadPoolExecutor mainThread;
+    private final EventDispatcher eventDispatcher = new EventDispatcher();
+    private final HashMap<Integer, Future> taskFutureIds = new HashMap<>();
+    private final HashMap<ZBotPlugin, Future> taskFuturePlugins = new HashMap<>();
     private int futureIndex = 0;
-    private boolean reconnect = true;
 
     public GameContext(String serverIp, int serverPort, Session session, ClientSettings clientSettings) {
-        this.serverAddress = new InetSocketAddress(serverIp, serverPort);
+        this.serverIp = serverIp;
+        this.serverPort = serverPort;
         this.session = session;
+        connectionWatcher = new ThreadConnectionWatcher(this);
         pluginManager = new PluginManager();
-        mainThread = new ZBotThreadPoolExecutor(this, 1);
-        this.clientSettings = clientSettings;
-    }
-
-    public void run() {
         CraftEnvironment env = new CraftEnvironment();
         self = new CraftSelf(this, env, locationUpdater, clientSettings);
-        ThreadChatSender chatSender = new ThreadChatSender(this);
-        try {
-            renewSession();
-            pluginManager.loadPlugins();
-            pluginManager.enablePlugins(self);
+        mainThread = new ZBotThreadPoolExecutor(this, 1);
+    }
+
+    public synchronized void openConnection(InputStream is, OutputStream os, boolean compressionEnabled) {
+        threadUp = new ThreadUp(os);
+        threadDown = new ThreadDown(is, this, compressionEnabled);
+        locationUpdater = new ThreadLocationUpdater(this);
+        self.setClientSettings(self.getClientSettings()); // Force re-send if online mode
+        threadUp.start();
+        threadDown.start();
+        if (chatSender != null) {
+            chatSender.changeUpThread(threadUp);
+        } else {
+            chatSender = new ThreadChatSender(threadUp);
             chatSender.start();
-            while (reconnect) {
-                GameSocket gameSocket = new GameSocket(getServerAddress(), session);
-                System.out.println("Connecting to server..");
-                if (!gameSocket.connect()) {
-                    System.err.println("Could not connect to server. Retrying in 30 seconds");
-                    sleep(30000);
-                    continue;
-                }
-                System.out.println("Logging in..");
-                if (!gameSocket.handshake()) {
-                    System.err.println("Unable to log in!");
-                    if (gameSocket.getDisconnectPacket() != null) {
-                        handleLoginRejection(gameSocket.getDisconnectPacket());
-                    }
-                    sleep(30000);
-                    continue;
-                }
-                
-                
-                
-                
-                threadUp = new ThreadUp(gameSocket);
-                threadDown = new ThreadDown(gameSocket);
-                locationUpdater = new ThreadLocationUpdater(this);
-                self.setClientSettings(self.getClientSettings()); // Force re-send if online mode
-                System.out.println("Loading terrain..");
-                threadUp.start();
-                threadDown.start();
-                
-                
-                
-                // Main game logic here
-                
-                
-                threadUp.exit();
-            }
-            mainThread.shutdownNow();
-            pluginManager.disablePlugins();
-        } catch (InterruptedException ex) {
         }
     }
 
-    private void handleLoginRejection(Packet00Disconnect disconnectPacket) {
-        String kickReason = disconnectPacket.getJSONData();
-        System.out.println("Kicked: " + kickReason);
-        if (kickReason.contains("40")) {
-            renewSession();
-        }
+    public synchronized void launch() {
+        pluginManager.loadPlugins();
+        pluginManager.enablePlugins(self);
+        connectionWatcher.start();
     }
 
-    private void renewSession() {
-        try {
-            while (true) {
-                System.out.println("Getting session..");
-                if (session.renew()) {
-                    break;
-                }
-                System.err.println("Unable to get session. Retrying in 30 seconds");
-                sleep(30000);
-            }
-        } catch (InterruptedException ex) {
-            System.err.println("Unable to get session.");
-        }
+    public synchronized void finish() {
+        mainThread.shutdownNow();
+        connectionWatcher.interrupt();
+        pluginManager.disablePlugins();
     }
 
-    public synchronized void disconnect() {
-    }
-
-    public synchronized void cleanUpConnection() {
+    public synchronized void closeConnection() {
         pluginManager.onQuit();
         for (int i : taskFutureIds.keySet()) {
             taskFutureIds.get(i).cancel(false);
         }
-        locationUpdater.exit();
+        if (threadUp != null) {
+            threadUp.interrupt();
+        }
+        if (threadDown != null) {
+            threadDown.interrupt();
+        }
+        if (locationUpdater != null) {
+            locationUpdater.interrupt();
+        }
+        if (chatSender != null) {
+            chatSender.changeUpThread(null);
+        }
     }
 
     public synchronized void cancelTask(int i) {
         taskFutureIds.get(i).cancel(false);
         mainThread.purge();
+    }
+
+    public synchronized ThreadDown getDownThread() {
+        return threadDown;
     }
 
     public synchronized EventDispatcher getEventDispatcher() {
@@ -157,12 +124,25 @@ public class GameContext {
         return self;
     }
 
+    public synchronized String getServerIp() {
+        return serverIp;
+    }
+
+    public synchronized int getServerPort() {
+        return serverPort;
+    }
+
     public synchronized Session getSession() {
         return session;
     }
 
     public synchronized ThreadUp getUpThread() {
         return threadUp;
+    }
+
+    public void joinThreads() throws InterruptedException {
+        threadDown.join();
+        //threadUp.join();
     }
 
     public synchronized int scheduleSyncDelayedTask(ZBotPlugin plugin, Runnable r, long delay) {
@@ -193,10 +173,4 @@ public class GameContext {
         return pluginManager;
     }
 
-    /**
-     * @return the serverAddress
-     */
-    public InetSocketAddress getServerAddress() {
-        return serverAddress;
-    }
 }

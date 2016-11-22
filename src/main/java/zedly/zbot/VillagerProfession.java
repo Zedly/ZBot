@@ -11,7 +11,7 @@ package zedly.zbot;
  */
 public enum VillagerProfession {
 
-    FARMER, LIBRARIAN, PRIEST, BLACKSMITH, BUTCHER;
+    FARMER, LIBRARIAN, PRIEST, BLACKSMITH, BUTCHER, NITWIT;
 
     public static VillagerProfession getById(int id) {
         switch (id) {
@@ -23,6 +23,8 @@ public enum VillagerProfession {
                 return BLACKSMITH;
             case 4:
                 return BUTCHER;
+            case 5:
+                return NITWIT;
             default:
                 return FARMER;
         }

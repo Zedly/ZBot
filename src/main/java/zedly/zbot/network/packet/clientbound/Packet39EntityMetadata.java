@@ -48,6 +48,8 @@ public class Packet39EntityMetadata implements ClientBoundPacket {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                System.err.println("Failed to set meta for " + ce + ":");
+                System.err.println(metaData);
             }
         }
     }

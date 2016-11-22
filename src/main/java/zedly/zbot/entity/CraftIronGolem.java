@@ -18,6 +18,7 @@ import zedly.zbot.event.Event;
 public class CraftIronGolem extends CraftGolem implements IronGolem {
 
     boolean playerCreated = false;
+    boolean isHidingRose = false;
     
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
@@ -35,6 +36,11 @@ public class CraftIronGolem extends CraftGolem implements IronGolem {
     @Override
     public synchronized boolean isPlayerCreated() {
         return playerCreated;
+    }
+    
+    
+    public synchronized boolean isHidingRose() {
+        return isHidingRose;
     }
     
 }

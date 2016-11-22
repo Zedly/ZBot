@@ -38,6 +38,7 @@ public class Packet23JoinGame implements ClientBoundPacket {
     public void process(GameContext context) {
         context.getSelf().setEntityId(entityID);
         context.getPluginManager().onJoin();
-        //context.getMainThread().fireEvent(new PlayerJoinEvent(entityID, gamemode));
+        context.getSelf().getEnvironment().reset(dimension);
+//        context.getMainThread().fireEvent(new PlayerJoinEvent(entityID, gamemode));
     }
 }

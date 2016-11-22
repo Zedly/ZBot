@@ -8,7 +8,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 public class ZBotThreadPoolExecutor extends ScheduledThreadPoolExecutor {
 
     private final GameContext context;
-    
+
     public ZBotThreadPoolExecutor(GameContext context, int i) {
         super(i);
         this.context = context;
