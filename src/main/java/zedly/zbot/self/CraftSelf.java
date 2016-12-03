@@ -11,13 +11,13 @@ import zedly.zbot.ClientSettings;
 import zedly.zbot.GameContext;
 import zedly.zbot.ServerConnection;
 import zedly.zbot.StringUtil;
-import zedly.zbot.self.Self;
 import zedly.zbot.event.Listener;
 import zedly.zbot.inventory.CraftInventory;
 import zedly.zbot.environment.CraftEnvironment;
 import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
+import zedly.zbot.inventory.CraftPlayerInventory;
 import zedly.zbot.network.ThreadLocationUpdater;
 import zedly.zbot.network.packet.serverbound.Packet02ChatMessage;
 import zedly.zbot.network.packet.serverbound.Packet03ClientStatus;
@@ -39,17 +39,16 @@ import zedly.zbot.plugin.ZBotPlugin;
  */
 public class CraftSelf extends CraftPlayer implements Self {
 
-    private final GameContext context;
-    protected final CraftEnvironment environment;
-    protected final CraftInventory inventory;
     private final ServerConnection serverConnection;
+    private final GameContext context;
+    private CraftEnvironment environment;
+    private CraftInventory inventory;
     private ClientSettings clientSettings;
-    private CraftInventory externalInventory;
 
     public CraftSelf(GameContext context, CraftEnvironment env, ThreadLocationUpdater locationUpdater, ClientSettings clientSettings) {
         this.context = context;
         this.environment = env;
-        this.inventory = new CraftInventory(context);
+        this.inventory = new CraftPlayerInventory(context);
         this.serverConnection = new ServerConnection(context.getServerIp(), context.getServerPort(), context.getSession().getActualUsername());
         this.clientSettings = clientSettings;
     }
@@ -213,7 +212,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void sendChat(String message) {
-        ArrayList<String> lines = StringUtil.wrap(message, 100);
+        ArrayList<String> lines = StringUtil.wrap(message, 240);
         for (String line : lines) {
             context.getUpThread().sendPacket(new Packet02ChatMessage(line));
         }
@@ -276,22 +275,12 @@ public class CraftSelf extends CraftPlayer implements Self {
         return clientSettings.isLeftHanded();
     }
 
-    public boolean hasExternalInventory() {
-        return externalInventory != null;
-    }
-
-    /**
-     * @return the externalInventory
-     */
-    public CraftInventory getExternalInventory() {
-        return externalInventory;
-    }
-
     /**
      * @param externalInventory the externalInventory to set
      */
-    public void setExternalInventory(CraftInventory externalInventory) {
-        this.externalInventory = externalInventory;
+    public void setInventory(CraftInventory inventory) {
+        this.inventory.close();
+        this.inventory = inventory;
     }
 
 }
