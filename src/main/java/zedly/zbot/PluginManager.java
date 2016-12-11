@@ -64,7 +64,7 @@ public class PluginManager {
                     ZBotPlugin plugin = ctor.newInstance();
                     // Awwwww
                     try {
-                        plugin.reloadConfig();
+                        plugin.createDataFolder();
                         plugin.onLoad();
                         plugins.put(pluginName, plugin);
                     } catch (Exception ex) {
