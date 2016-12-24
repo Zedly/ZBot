@@ -6,13 +6,13 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.EyeOfEnder;
+import zedly.zbot.entity.EyeOfEnderSignal;
 
 /**
  *
  * @author Dennis
  */
-public class CraftEyeOfEnder extends CraftProjectile implements EyeOfEnder {
+public class CraftEyeOfEnderSignal extends CraftProjectile implements EyeOfEnderSignal {
 
     @Override
     public EntityType getType() {

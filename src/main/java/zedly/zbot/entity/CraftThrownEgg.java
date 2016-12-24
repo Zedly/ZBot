@@ -6,17 +6,17 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.Egg;
+import zedly.zbot.entity.ThrownEgg;
 
 /**
  *
  * @author Dennis
  */
-public class CraftEgg extends CraftProjectile implements Egg {
+public class CraftThrownEgg extends CraftProjectile implements ThrownEgg {
 
     @Override
     public EntityType getType() {
-        return EntityType.EGG;
+        return EntityType.THROWN_EGG;
     }
 
     @Override

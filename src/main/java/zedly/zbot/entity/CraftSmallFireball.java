@@ -6,13 +6,13 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.FireCharge;
+import zedly.zbot.entity.SmallFireball;
 
 /**
  *
  * @author Dennis
  */
-public class CraftFireCharge extends CraftProjectile implements FireCharge {
+public class CraftSmallFireball extends CraftProjectile implements SmallFireball {
 
     @Override
     public EntityType getType() {

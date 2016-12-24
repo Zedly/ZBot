@@ -5,8 +5,7 @@
  */
 package zedly.zbot.inventory;
 
-import zedly.zbot.block.Material;
-import zedly.zbot.inventory.ItemStack;
+import org.bukkit.Material;
 import net.minecraft.server.NBTBase;
 
 /**
@@ -16,7 +15,7 @@ import net.minecraft.server.NBTBase;
 public class CraftItemStack implements ItemStack {
 
     protected short itemId = -1;
-    protected short damageValue = 0;
+    protected short data = 0;
     protected NBTBase nbt;
     protected byte itemCount = 0;
 
@@ -25,22 +24,22 @@ public class CraftItemStack implements ItemStack {
 
     public CraftItemStack(int materialId, int damage) {
         itemId = (short) materialId;
-        this.damageValue = (short) damage;
+        this.data = (short) damage;
     }
     
     @Override
     public synchronized Material getType() {
-        return Material.fromTypeId(itemId);
+        return Material.getMaterial(itemId);
     }
 
     @Override
     public synchronized int getTypeId() {
         return itemId;
     }
-
+    
     @Override
-    public synchronized short getDamageValue() {
-        return damageValue;
+    public synchronized short getData() {
+        return data;
     }
 
     @Override
@@ -57,8 +56,8 @@ public class CraftItemStack implements ItemStack {
         this.itemId = itemId;
     }
 
-    public synchronized void setDamageValue(short damageValue) {
-        this.damageValue = damageValue;
+    public synchronized void setData(short damageValue) {
+        this.data = damageValue;
     }
 
     public synchronized void setNbt(NBTBase nbt) {

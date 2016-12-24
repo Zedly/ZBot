@@ -5,8 +5,6 @@
  */
 package zedly.zbot.environment;
 
-import zedly.zbot.block.CraftBlock;
-
 /**
  *
  * @author Dennis
@@ -92,17 +90,46 @@ public class CraftChunk implements Chunk {
         this.blockLight = new byte[4096];
     }
     
-    public synchronized CraftBlock getBlockAt(int x, int y, int z) {
-        int id = blockIds[256 * y + 16 * z + x];
-        int data = blockData[256 * y + 16 * z + x];
-        int slight = skyLight[256 * y + 16 * z + x];
-        int blight = blockLight[256 * y + 16 * z + x];
-        return new CraftBlock(x, y, z, id, data, blight, slight);
-    }
-    
-    public synchronized void setBlockAt(int x, int y, int z, int typeId, int blockData) {
-        blockIds[256 * y + 16 * z + x] = (short) typeId;
-        this.blockData[256 * y + 16 * z + x] = (byte) blockData;
+    public int getTypeIdAt(int x, int y, int z) {
+        return blockIds[toArrayIndex(x, y, z)];
     }
 
+    public int getDataAt(int x, int y, int z) {
+        return blockData[toArrayIndex(x, y, z)];
+    }
+
+    public int getBlockLightAt(int x, int y, int z) {
+        return blockLight[toArrayIndex(x, y, z)];
+    }
+
+    public int getSkyLightAt(int x, int y, int z) {
+        return skyLight[toArrayIndex(x, y, z)];
+    }
+    
+    public void setBlockAt(int x, int y, int z, int typeId, int blockData) {
+        int arrayIndex = toArrayIndex(x, y, z);
+        blockIds[arrayIndex] = (short) typeId;
+        this.blockData[arrayIndex] = (byte) blockData;
+    }
+
+    private int toArrayIndex(int x, int y, int z) {
+        int localX, localY, localZ;
+        if (x < 0) {
+            localX = 15 + ((x + 1) % 16);
+        } else {
+            localX = x % 16;
+        }
+        if (y < 0) {
+            localY= 15 + ((y + 1) % 16);
+        } else {
+            localY = y % 16;
+        }
+        if (z < 0) {
+            localZ = 15 + ((z + 1) % 16);
+        } else {
+            localZ = z % 16;
+        }
+        return 256 * localY + 16 * localZ + localX;
+    }
+    
 }

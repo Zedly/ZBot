@@ -66,7 +66,7 @@ public class ExtendedDataInputStream extends DataInputStream {
             return stack;
         }
         stack.setItemCount(readByte());
-        stack.setDamageValue(readShort());
+        stack.setData(readShort());
         stack.setNbt(readNBT());
         return stack;
     }

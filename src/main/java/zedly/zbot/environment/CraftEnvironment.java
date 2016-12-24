@@ -8,14 +8,12 @@ package zedly.zbot.environment;
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.Collections;
-import zedly.zbot.environment.Environment;
 import zedly.zbot.entity.CraftEntity;
 
 import java.util.HashMap;
 import java.util.UUID;
 import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
-import zedly.zbot.block.CraftBlock;
 import zedly.zbot.entity.*;
 import zedly.zbot.network.ExtendedDataInputStream;
 
@@ -27,6 +25,7 @@ public class CraftEnvironment implements Environment {
 
     private static final HashMap<Integer, Class> entityTypeMap = new HashMap<>();
     private static final HashMap<Integer, Class> objectTypeMap = new HashMap<>();
+    private static final CraftChunk AIR_CHUNK = new CraftChunk();
 
     private final HashMap<Integer, CraftEntity> entities = new HashMap<>();
     private final HashMap<UUID, String> playerNameCache = new HashMap<>();
@@ -35,35 +34,60 @@ public class CraftEnvironment implements Environment {
     private int difficulty = 0;
 
     @Override
-    public synchronized Collection<Entity> getEntities() {
+    public Collection<Entity> getEntities() {
         return Collections.unmodifiableCollection(entities.values());
     }
 
     @Override
-    public synchronized CraftEntity getEntityById(int entityId) {
+    public CraftEntity getEntityById(int entityId) {
         return entities.get(entityId);
     }
 
-    public synchronized void addEntity(CraftEntity ent) {
-        entities.put(ent.getEntityId(), ent);
-    }
-
-    public synchronized void removeEntity(int entityId) {
-        entities.remove(entityId);
-    }
-
     @Override
-    public synchronized String getPlayerNameByUUID(UUID uuid) {
+    public String getPlayerNameByUUID(UUID uuid) {
         return playerNameCache.get(uuid);
     }
 
-    public synchronized void addPlayerNameAndUUID(UUID uuid, String name) {
+    @Override
+    public CraftBlock getBlockAt(int x, int y, int z) {
+        return new CraftBlock(this, x, y, z);
+    }
+
+    @Override
+    public CraftBlock getBlockAt(Location loc) {
+        return getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+
+    public boolean isChunkLoaded(int x, int y, int z) {
+        long chunkLong = blockCoordinatesToChunkLong(x, y, z);
+        return chunks.containsKey(chunkLong);
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public int getNumberOfLoadedChunks() {
+        return chunks.size();
+    }
+
+    public void addEntity(CraftEntity ent) {
+        entities.put(ent.getEntityId(), ent);
+    }
+
+    public void removeEntity(int entityId) {
+        entities.remove(entityId);
+    }
+
+    public void addPlayerNameAndUUID(UUID uuid, String name) {
         playerNameCache.put(uuid, name);
     }
 
-    public synchronized void loadChunkColumn(int x, int z, CraftChunk[] chunkArray, boolean completeWithAirChunks) {
+    // Non-API methods start here
+    
+    public void loadChunkColumn(int x, int z, CraftChunk[] chunkArray, boolean completeWithAirChunks) {
         for (int i = 0; i < 16; i++) {
-            long chunkId = toChunkLong(x, i, z);
+            long chunkId = chunkCoordinatesToChunkLong(x, i, z);
             if (chunkArray[i] != null) {
                 chunks.put(chunkId, chunkArray[i]);
             } else {
@@ -72,81 +96,47 @@ public class CraftEnvironment implements Environment {
         }
     }
 
-    public synchronized void loadChunkColumn(byte[] rawData, int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask) {
+    public void loadChunkColumn(byte[] rawData, int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask) {
         ExtendedDataInputStream edis = new ExtendedDataInputStream(new ByteArrayInputStream(rawData));
         for (int i = 0; i < 16; i++) {
             if (((1 << i) & primaryBitMask) != 0) {
                 try {
-                    chunks.put(toChunkLong(chunkX, i, chunkZ), edis.readChunkSection(worldType == 0));
+                    chunks.put(chunkCoordinatesToChunkLong(chunkX, i, chunkZ), edis.readChunkSection(worldType == 0));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             } else {
-                chunks.put(toChunkLong(chunkX, i, chunkZ), new CraftChunk());
+                chunks.put(chunkCoordinatesToChunkLong(chunkX, i, chunkZ), new CraftChunk());
             }
         }
     }
 
-    public synchronized void reset(int worldType) {
+    public void reset(int worldType) {
         chunks.clear();
         this.worldType = worldType;
         System.out.println("Teleported to new world: Type " + worldType);
     }
 
-    @Override
-    public synchronized CraftBlock getBlockAt(int x, int y, int z) {
-        int chunkX, chunkZ, blockX, blockZ;
-        if (x < 0) {
-            chunkX = (x + 1) / 16 - 1;
-            blockX = 15 + ((x + 1) % 16);
-        } else {
-            chunkX = x / 16;
-            blockX = x % 16;
+    public CraftChunk getChunkAt(int x, int y, int z) {
+        if (y < 0 || y >= 256) {
+            return AIR_CHUNK;
         }
-        if (z < 0) {
-            chunkZ = (z + 1) / 16 - 1;
-            blockZ = 15 + ((z + 1) % 16);
-        } else {
-            chunkZ = z / 16;
-            blockZ = z % 16;
-        }
-        long chunkLong = toChunkLong(chunkX, y / 16, chunkZ);
-        CraftChunk cc = chunks.get(chunkLong);
-        if (!chunks.containsKey(chunkLong)) {
-            return null;
-        }
-        return cc.getBlockAt(blockX, y % 16, blockZ);
-    }
-
-    @Override
-    public synchronized CraftBlock getBlockAt(Location loc) {
-        return getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-    }
-
-    public synchronized void setBlockAt(int x, int y, int z, int typeId, int blockData) {
-        int chunkX, chunkZ, blockX, blockZ;
-        if (x < 0) {
-            chunkX = (x + 1) / 16 - 1;
-            blockX = 15 + ((x + 1) % 16);
-        } else {
-            chunkX = x / 16;
-            blockX = x % 16;
-        }
-        if (z < 0) {
-            chunkZ = (z + 1) / 16 - 1;
-            blockZ = 16 + ((z + 1) % 16);
-        } else {
-            chunkZ = z / 16;
-            blockZ = z % 16;
-        }
-        long chunkLong = toChunkLong(chunkX, y / 16, chunkZ);
-        CraftChunk cc = chunks.get(chunkLong);
+        long chunkLong = blockCoordinatesToChunkLong(x, y, z);
         if (chunks.containsKey(chunkLong)) {
-            cc.setBlockAt(blockX, y % 16, blockZ, typeId, blockData);
+            return chunks.get(chunkLong);
         }
+        return AIR_CHUNK;
     }
 
-    public synchronized CraftEntity spawnEntity(int typeId, int entityId, Location loc) {
+    public void setBlockAt(int x, int y, int z, int typeId, int blockData) {
+        CraftChunk cc = getChunkAt(x, y, z);
+        if (cc == null) {
+            return;
+        }
+        cc.setBlockAt(x, y, z, typeId, blockData);
+    }
+
+    public CraftEntity spawnEntity(int typeId, int entityId, Location loc) {
         CraftEntity ce;
         if (entityTypeMap.containsKey(typeId)) {
             try {
@@ -167,7 +157,7 @@ public class CraftEnvironment implements Environment {
         return ce;
     }
 
-    public synchronized CraftEntity spawnEntity(Class<? extends CraftEntity> cl, int entityId, Location loc) {
+    public CraftEntity spawnEntity(Class<? extends CraftEntity> cl, int entityId, Location loc) {
         try {
             CraftEntity ce = (CraftEntity) cl.newInstance();
             ce.setEntityId(entityId);
@@ -180,7 +170,7 @@ public class CraftEnvironment implements Environment {
         return null;
     }
 
-    public synchronized CraftObject spawnObject(int typeId, int entityId, int objectData, Location loc) {
+    public CraftObject spawnObject(int typeId, int entityId, int objectData, Location loc) {
         if (objectTypeMap.containsKey(typeId)) {
             try {
                 CraftObject ce = (CraftObject) objectTypeMap.get(typeId).newInstance();
@@ -203,23 +193,75 @@ public class CraftEnvironment implements Environment {
         return ce;
     }
 
-    private long toChunkLong(long x, long y, long z) {
-        return (x & 0xFFFFFF) + ((y & 0xF) << 24) + ((z & 0xFFFFFF) << 28);
+    private long chunkCoordinatesToChunkLong(long chunkX, long chunkY, long chunkZ) {
+        return (chunkX & 0xFFFFFF) | ((chunkY & 0xF) << 24) | ((chunkZ & 0xFFFFFF) << 28);
+    }
+    
+    private long blockCoordinatesToChunkLong(long x, long y, long z) {
+        long chunkX, chunkY, chunkZ;
+        if (x < 0) {
+            chunkX = (x + 1) / 16 - 1;
+        } else {
+            chunkX = x / 16;
+        }
+        chunkY = y / 16;
+        if (z < 0) {
+            chunkZ = (z + 1) / 16 - 1;
+        } else {
+            chunkZ = z / 16;
+        }
+        return chunkCoordinatesToChunkLong(chunkX, chunkY, chunkZ);
     }
 
-    public synchronized int getDifficulty() {
-        return difficulty;
-    }
-
-    public synchronized void setDifficulty(int difficulty) {
+    public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
 
-    public synchronized int getNumberOfLoadedChunks() {
-        return chunks.size();
-    }
-
     static {
+        entityTypeMap.put(1, CraftItem.class);
+        //entityTypeMap.put(2, CraftExperienceOrb.class); // TODO: Implement
+        entityTypeMap.put(3, CraftAreaEffectCloud.class);
+        //entityTypeMap.put(4, CraftElderGuardian.class);
+        //entityTypeMap.put(5, CraftWitherSkeleton.class);
+        //entityTypeMap.put(6, CraftStray.class);
+        entityTypeMap.put(7, CraftThrownEgg.class);
+        entityTypeMap.put(8, CraftLeashKnot.class);
+        //entityTypeMap.put(9, CraftPainting.class); // TODO: Implement
+        entityTypeMap.put(10, CraftArrow.class);
+        entityTypeMap.put(11, CraftSnowball.class);
+        entityTypeMap.put(12, CraftFireball.class);
+        entityTypeMap.put(13, CraftSmallFireball.class);
+        entityTypeMap.put(14, CraftThrownEnderpearl.class);
+        entityTypeMap.put(15, CraftEyeOfEnderSignal.class);
+        entityTypeMap.put(16, CraftThrownPotion.class);
+        entityTypeMap.put(17, CraftThrownExperienceBottle.class);
+        entityTypeMap.put(18, CraftItemFrame.class);
+        entityTypeMap.put(19, CraftWitherSkull.class);
+        entityTypeMap.put(20, CraftPrimedTNT.class);
+        entityTypeMap.put(21, CraftFallingBlock.class);
+        entityTypeMap.put(22, CraftFirework.class);
+        //entityTypeMap.put(23, CraftHusk.class);
+        entityTypeMap.put(24, CraftArrowSpectral.class);
+        entityTypeMap.put(25, CraftShulkerBullet.class);
+        entityTypeMap.put(26, CraftDragonFireball.class);
+        //entityTypeMap.put(1, CraftZombieVillager.class);
+        //entityTypeMap.put(1, CraftSkeletonHorse.class);
+        //entityTypeMap.put(1, CraftZombieHorse.class);
+        //entityTypeMap.put(1, CraftDonkey.class);
+        //entityTypeMap.put(1, CraftMule.class);
+        //entityTypeMap.put(1, CraftEvocationFangs.class);
+        //entityTypeMap.put(1, CraftEvocationIllager.class);
+        //entityTypeMap.put(1, CraftVex.class);
+        //entityTypeMap.put(1, CraftVindicationIllager.class);
+        //entityTypeMap.put(1, CraftMinecartCommandBlock.class);
+        entityTypeMap.put(1, CraftBoat.class);
+        //entityTypeMap.put(1, CraftMinecartRideable.class);
+        //entityTypeMap.put(1, CraftMinecartChest.class);
+        //entityTypeMap.put(1, CraftMinecartFurnace.class);
+        //entityTypeMap.put(1, CraftMinecartTNT.class);
+        //entityTypeMap.put(1, CraftMinecartHopper.class);
+        //entityTypeMap.put(1, CraftMinecartSpawner.class);
+
         entityTypeMap.put(50, CraftCreeper.class);
         entityTypeMap.put(51, CraftSkeleton.class);
         entityTypeMap.put(52, CraftSpider.class);
@@ -250,9 +292,13 @@ public class CraftEnvironment implements Environment {
         entityTypeMap.put(97, CraftSnowman.class);
         entityTypeMap.put(98, CraftOcelot.class);
         entityTypeMap.put(99, CraftIronGolem.class);
-        entityTypeMap.put(100, CraftHorse.class);
+        entityTypeMap.put(100, CraftAbstractHorse.class);
         entityTypeMap.put(101, CraftRabbit.class);
+        //entityTypeMap.put(102, CraftPolarBear.class);
+        //entityTypeMap.put(103, CraftLlama.class);
+        entityTypeMap.put(104, CraftRabbit.class);
         entityTypeMap.put(120, CraftVillager.class);
+        entityTypeMap.put(200, CraftEnderCrystal.class);
 
         objectTypeMap.put(1, CraftBoat.class);
         objectTypeMap.put(2, CraftItem.class);
@@ -262,24 +308,23 @@ public class CraftEnvironment implements Environment {
         objectTypeMap.put(51, CraftEnderCrystal.class);
         objectTypeMap.put(60, CraftArrow.class);
         objectTypeMap.put(61, CraftSnowball.class);
-        objectTypeMap.put(62, CraftEgg.class);
+        objectTypeMap.put(62, CraftThrownEgg.class);
         objectTypeMap.put(63, CraftFireball.class);
-        objectTypeMap.put(64, CraftFireCharge.class);
-        objectTypeMap.put(65, CraftEnderPearl.class);
+        objectTypeMap.put(64, CraftSmallFireball.class);
+        objectTypeMap.put(65, CraftThrownEnderpearl.class);
         objectTypeMap.put(66, CraftWitherSkull.class);
         objectTypeMap.put(67, CraftShulkerBullet.class);
         objectTypeMap.put(70, CraftFallingBlock.class);
         objectTypeMap.put(71, CraftItemFrame.class);
-        objectTypeMap.put(72, CraftEyeOfEnder.class);
-        objectTypeMap.put(73, CraftPotion.class);
+        objectTypeMap.put(72, CraftEyeOfEnderSignal.class);
+        objectTypeMap.put(73, CraftThrownPotion.class);
         objectTypeMap.put(74, CraftDragonEgg.class);
-        objectTypeMap.put(75, CraftExperienceBottle.class);
+        objectTypeMap.put(75, CraftThrownExperienceBottle.class);
         objectTypeMap.put(76, CraftFirework.class);
         objectTypeMap.put(77, CraftLeashKnot.class);
         objectTypeMap.put(78, CraftArmorStand.class);
         objectTypeMap.put(90, CraftFishingHook.class);
         objectTypeMap.put(91, CraftArrowSpectral.class);
-        objectTypeMap.put(92, CraftArrowTipped.class);
         objectTypeMap.put(93, CraftDragonFireball.class);
     }
 }

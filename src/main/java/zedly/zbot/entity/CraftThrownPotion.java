@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.event.Event;
 
-public class CraftPotion extends CraftProjectile implements Potion {
+public class CraftThrownPotion extends CraftProjectile implements ThrownPotion {
 
     protected ItemStack itemStack;
 
     @Override
     public EntityType getType() {
-        return EntityType.POTION;
+        return EntityType.THROWN_POTION;
     }
 
     @Override

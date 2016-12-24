@@ -8,8 +8,6 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.block.Block;
-import zedly.zbot.entity.Enderman;
 import zedly.zbot.event.Event;
 import zedly.zbot.event.entity.EndermanBlockChangeEvent;
 import zedly.zbot.event.entity.EndermanScreamEvent;

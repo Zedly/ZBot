@@ -12,7 +12,7 @@ import zedly.zbot.entity.ExperienceBottle;
  *
  * @author Dennis
  */
-public class CraftExperienceBottle extends CraftProjectile implements ExperienceBottle {
+public class CraftThrownExperienceBottle extends CraftProjectile implements ExperienceBottle {
 
     @Override
     public EntityType getType() {

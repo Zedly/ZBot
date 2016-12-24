@@ -9,7 +9,6 @@ import zedly.zbot.EntityType;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.WoolColor;
-import zedly.zbot.entity.Sheep;
 import zedly.zbot.event.Event;
 
 /**
@@ -45,6 +44,10 @@ public class CraftSheep extends CraftAnimal implements Sheep {
     @Override
     public EntityType getType() {
         return EntityType.SHEEP;
+    }
+    
+    public String toString() {
+        return super.toString() + ", color: " + color + ", sheared: " + sheared;
     }
 
 }

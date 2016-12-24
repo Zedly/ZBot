@@ -43,6 +43,7 @@ public class PluginManager {
             // Create ClassLoader
             // Find Main classes in plugin ymls
             for (URL pluginUrl : pluginUrls) {
+                System.out.println(pluginUrl.toString());
                 URLClassLoader loader = URLClassLoader.newInstance(new URL[]{pluginUrl}, ZBot.class.getClassLoader());
                 YamlConfiguration pluginYml = YamlConfiguration.read(loader.getResourceAsStream("plugin.yml"));
                 String mainClass = pluginYml.getString("main", null);
@@ -63,16 +64,12 @@ public class PluginManager {
                     Constructor<? extends ZBotPlugin> ctor = pluginClass.getConstructor();
                     ZBotPlugin plugin = ctor.newInstance();
                     // Awwwww
-                    try {
-                        plugin.createDataFolder();
-                        plugin.onLoad();
-                        plugins.put(pluginName, plugin);
-                    } catch (Exception ex) {
-                        System.err.println("Error loading plugin " + pluginName + "!");
-                        ex.printStackTrace();
-                    }
+                    plugin.createDataFolder();
+                    plugin.onLoad();
+                    plugins.put(pluginName, plugin);
                     // Yissss
                 } catch (Exception ex) {
+                    System.err.println("Error loading plugin " + pluginName + "!");
                     ex.printStackTrace();
                 }
             }

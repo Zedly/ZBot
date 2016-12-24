@@ -74,7 +74,7 @@ public class ExtendedDataOutputStream extends DataOutputStream {
             return;
         }
         writeByte(item.getAmount());
-        writeShort(item.getDamageValue());
+        writeShort(item.getData());
         writeNBT(item.getNbt());
     }
     

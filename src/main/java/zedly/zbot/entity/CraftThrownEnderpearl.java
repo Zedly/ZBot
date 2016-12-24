@@ -6,13 +6,13 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.EnderPearl;
+import zedly.zbot.entity.ThrownEnderPearl;
 
 /**
  *
  * @author Dennis
  */
-public class CraftEnderPearl extends CraftProjectile implements EnderPearl {
+public class CraftThrownEnderpearl extends CraftProjectile implements ThrownEnderPearl {
     
     @Override
     public EntityType getType() {

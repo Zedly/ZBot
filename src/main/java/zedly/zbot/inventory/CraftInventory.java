@@ -52,6 +52,8 @@ public abstract class CraftInventory implements Inventory {
             itemOnCursor = is;
         } else if (slot >= 0 && slot < items.length) {
             items[slot] = is;
+        } else {
+            System.err.println("Invalid slot ID " + slot + " in inventory " + getClass() + " set to " + is);
         }
     }
 

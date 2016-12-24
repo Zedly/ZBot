@@ -17,6 +17,7 @@ import zedly.zbot.environment.CraftEnvironment;
 import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
+import zedly.zbot.environment.BlockFace;
 import zedly.zbot.inventory.CraftPlayerInventory;
 import zedly.zbot.network.ThreadLocationUpdater;
 import zedly.zbot.network.packet.serverbound.Packet02ChatMessage;
@@ -175,13 +176,36 @@ public class CraftSelf extends CraftPlayer implements Self {
     }
 
     @Override
-    public void placeBlock(int x, int y, int z) {
-        context.getUpThread().sendPacket(new Packet1CPlayerBlockPlacement(x, y, z, (byte) 1, 0, (byte) 0, (byte) 0, (byte) 0));
+    public void placeBlock(int x, int y, int z, BlockFace face) {
+        int iFace = 255;
+        if (face != null) {
+            switch (face) {
+                case DOWN:
+                    iFace = 0;
+                    break;
+                case UP:
+                    iFace = 1;
+                    break;
+                case NORTH:
+                    iFace = 2;
+                    break;
+                case SOUTH:
+                    iFace = 3;
+                    break;
+                case WEST:
+                    iFace = 4;
+                    break;
+                case EAST:
+                    iFace = 5;
+                    break;
+            }
+        }
+        context.getUpThread().sendPacket(new Packet1CPlayerBlockPlacement(x, y, z, (byte) iFace, 0, (byte) 0, (byte) 0, (byte) 0));
     }
 
     @Override
-    public void placeBlock(Location loc) {
-        placeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    public void placeBlock(Location loc, BlockFace face) {
+        placeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), face);
     }
 
     @Override
@@ -202,6 +226,11 @@ public class CraftSelf extends CraftPlayer implements Self {
     @Override
     public int scheduleSyncRepeatingTask(ZBotPlugin plugin, Runnable r, long delay, long interval) {
         return context.scheduleSyncRepeatingTask(plugin, r, delay, interval);
+    }
+
+    @Override
+    public int scheduleSyncRepeatingTask(ZBotPlugin plugin, Runnable r, long interval) {
+        return context.scheduleSyncRepeatingTask(plugin, r, interval, interval);
     }
 
     @Override
