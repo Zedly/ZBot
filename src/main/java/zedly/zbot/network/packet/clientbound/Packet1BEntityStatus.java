@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 //import zedly.zbot.event.entity.EntityStatusEvent;
@@ -16,25 +11,30 @@ import zedly.zbot.entity.CraftEntity;
 /**
  * @author Dennis
  */
-public class Packet1BEntityStatus implements ClientBoundPacket {
 
-    private int entityId;
-    private byte entityStatus;
+/**
+* Entity statuses generally trigger an animation for an entity.  The available statuses vary by the entity's type (and are available to subclasses of that type as well).
+*/
+
+public class Packet1BEntityStatus implements ClientBoundPacket {
+    private int entityID;
+    private int entityStatus;  // See below
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        entityId = dis.readInt();
+        entityID = dis.readInt();
         entityStatus = dis.readByte();
     }
 
     @Override
     public void process(GameContext context) {
-        if (entityId == context.getSelf().getEntityId()) {
+        if (entityID == context.getSelf().getEntityId()) {
             context.getSelf().setStatus(entityStatus);
         } else {
-            CraftEntity ce = context.getSelf().getEnvironment().getEntityById(entityId);
+            CraftEntity ce = context.getSelf().getEnvironment().getEntityById(entityID);
             if (ce == null) {
-                System.err.println("Entity status: " + entityId + " is null!");
+                System.err.println("Entity status: " + entityID + " is null!");
             } else {
                 Event evt = ce.setStatus(entityStatus);
                 if (evt != null) {
@@ -43,4 +43,5 @@ public class Packet1BEntityStatus implements ClientBoundPacket {
             }
         }
     }
+
 }

@@ -1,19 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.serverbound;
+package  zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
 //Play, Serverbound
 
-public class Packet00TeleportConfirm implements ServerBoundPacket {
-    int teleportId;
 
-    public Packet00TeleportConfirm(int teleportId) {
-        this.teleportId = teleportId;
+/**
+* Sent by client as confirmation of <a href="#Player_Position_And_Look_.28clientbound.29">Player Position And Look</a>.
+*/
+
+public class Packet00TeleportConfirm implements ServerBoundPacket {
+    private final int teleportID;  // The ID given by the <a href="#Player_Position_And_Look_.28clientbound.29">Player Position And Look</a> packet
+
+
+    public Packet00TeleportConfirm(int teleportID) {
+        this.teleportID = teleportID;
     }
 
     @Override
@@ -23,7 +24,6 @@ public class Packet00TeleportConfirm implements ServerBoundPacket {
 
     @Override
     public void writePacket(ExtendedDataOutputStream dos) throws IOException {
-        dos.writeVarInt(teleportId);
+        dos.writeVarInt(teleportID);
     }
-    
 }

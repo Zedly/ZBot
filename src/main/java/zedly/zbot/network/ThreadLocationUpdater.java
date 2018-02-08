@@ -2,8 +2,8 @@ package zedly.zbot.network;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.Location;
-import zedly.zbot.network.packet.serverbound.Packet0FPlayer;
-import zedly.zbot.network.packet.serverbound.Packet0DPlayerPositionAndLook;
+import zedly.zbot.network.packet.serverbound.Packet0CPlayer;
+import zedly.zbot.network.packet.serverbound.Packet0EPlayerPositionAndLook;
 
 /**
  *
@@ -25,9 +25,9 @@ public class ThreadLocationUpdater extends Thread {
         try {
             while (!isInterrupted()) {
                 if (updated) {
-                    upThread.sendPacket(new Packet0DPlayerPositionAndLook(location));
+                    upThread.sendPacket(new Packet0EPlayerPositionAndLook(location, true));
                 } else {
-                    upThread.sendPacket(new Packet0FPlayer(true));
+                    upThread.sendPacket(new Packet0CPlayer(true));
                 }
                 updated = false;
                 synchronized (this) {

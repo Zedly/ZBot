@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.serverbound;
+package  zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
@@ -13,14 +8,20 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  *
  * @author Dennis
  */
-public class Packet05ConfirmTransaction implements ServerBoundPacket {
-    byte windowId;
-    short actionId;
-    boolean accepted;
 
-    public Packet05ConfirmTransaction(byte windowId, short actionId, boolean accepted) {
-        this.windowId = windowId;
-        this.actionId = actionId;
+/**
+* If a transaction sent by the client was not accepted, the server will reply with a <a href="#Confirm_Transaction_.28clientbound.29">Confirm Transaction (clientbound)</a> packet with the Accepted field set to false. When this happens, the client must send this packet to apologize (as with movement), otherwise the server ignores any successive transactions.
+*/
+
+public class Packet05ConfirmTransaction implements ServerBoundPacket {
+    private final int windowID;  // The ID of the window that the action occurred in
+    private final int actionNumber;  // Every action that is to be accepted has a unique number. This number is an incrementing integer (starting at 1) with separate counts for each window ID.
+    private final boolean accepted;  // Whether the action was accepted
+
+
+    public Packet05ConfirmTransaction(int windowID, int actionNumber, boolean accepted) {
+        this.windowID = windowID;
+        this.actionNumber = actionNumber;
         this.accepted = accepted;
     }
 
@@ -31,9 +32,8 @@ public class Packet05ConfirmTransaction implements ServerBoundPacket {
 
     @Override
     public void writePacket(ExtendedDataOutputStream dos) throws IOException {
-        dos.writeByte(windowId);
-        dos.writeShort(actionId);
+        dos.writeByte(windowID);
+        dos.writeShort(actionNumber);
         dos.writeBoolean(accepted);
     }
-    
 }

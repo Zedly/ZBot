@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.event.WindowItemsEvent;
@@ -15,17 +10,23 @@ import java.io.IOException;
 /**
  * @author Dennis
  */
-public class Packet14WindowItems implements ClientBoundPacket {
 
-    private int windowID;
+/**
+* Sent by the server when items in multiple slots (in a window) are added/removed. This includes the main inventory, equipped armour and crafting slots.
+*/
+
+public class Packet14WindowItems implements ClientBoundPacket {
+    private int windowID;  // The ID of window which items are being sent for. 0 for player inventory.
+    private int count;  // Number of elements in the following array
     private ItemStack[] slotData;
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         windowID = dis.readUnsignedByte();
-        short count = dis.readShort();
+        count = dis.readShort();
         slotData = new ItemStack[count];
-        for (int i = 0; i < count; i++) {
+        for(int i = 0; i < count; i++) {
             slotData[i] = dis.readSlot();
         }
     }

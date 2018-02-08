@@ -24,14 +24,7 @@ import zedly.zbot.network.packet.serverbound.Packet02ChatMessage;
 import zedly.zbot.network.packet.serverbound.Packet03ClientStatus;
 import zedly.zbot.network.packet.serverbound.Packet04ClientSettings;
 import zedly.zbot.network.packet.serverbound.Packet0AUseEntity;
-import zedly.zbot.network.packet.serverbound.Packet12PlayerAbilities;
-import zedly.zbot.network.packet.serverbound.Packet13PlayerDigging;
-import zedly.zbot.network.packet.serverbound.Packet14EntityAction;
-import zedly.zbot.network.packet.serverbound.Packet17HeldItemChange;
-import zedly.zbot.network.packet.serverbound.Packet19UpdateSign;
-import zedly.zbot.network.packet.serverbound.Packet1AAnimation;
-import zedly.zbot.network.packet.serverbound.Packet1CPlayerBlockPlacement;
-import zedly.zbot.network.packet.serverbound.Packet1DUseItem;
+import zedly.zbot.network.packet.serverbound.*;
 import zedly.zbot.plugin.ZBotPlugin;
 
 /**
@@ -136,47 +129,52 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void performAction(int action) {
-        context.getUpThread().sendPacket(new Packet14EntityAction(getEntityId(), action, 0));
+        context.getUpThread().sendPacket(new Packet15EntityAction(getEntityId(), action, 0));
     }
 
     @Override
     public void breakBlock(int x, int y, int z) {
-        context.getUpThread().sendPacket(new Packet13PlayerDigging(0, x, y, z, 0));
-        context.getUpThread().sendPacket(new Packet13PlayerDigging(2, x, y, z, 0));
+        breakBlock(new Location(x, y, z));
     }
 
     @Override
     public void breakBlock(int x, int y, int z, int millis, Runnable callback) {
-        context.getUpThread().sendPacket(new Packet13PlayerDigging(0, x, y, z, 1));
+        breakBlock(new Location(x, y, z), millis, callback);
+    }
+
+    @Override
+    public void breakBlock(Location loc) {
+        context.getUpThread().sendPacket(new Packet14PlayerDigging(0, loc, 0));
+        context.getUpThread().sendPacket(new Packet14PlayerDigging(2, loc, 0));
+    }
+
+    @Override
+    public void breakBlock(Location loc, int millis, Runnable callback) {
+        context.getUpThread().sendPacket(new Packet14PlayerDigging(0, loc, 1));
         context.getMainThread().schedule(() -> {
-            context.getUpThread().sendPacket(new Packet13PlayerDigging(2, x, y, z, 1));
+            context.getUpThread().sendPacket(new Packet14PlayerDigging(2, loc, 1));
             callback.run();
         }, millis, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public void breakBlock(Location loc) {
-        breakBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-    }
-
-    @Override
-    public void breakBlock(Location loc, int millis, Runnable callback) {
-        breakBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), millis, callback);
-    }
-
-    @Override
     public void clickBlock(Location loc) {
-        clickBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        context.getUpThread().sendPacket(new Packet14PlayerDigging(0, loc, 0));
+        context.getUpThread().sendPacket(new Packet14PlayerDigging(1, loc, 0));
     }
 
     @Override
     public void clickBlock(int x, int y, int z) {
-        context.getUpThread().sendPacket(new Packet13PlayerDigging(0, x, y, z, 0));
-        context.getUpThread().sendPacket(new Packet13PlayerDigging(1, x, y, z, 0));
+        clickBlock(new Location(x, y, z));
     }
 
     @Override
     public void placeBlock(int x, int y, int z, BlockFace face) {
+        placeBlock(new Location(x, y, z), face);
+    }
+
+    @Override
+    public void placeBlock(Location loc, BlockFace face) {
         int iFace = 255;
         if (face != null) {
             switch (face) {
@@ -200,12 +198,7 @@ public class CraftSelf extends CraftPlayer implements Self {
                     break;
             }
         }
-        context.getUpThread().sendPacket(new Packet1CPlayerBlockPlacement(x, y, z, (byte) iFace, 0, (byte) 0, (byte) 0, (byte) 0));
-    }
-
-    @Override
-    public void placeBlock(Location loc, BlockFace face) {
-        placeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), face);
+        context.getUpThread().sendPacket(new Packet1FPlayerBlockPlacement(loc, (byte) iFace, 0, (byte) 0, (byte) 0, (byte) 0));
     }
 
     @Override
@@ -236,7 +229,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     @Override
     public void selectSlot(int i) {
         inventory.selectSlot(i);
-        context.getUpThread().sendPacket(new Packet17HeldItemChange(i));
+        context.getUpThread().sendPacket(new Packet1AHeldItemChange(i));
     }
 
     @Override
@@ -249,7 +242,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void setAbilities(int abilities) {
-        context.getUpThread().sendPacket(new Packet12PlayerAbilities((byte) abilities, 0, 0));
+        context.getUpThread().sendPacket(new Packet13PlayerAbilities((byte) abilities, 0, 0));
     }
 
     @Override
@@ -261,22 +254,22 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void sneak(boolean sneak) {
-        context.getUpThread().sendPacket(new Packet14EntityAction(entityId, (sneak ? 0 : 1), 0));
+        context.getUpThread().sendPacket(new Packet15EntityAction(entityId, (sneak ? 0 : 1), 0));
     }
 
     @Override
     public void sprint(boolean sprint) {
-        context.getUpThread().sendPacket(new Packet14EntityAction(entityId, (sprint ? 3 : 4), 0));
+        context.getUpThread().sendPacket(new Packet15EntityAction(entityId, (sprint ? 3 : 4), 0));
     }
 
     @Override
     public void swingArm(boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet1AAnimation((leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet1DAnimation((leftHand ? 1 : 0)));
     }
 
     @Override
     public void useItem(boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet1DUseItem((leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet20UseItem((leftHand ? 1 : 0)));
     }
 
     @Override
@@ -286,7 +279,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void writeToSign(Location loc, String line1, String line2, String line3, String line4) {
-        context.getUpThread().sendPacket(new Packet19UpdateSign(loc, line1, line2, line3, line4));
+        context.getUpThread().sendPacket(new Packet1CUpdateSign(loc, line1, line2, line3, line4));
     }
 
     @Override

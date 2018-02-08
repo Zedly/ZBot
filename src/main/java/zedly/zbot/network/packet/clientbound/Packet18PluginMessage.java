@@ -23,3 +23,4 @@ public class Packet18PluginMessage implements ClientBoundPacket {
         dis.readFully(data);
     }
 }
+//Refactored ancestor. Review data strcuture

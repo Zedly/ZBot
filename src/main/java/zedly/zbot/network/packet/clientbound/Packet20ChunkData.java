@@ -47,3 +47,4 @@ public class Packet20ChunkData implements ClientBoundPacket {
         environment.loadChunkColumn(compressedData, chunkX, chunkZ, groundUpContinuous, primaryBitMask);
     }
 }
+//Refactored ancestor. Review data strcuture

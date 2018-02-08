@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
@@ -14,21 +9,29 @@ import zedly.zbot.network.ExtendedDataOutputStream;
  *
  * @author Dennis
  */
+/**
+ * Sent when the player connects, or when settings are changed.
+ */
 public class Packet04ClientSettings implements ServerBoundPacket {
-    private final String locale;
-    private final int viewDistance;
-    private final ChatMode chatMode;
-    private final boolean chatColors;
-    private final int showParts;
-    private final int mainHand;
+
+    private final String locale;  // e.g. en_GB
+    private final int viewDistance;  // Client-side render distance, in chunks
+    private final int chatMode;  // 0: enabled, 1: commands only, 2: hidden.  See <a href="/Chat#Processing_chat" title="Chat">processing chat</a> for more information.
+    private final boolean chatColors;  // “Colors” multiplayer setting
+    private final int displayedSkinParts;  // Bit mask, see below
+    private final int mainHand;  // 0: Left, 1: Right
+
+    public Packet04ClientSettings(String locale, int viewDistance, int chatMode, boolean chatColors, int displayedSkinParts, int mainHand) {
+        this.locale = locale;
+        this.viewDistance = viewDistance;
+        this.chatMode = chatMode;
+        this.chatColors = chatColors;
+        this.displayedSkinParts = displayedSkinParts;
+        this.mainHand = mainHand;
+    }
 
     public Packet04ClientSettings(ClientSettings clientSettings) {
-        this.locale = clientSettings.getLocale();
-        this.viewDistance = clientSettings.getViewDistance();
-        this.chatMode = clientSettings.getChatMode();
-        this.chatColors = clientSettings.isChatColorsEnabled();
-        this.showParts = clientSettings.getSkinFlags();
-        this.mainHand = clientSettings.isLeftHanded() ? 1 : 0;
+        this(clientSettings.getLocale(), clientSettings.getViewDistance(), clientSettings.getChatMode().ordinal(), clientSettings.isChatColorsEnabled(), clientSettings.getSkinFlags(), clientSettings.isLeftHanded() ? 0 : 1);
     }
 
     @Override
@@ -40,10 +43,9 @@ public class Packet04ClientSettings implements ServerBoundPacket {
     public void writePacket(ExtendedDataOutputStream dos) throws IOException {
         dos.writeString(locale);
         dos.writeByte(viewDistance);
-        dos.writeVarInt(chatMode.ordinal());
+        dos.writeVarInt(chatMode);
         dos.writeBoolean(chatColors);
-        dos.writeByte(showParts);
+        dos.writeByte(displayedSkinParts);
         dos.writeVarInt(mainHand);
     }
-    
 }

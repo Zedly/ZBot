@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.serverbound;
+package  zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.inventory.ItemStack;
@@ -13,21 +8,27 @@ import zedly.zbot.network.ExtendedDataOutputStream;
  *
  * @author Dennis
  */
-public class Packet07ClickWindow implements ServerBoundPacket {
-    byte windowId;
-    short slot;
-    byte button;
-    short actionId;
-    byte mode;
-    ItemStack clickedItem;
 
-    public Packet07ClickWindow(byte windowId, short slot, byte button, short actionId, byte mode, ItemStack clickedItem) {
-        this.windowId = windowId;
+/**
+* This packet is sent by the player when it clicks on a slot in a window.
+*/
+
+public class Packet07ClickWindow implements ServerBoundPacket {
+    private final int windowID;  // The ID of the window which was clicked. 0 for player inventory.
+    private final int slot;  // The clicked slot number, see below
+    private final int button;  // The button used in the click, see below
+    private final int actionNumber;  // A unique number for the action, implemented by Notchian as a counter, starting at 1 (different counter for every window ID). Used by the server to send back a <a href="#Confirm_Transaction_.28clientbound.29">Confirm Transaction (clientbound)</a>.
+    private final int mode;  // Inventory operation mode, see below
+    private final ItemStack clickeditem;  // The clicked slot. Has to be empty (item ID = -1) for drop mode.
+
+
+    public Packet07ClickWindow(int windowID, int slot, int button, int actionNumber, int mode, ItemStack clickeditem) {
+        this.windowID = windowID;
         this.slot = slot;
         this.button = button;
-        this.actionId = actionId;
+        this.actionNumber = actionNumber;
         this.mode = mode;
-        this.clickedItem = clickedItem;
+        this.clickeditem = clickeditem;
     }
 
     @Override
@@ -37,12 +38,11 @@ public class Packet07ClickWindow implements ServerBoundPacket {
 
     @Override
     public void writePacket(ExtendedDataOutputStream dos) throws IOException {
-        dos.writeByte(windowId);
+        dos.writeByte(windowID);
         dos.writeShort(slot);
         dos.writeByte(button);
-        dos.writeShort(actionId);
+        dos.writeShort(actionNumber);
         dos.writeVarInt(mode);
-        dos.writeSlot(clickedItem);
+        dos.writeSlot(clickeditem);
     }
-    
 }

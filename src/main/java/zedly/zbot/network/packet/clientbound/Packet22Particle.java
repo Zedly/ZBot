@@ -43,6 +43,7 @@ public class Packet22Particle implements ClientBoundPacket {
                 break;
             case 37:
             case 38:
+            case 46:
                 data = new int[1];
                 break;
             default:
@@ -98,3 +99,4 @@ public class Packet22Particle implements ClientBoundPacket {
     }
     
 }
+//Refactored ancestor. Review data strcuture

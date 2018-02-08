@@ -26,3 +26,4 @@ public class Packet07Statistics implements ClientBoundPacket {
         }
     }
 }
+//Refactored ancestor. Review data strcuture

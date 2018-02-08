@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.event.*;
@@ -15,10 +10,15 @@ import java.io.IOException;
 /**
  * @author Dennis
  */
-public class Packet1EChangeGameState implements ClientBoundPacket {
 
-    private int reason;
-    private float value;
+/**
+* Used for a wide variety of game state things, from whether to bed use to gamemode to demo messages.
+*/
+
+public class Packet1EChangeGameState implements ClientBoundPacket {
+    private int reason;  // See below
+    private double value;  // Depends on Reason
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
@@ -60,6 +60,6 @@ public class Packet1EChangeGameState implements ClientBoundPacket {
         }
         if (fire != null) {
             context.getMainThread().fireEvent(fire);
-        }
-    }
+        }    }
+
 }

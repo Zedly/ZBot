@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,44 +15,49 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
-public class Packet03SpawnMob implements ClientBoundPacket {
 
-    public int entityID;
-    private UUID uuid;
-    private int type;
+/**
+* Sent by the server when a mob entity is spawned.
+*/
+
+public class Packet03SpawnMob implements ClientBoundPacket {
+    private int entityID;
+    private UUID entityUUID;
+    private int type;  // The type of mob. See <a href="/Entities#Mobs" class="mw-redirect" title="Entities">Entities#Mobs</a>
     private double x;
     private double y;
     private double z;
-    private byte pitch;
-    private byte headPitch;
-    private byte yaw;
-    private short velocityX;
-    private short velocityY;
-    private short velocityZ;
-    private HashMap<Integer, EntityMeta> metaData;
+    private int yaw;
+    private int pitch;
+    private int headPitch;
+    private int velocityX;  // Same units as <a href="#Entity_Velocity">Entity Velocity</a>
+    private int velocityY;  // Same units as <a href="#Entity_Velocity">Entity Velocity</a>
+    private int velocityZ;  // Same units as <a href="#Entity_Velocity">Entity Velocity</a>
+    private HashMap<Integer, EntityMeta> metadata;
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         entityID = dis.readVarInt();
-        uuid = dis.readUUID();
+        entityUUID = dis.readUUID();
         type = dis.readVarInt();
         x = dis.readDouble();
         y = dis.readDouble();
         z = dis.readDouble();
-        yaw = dis.readByte();
-        pitch = dis.readByte();
-        headPitch = dis.readByte();
+        yaw = dis.readUnsignedByte();
+        pitch = dis.readUnsignedByte();
+        headPitch = dis.readUnsignedByte();
         velocityX = dis.readShort();
         velocityY = dis.readShort();
         velocityZ = dis.readShort();
-        metaData = dis.readEntityMetaData();
+        metadata = dis.readEntityMetaData();
     }
 
     @Override
     public void process(GameContext context) {
         try {
             CraftEntity ent = context.getSelf().getEnvironment().spawnEntity(type, entityID, new Location(x, y, z, yaw, pitch));
-            ent.setMeta(metaData);
+            ent.setMeta(metadata);
             //System.out.println("Spawned " + ent.getType() + " " + entityID);
             context.getMainThread().fireEvent(new EntitySpawnEvent(ent));
         } catch (Exception ex) {
@@ -66,4 +66,5 @@ public class Packet03SpawnMob implements ClientBoundPacket {
         }
 
     }
+
 }

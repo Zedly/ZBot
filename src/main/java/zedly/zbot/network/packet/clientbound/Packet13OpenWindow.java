@@ -31,3 +31,4 @@ public class Packet13OpenWindow implements ClientBoundPacket {
     }
     
 }
+//Refactored ancestor. Review data strcuture

@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,50 +15,44 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* This packet is sent by the server when a player comes into visible range, <i>not</i> when a player joins.
+*/
+
 public class Packet05SpawnPlayer implements ClientBoundPacket {
-    private int entityID;
-    private UUID playerUUID;
-    private String playerName;
-    private int dataCount;
-    private Data[] theData;
+    private int entityID;  // Player's EID
+    private UUID playerUUID;  // See below for notes on <span class="plainlinks"><a rel="nofollow" class="external text" href="http://minecraft.gamepedia.com/Server.properties%23online-mode">offline mode</a></span> and NPCs
     private double x;
     private double y;
     private double z;
-    private byte yaw;
-    private byte pitch;
-    private short currentItem;
-    private HashMap<Integer, EntityMeta> metaData;
+    private int yaw;
+    private int pitch;
+    private HashMap<Integer, EntityMeta> metadata;
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         entityID = dis.readVarInt();
         playerUUID = dis.readUUID();
-        /*
-        theData = new Data[dataCount];
-        for (int i = 0; i < dataCount; i++) {
-        theData[i] = new Data();
-        theData[i].name = dis.readString();
-        theData[i].value = dis.readString();
-        theData[i].signature = dis.readString();
-        }
-         */
         x = dis.readDouble();
         y = dis.readDouble();
         z = dis.readDouble();
-        yaw = dis.readByte();
-        pitch = dis.readByte();
-        metaData = dis.readEntityMetaData();
+        yaw = dis.readUnsignedByte();
+        pitch = dis.readUnsignedByte();
+        metadata = dis.readEntityMetaData();
     }
 
+    @Override
     public void process(GameContext context) {
         CraftPlayer ent = new CraftPlayer();
         ent.setEntityId(entityID);
         ent.setLocation(new Location(x, y, z, yaw, pitch));
-        ent.setName(playerName);
+        ent.setName(playerUUID.toString());
         ent.setUUID(playerUUID);
-        ent.setMeta(metaData);
+        ent.setMeta(metadata);
         context.getSelf().getEnvironment().addEntity(ent);
         context.getMainThread().fireEvent(new PlayerSpawnEvent(ent));
     }
-    
+
 }

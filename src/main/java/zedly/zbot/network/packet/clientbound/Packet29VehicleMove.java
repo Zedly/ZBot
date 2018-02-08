@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataInputStream;
@@ -12,13 +7,20 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
-public class Packet29VehicleMove implements ClientBoundPacket {
-    private double x;
-    private double y;
-    private double z;
-    private float yaw;
-    private float pitch;
 
+/**
+* Note that all fields use absolute positioning and do not allow for relative positioning.
+*/
+
+public class Packet29VehicleMove implements ClientBoundPacket {
+    private double x;  // Absolute position (X coordinate)
+    private double y;  // Absolute position (Y coordinate)
+    private double z;  // Absolute position (Z coordinate)
+    private double yaw;  // Absolute rotation on the vertical axis, in degrees
+    private double pitch;  // Absolute rotation on the horizontal axis, in degrees
+
+
+    @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         x = dis.readDouble();
         y = dis.readDouble();
@@ -26,5 +28,5 @@ public class Packet29VehicleMove implements ClientBoundPacket {
         yaw = dis.readFloat();
         pitch = dis.readFloat();
     }
-    
+
 }

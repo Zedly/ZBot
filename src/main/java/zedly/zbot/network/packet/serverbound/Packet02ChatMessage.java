@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.serverbound;
+package  zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
@@ -13,8 +8,14 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  *
  * @author Dennis
  */
+
+/**
+* Used to send a chat message to the server.  The message may not be longer than 256 characters or else the server will kick the client.
+*/
+
 public class Packet02ChatMessage implements ServerBoundPacket {
-    String message;
+    private final String message;  // The client sends the raw input, not a <a href="/Chat" title="Chat">Chat</a> component
+
 
     public Packet02ChatMessage(String message) {
         this.message = message;
@@ -29,5 +30,4 @@ public class Packet02ChatMessage implements ServerBoundPacket {
     public void writePacket(ExtendedDataOutputStream dos) throws IOException {
         dos.writeString(message);
     }
-    
 }

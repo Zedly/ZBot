@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.Location;
@@ -13,29 +8,18 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* Sent when the client has placed a sign and is allowed to send <a href="#Update_Sign">Update Sign</a>.  There must already be a sign at the given location (which the client does not do automatically) - send a <a href="#Block_Change">Block Change</a> first.
+*/
+
 public class Packet2AOpenSignEditor implements ClientBoundPacket {
-    private int x;
-    private int y;
-    private int z;
+    private Location location;
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        Location loc = dis.readPosition();
-        x = loc.getBlockX();
-        y = loc.getBlockY();
-        z = loc.getBlockZ();
+        location = dis.readPosition();
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getZ() {
-        return z;
-    }
-    
 }

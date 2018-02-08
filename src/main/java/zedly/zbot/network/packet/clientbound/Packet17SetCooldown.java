@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataInputStream;
@@ -12,13 +7,20 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* Applies a cooldown period to all items with the given type.  Used by the Notchian server with enderpearls.  This packet should be sent when the cooldown starts and also when the cooldown ends (to compensate for lag), although the client will end the cooldown automatically.
+*/
+
 public class Packet17SetCooldown implements ClientBoundPacket {
-    private int itemId;
-    private int cooldownTicks;
+    private int itemID;  // Numeric ID of the item to apply a cooldown to.
+    private int cooldownTicks;  // Number of ticks to apply a cooldown for, or 0 to clear the cooldown.
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        itemId = dis.readVarInt();
+        itemID = dis.readVarInt();
         cooldownTicks = dis.readVarInt();
     }
+
 }

@@ -85,3 +85,4 @@ public class Packet24Map implements ClientBoundPacket {
     }
     
 }
+//Refactored ancestor. Review data strcuture

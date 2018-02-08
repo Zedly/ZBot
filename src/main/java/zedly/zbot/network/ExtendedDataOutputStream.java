@@ -11,6 +11,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
+import zedly.zbot.Location;
 
 /**
  *
@@ -20,6 +21,10 @@ public class ExtendedDataOutputStream extends DataOutputStream {
 
     public ExtendedDataOutputStream(OutputStream out) {
         super(out);
+    }
+    
+    public void writeFloat(double d) throws IOException {
+        super.writeFloat((float) d);
     }
 
     public void writeString(String str) throws IOException {
@@ -55,6 +60,14 @@ public class ExtendedDataOutputStream extends DataOutputStream {
     }
 
     public void writePosition(int x, int y, int z) throws IOException {
+        long raw = ((long) x & 0x3FFFFFF) << 38 | (((long) y & 0xFFF) << 26) | ((long) z & 0x3FFFFFF);
+        writeLong(raw);
+    }
+    
+    public void writePosition(Location loc) throws IOException {
+        int x = loc.getBlockX();
+        int y = loc.getBlockY();
+        int z = loc.getBlockZ();
         long raw = ((long) x & 0x3FFFFFF) << 38 | (((long) y & 0xFFF) << 26) | ((long) z & 0x3FFFFFF);
         writeLong(raw);
     }
