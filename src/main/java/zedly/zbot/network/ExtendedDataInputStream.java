@@ -154,7 +154,7 @@ public class ExtendedDataInputStream extends DataInputStream {
         for(int i = 0; i < arrayLength; i++) {
             int arrayLength1 = readVarInt();
             List<String> requirement = new LinkedList<>();
-            for(int j = 0; j < arrayLength; j++) {
+            for(int j = 0; j < arrayLength1; j++) {
                 requirement.add(readString());
             }
             requirements.add(requirement);

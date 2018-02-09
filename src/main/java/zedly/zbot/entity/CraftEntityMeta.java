@@ -6,6 +6,7 @@ import zedly.zbot.Location;
 import zedly.zbot.inventory.ItemStack;
 
 import java.util.UUID;
+import net.minecraft.server.NBTBase;
 import zedly.zbot.Direction;
 import zedly.zbot.Util;
 import zedly.zbot.inventory.CraftItemStack;
@@ -238,6 +239,20 @@ public abstract class CraftEntityMeta implements EntityMeta {
             return "OptionalUUIDMeta: " + uuidValue;
         }
     }
+    
+    public static class NBTMeta extends CraftEntityMeta {
+
+        private NBTBase nbtValue;
+
+        @Override
+        public void read(ExtendedDataInputStream edis) throws IOException {
+            nbtValue = edis.readNBT();
+        }
+
+        public String toString() {
+            return "NBTMeta: " + nbtValue;
+        }
+    }
 
     static {
         dataMap.put(0, ByteMeta.class);
@@ -253,6 +268,7 @@ public abstract class CraftEntityMeta implements EntityMeta {
         dataMap.put(10, IntMeta.class);
         dataMap.put(11, OptionalUUIDMeta.class);
         dataMap.put(12, IntMeta.class);
+        dataMap.put(13, NBTMeta.class);
     }
 
 }

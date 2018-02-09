@@ -52,7 +52,7 @@ public class ThreadConnectionWatcher extends Thread {
                 PacketInputStream dis = new PacketInputStream(is, StreamState.LOGIN);
                 PacketOutputStream dos = new PacketOutputStream(os, StreamState.LOGIN);
 
-                Packet00Handshake pack = new Packet00Handshake(315, serverIP, serverPort, 2);
+                Packet00Handshake pack = new Packet00Handshake(340, serverIP, serverPort, 2);
                 Packet00LoginStart loginStart = new Packet00LoginStart(session.getActualUsername());
 
                 dos.writePacket(pack);
