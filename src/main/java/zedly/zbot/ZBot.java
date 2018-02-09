@@ -13,7 +13,7 @@ public class ZBot {
     private static int serverPort = 25565;
     private static String serverIP = "127.0.0.1";
     private static boolean onlineMode = false;
-    
+
     public static void main(String[] args) throws Exception {
         Session session;
 
@@ -26,11 +26,14 @@ public class ZBot {
         }
 
         System.out.print("Logging in.. [    ]");
-        
+
         if (onlineMode) {
             session = new Session(username, password);
             while (!session.renew()) {
+                System.out.println("\rLogging in.. [FAIL]");
+                System.out.println("Login to Mojang failed. Waiting to retry...");
                 Thread.sleep(60000);
+                System.out.print("Logging in.. [    ]");
             }
             //System.out.println("logged in as player " + session.getActualUsername());
         } else {
