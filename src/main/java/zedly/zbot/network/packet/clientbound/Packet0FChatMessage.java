@@ -9,7 +9,8 @@ import java.io.IOException;
 
 
 /**
-* Identifying the difference between Chat/System Message is important as it helps respect the user's chat visibility options.  See <a href="/Chat#Processing_chat" title="Chat">processing chat</a> for more info about these positions.
+* Identifying the difference between Chat/System Message is important as it helps respect the user's chat visibility options.  
+* See <a href="/Chat#Processing_chat" title="Chat">processing chat</a> for more info about these positions.
 */
 
 public class Packet0FChatMessage implements ClientBoundPacket {
@@ -27,7 +28,7 @@ public class Packet0FChatMessage implements ClientBoundPacket {
     public void process(GameContext context) {
         String message = Util.interpretJson(jSONData);
         System.out.println(message.replaceAll("\u00A7.", ""));
-        context.getMainThread().fireEvent(new ChatEvent(message));
+        context.getMainThread().fireEvent(new ChatEvent(jSONData, message));
     }
 
 }

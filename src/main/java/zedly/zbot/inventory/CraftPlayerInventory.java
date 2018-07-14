@@ -14,7 +14,7 @@ import zedly.zbot.GameContext;
 public class CraftPlayerInventory extends CraftInventory {
 
     public CraftPlayerInventory(GameContext context) {
-        super(context, 45, 0);
+        super(context, 46, 0);
     }
 
 }
