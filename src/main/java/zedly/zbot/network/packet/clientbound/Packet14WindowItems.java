@@ -39,6 +39,9 @@ public class Packet14WindowItems implements ClientBoundPacket {
             }
         }
         context.getMainThread().fireEvent(new WindowItemsEvent(windowID, slotData));
+        if(!context.getSelf().getInventory().isInitialized()) {
+            // Emit OpenWindowFinishEvent
+        }
     }
 
 }

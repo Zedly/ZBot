@@ -11,14 +11,15 @@ import zedly.zbot.GameContext;
  *
  * @author Dennis
  */
-public class CraftPlayerInventory extends CraftExternalInventory implements PlayerInventory {
+public class CraftChestInventory extends CraftExternalInventory implements ChestInventory {
 
-    public CraftPlayerInventory(GameContext context) {
-        super(context, 46, 9, 0, "Crafting");
+    public CraftChestInventory(GameContext context, int windowId, int size, String title) {
+        super(context, size + 36, size, windowId, title);
     }
 
-    public ItemStack getItemInOffHand() {
-        return items[45];
+    @Override
+    public String getTitle() {
+        return "Chest";
     }
     
     @Override

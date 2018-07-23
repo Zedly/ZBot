@@ -18,6 +18,8 @@ import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
 import zedly.zbot.environment.BlockFace;
+import zedly.zbot.inventory.CraftChestInventory;
+import zedly.zbot.inventory.CraftFurnaceInventory;
 import zedly.zbot.inventory.CraftPlayerInventory;
 import zedly.zbot.network.ThreadLocationUpdater;
 import zedly.zbot.network.packet.serverbound.Packet02ChatMessage;
@@ -59,7 +61,11 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void closeWindow() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        context.getUpThread().sendPacket(new Packet08CloseWindow(inventory.windowId()));
+        if(!(inventory instanceof CraftPlayerInventory)) {
+            inventory.close();
+            inventory = new CraftPlayerInventory(context);
+        }
     }
 
     @Override
@@ -297,8 +303,27 @@ public class CraftSelf extends CraftPlayer implements Self {
         return clientSettings.isLeftHanded();
     }
 
+    public void openWindow(String type, int id, int size, String title) {
+        CraftInventory inv = null;
+        switch (type) {
+            case "minecraft:furnace":
+                inv = new CraftFurnaceInventory(context, id, title);
+                break;
+            case "minecraft:container":
+            case "minecraft:chest":
+            case "minecraft:shulker_box":
+                inv = new CraftChestInventory(context, id, size, title);
+                break;
+        }
+        if (inv == null) {
+            System.err.println("Opened unknown inventory: " + type);
+        } else {
+            setInventory(inv);
+        }
+    }
+
     /**
-     * @param externalInventory the externalInventory to set
+     * @param inventory the Inventory to set
      */
     public void setInventory(CraftInventory inventory) {
         this.inventory.close();

@@ -5,6 +5,8 @@
  */
 package zedly.zbot.inventory;
 
+import java.util.HashMap;
+import java.util.function.Predicate;
 import zedly.zbot.GameContext;
 import zedly.zbot.network.packet.serverbound.Packet07ClickWindow;
 
@@ -14,62 +16,35 @@ import zedly.zbot.network.packet.serverbound.Packet07ClickWindow;
  */
 public abstract class CraftInventory implements Inventory {
 
-    private final GameContext context;
-    private final int windowId;
-    private final ItemStack[] items;
-    private ItemStack itemOnCursor;
-    protected int selectedSlot = 36;
-    private int transactionId = 0;
-    private boolean open = true;
+    protected final GameContext context;
+    protected final ItemStack[] items;
+    protected final int windowId;
+    protected final int staticBlockOffset;
+    protected ItemStack itemOnCursor;
+    protected int selectedSlot = 0;
+    protected int transactionId = 0;
+    protected boolean open = true;
+    protected boolean initialized = false;
 
-    protected CraftInventory(GameContext context, int size, int windowId) {
+    public CraftInventory(GameContext context, int size, int staticBlockOffset, int windowId) {
         this.context = context;
         items = new ItemStack[size];
         this.windowId = windowId;
+        this.staticBlockOffset = staticBlockOffset;
     }
 
     @Override
-    public ItemStack getSlot(int slot) {
-        if (slot < 0 || slot > items.length) {
-            return null;
-        }
-        return items[slot];
+    public int size() {
+        return items.length;
     }
-
-    @Override
-    public int internalSlot(int slot) {
-        return items.length - 36 + slot;
-    }
-
-    @Override
-    public int hotbarSlot(int slot) {
-        return items.length - 9 + slot;
-    }
-
     
-    public void setSlot(int slot, ItemStack is) {
-        if (slot == -1) {
-            itemOnCursor = is;
-        } else if (slot >= 0 && slot < items.length) {
-            items[slot] = is;
-        } else {
-            System.err.println("Invalid slot ID " + slot + " in inventory " + getClass() + " set to " + is);
-        }
+    public int windowId() {
+        return windowId;
     }
 
     @Override
-    public int getSelectedSlot() {
-        return selectedSlot;
-    }
-
-    @Override
-    public ItemStack getItemInHand() {
-        return items[selectedSlot];
-    }
-
-    @Override
-    public ItemStack getItemOnCursor() {
-        return itemOnCursor;
+    public ItemStack getSlot(int i) {
+        return items[i];
     }
 
     public void dropStackOnCursor() {
@@ -78,10 +53,6 @@ public abstract class CraftInventory implements Inventory {
 
     public void dropItemOnCursor() {
         click(-999, 0, 1);
-    }
-
-    public void swapItems(int slot1, int slot2) {
-
     }
 
     @Override
@@ -100,12 +71,13 @@ public abstract class CraftInventory implements Inventory {
         selectedSlot = 36 + i;
     }
 
-    public boolean isOpen() {
-        return open;
-    }
-
-    public void close() {
-        open = false;
+    public void setSlot(int slot, ItemStack is) {
+        if (slot >= 0 && slot < items.length) {
+            items[slot] = is;
+        } else {
+            System.err.println("Invalid slot ID " + slot + " in inventory " + getClass() + " set to " + is);
+        }
+        initialized = true;
     }
 
     public void reset() {
@@ -113,4 +85,35 @@ public abstract class CraftInventory implements Inventory {
             items[i] = null;
         }
     }
+
+    @Override
+    public boolean isOpen() {
+        return open;
+    }
+
+    @Override
+    public int getSelectedSlot() {
+        return selectedSlot + staticBlockOffset + 27;
+    }
+
+    @Override
+    public ItemStack getItemInHand() {
+        return items[selectedSlot + staticBlockOffset + 27];
+    }
+
+    @Override
+    public ItemStack getItemOnCursor() {
+        return itemOnCursor;
+    }
+
+    public void close() {
+        open = false;
+    }
+    
+    public boolean isInitialized() {
+        return initialized;
+    }
+    
+    public abstract void setProperty(int property, int value);
+
 }
