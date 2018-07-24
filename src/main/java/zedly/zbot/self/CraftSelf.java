@@ -19,6 +19,7 @@ import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
 import zedly.zbot.environment.BlockFace;
 import zedly.zbot.inventory.CraftChestInventory;
+import zedly.zbot.inventory.CraftEnchantingTableInventory;
 import zedly.zbot.inventory.CraftFurnaceInventory;
 import zedly.zbot.inventory.CraftPlayerInventory;
 import zedly.zbot.network.ThreadLocationUpdater;
@@ -61,10 +62,17 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void closeWindow() {
-        context.getUpThread().sendPacket(new Packet08CloseWindow(inventory.windowId()));
-        if(!(inventory instanceof CraftPlayerInventory)) {
-            inventory.close();
-            inventory = new CraftPlayerInventory(context);
+        closeWindow(true);
+    }
+
+    public void closeWindow(boolean sendPacket) {
+        if (sendPacket) {
+            context.getUpThread().sendPacket(new Packet08CloseWindow(inventory.windowId()));
+        } else {
+            if (!(inventory instanceof CraftPlayerInventory)) {
+                inventory.close();
+                inventory = new CraftPlayerInventory(context);
+            }
         }
     }
 
@@ -313,6 +321,9 @@ public class CraftSelf extends CraftPlayer implements Self {
             case "minecraft:chest":
             case "minecraft:shulker_box":
                 inv = new CraftChestInventory(context, id, size, title);
+                break;
+            case "minecraft:enchanting_table":
+                inv = new CraftEnchantingTableInventory(context, id, title);
                 break;
         }
         if (inv == null) {

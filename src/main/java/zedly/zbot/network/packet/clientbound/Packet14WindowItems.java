@@ -6,6 +6,7 @@ import zedly.zbot.inventory.ItemStack;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;
+import zedly.zbot.event.WindowOpenFinishEvent;
 
 /**
  * @author Dennis
@@ -40,7 +41,7 @@ public class Packet14WindowItems implements ClientBoundPacket {
         }
         context.getMainThread().fireEvent(new WindowItemsEvent(windowID, slotData));
         if(!context.getSelf().getInventory().isInitialized()) {
-            // Emit OpenWindowFinishEvent
+            context.getEventDispatcher().dispatchEvent(new WindowOpenFinishEvent(context.getSelf().getInventory()));
         }
     }
 

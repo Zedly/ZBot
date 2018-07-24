@@ -29,7 +29,20 @@ public class CraftFurnaceInventory extends CraftExternalInventory implements Fur
     
         @Override
     public void setProperty(int property, int value) {
-        
+        switch(property) {
+            case 0:
+                remainingBurnTime = value;
+                break;
+            case 1:
+                maxBurnTime = value;
+                break;
+            case 2:
+                progress = value;
+                break;
+            case 3:
+                maxProgress = value;
+                break;
+        }
     }
 
     @Override

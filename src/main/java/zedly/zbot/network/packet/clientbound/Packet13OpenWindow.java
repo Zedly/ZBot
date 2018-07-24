@@ -7,6 +7,7 @@ package zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.GameContext;
+import zedly.zbot.event.WindowOpenStartEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**
@@ -34,6 +35,6 @@ public class Packet13OpenWindow implements ClientBoundPacket {
     @Override
     public void process(GameContext context) {
         context.getSelf().openWindow(windowType, windowID, numberOfSlots, windowTitle);
-        // Emit OpenWindowStartEvent
+        context.getEventDispatcher().dispatchEvent(new WindowOpenStartEvent(context.getSelf().getInventory()));
     }
 }

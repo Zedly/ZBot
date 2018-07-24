@@ -15,8 +15,8 @@ public abstract class CraftExternalInventory extends CraftInventory implements E
     
     private final String title;
     
-    public CraftExternalInventory(GameContext context, int size, int hotbarOffset, int windowId, String title) {
-        super(context, size, hotbarOffset, windowId);
+    public CraftExternalInventory(GameContext context, int size, int staticInventoryOffset, int windowId, String title) {
+        super(context, size, staticInventoryOffset, windowId);
         this.title = title;
     }
     

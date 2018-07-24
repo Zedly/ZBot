@@ -26,11 +26,11 @@ public abstract class CraftInventory implements Inventory {
     protected boolean open = true;
     protected boolean initialized = false;
 
-    public CraftInventory(GameContext context, int size, int staticBlockOffset, int windowId) {
+    public CraftInventory(GameContext context, int size, int staticInventoryOffset, int windowId) {
         this.context = context;
         items = new ItemStack[size];
         this.windowId = windowId;
-        this.staticBlockOffset = staticBlockOffset;
+        this.staticBlockOffset = staticInventoryOffset;
     }
 
     @Override
