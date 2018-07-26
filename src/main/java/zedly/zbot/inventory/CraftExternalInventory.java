@@ -25,4 +25,9 @@ public abstract class CraftExternalInventory extends CraftInventory implements E
         return "Crafting";
     }
     
+    @Override
+    public ItemStack getHotbarSlot(int i) {
+        return getSlot(staticBlockOffset + 27 + i);
+    }
+    
 }

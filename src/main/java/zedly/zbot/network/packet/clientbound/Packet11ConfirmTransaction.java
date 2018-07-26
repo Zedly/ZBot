@@ -2,6 +2,7 @@ package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.GameContext;
+import zedly.zbot.event.TransactionResponseEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**
@@ -28,6 +29,8 @@ public class Packet11ConfirmTransaction implements ClientBoundPacket {
 
     @Override
     public void process(GameContext context) {
-        System.out.println("Transaction ID " + actionNumber + ": " + accepted);    }
+        System.out.println("Transaction ID " + actionNumber + ": " + accepted);
+        context.getEventDispatcher().dispatchEvent(new TransactionResponseEvent(windowID, actionNumber, accepted ? 1 : 0));
+    }
 
 }

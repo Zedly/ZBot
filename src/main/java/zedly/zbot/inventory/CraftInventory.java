@@ -5,8 +5,6 @@
  */
 package zedly.zbot.inventory;
 
-import java.util.HashMap;
-import java.util.function.Predicate;
 import zedly.zbot.GameContext;
 import zedly.zbot.network.packet.serverbound.Packet07ClickWindow;
 
@@ -43,6 +41,11 @@ public abstract class CraftInventory implements Inventory {
     }
 
     @Override
+    public int getStaticOffset() {
+        return staticBlockOffset;
+    }
+    
+    @Override
     public ItemStack getSlot(int i) {
         return items[i];
     }
@@ -68,12 +71,14 @@ public abstract class CraftInventory implements Inventory {
     }
 
     public void selectSlot(int i) {
-        selectedSlot = 36 + i;
+        selectedSlot = i;
     }
 
     public void setSlot(int slot, ItemStack is) {
         if (slot >= 0 && slot < items.length) {
             items[slot] = is;
+        } else if (slot == -1) {
+            itemOnCursor = is;
         } else {
             System.err.println("Invalid slot ID " + slot + " in inventory " + getClass() + " set to " + is);
         }

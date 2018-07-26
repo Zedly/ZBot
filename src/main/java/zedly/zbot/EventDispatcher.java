@@ -11,38 +11,47 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import zedly.zbot.event.Event;
 
 public class EventDispatcher {
 
     private final LinkedHashMap<Listener, HashMap<Class, Collection<Method>>> permanentEventMethodCache = new LinkedHashMap<>();
     //Kind of pointless because we are dealing with ~10 entries at all times
-    private final LinkedList<HashMap<Class, Collection<Method>>> temporaryEventMethodCache = new LinkedList<>();
-
+    private final HashMap<Class, List<Consumer>> temporaryEventMethodCache = new HashMap<>();
     private final Collection<Listener> listeners = new ArrayList<>();
+    private final LinkedList<Listener> listenersToRemove = new LinkedList<>();
 
     /**
      * Totally faster than the previous method. Not.
      */
     public synchronized void dispatchEvent(Event event) {
         // Loop through all registered Listener
-        
+
         for (Entry<Listener, HashMap<Class, Collection<Method>>> eventMethodMap : permanentEventMethodCache.entrySet()) {
             // Loop through all methods accepting this class
             HashMap<Class, Collection<Method>> listenerMethods = eventMethodMap.getValue();
-            if (!listenerMethods.containsKey(event.getClass())) {
-                continue;
-            }
-            for (Method method : listenerMethods.get(event.getClass())) {
-                try {
-                    method.invoke(eventMethodMap.getKey(), event);
-                } catch (Exception e) {
-                    System.err.println("Could not invoke event handler!");
-                    e.printStackTrace(System.err);
+
+            for (Class clazz : listenerMethods.keySet()) {
+                if (clazz.isAssignableFrom(event.getClass())) {
+                    for (Method method : listenerMethods.get(clazz)) {
+                        try {
+                            method.invoke(eventMethodMap.getKey(), event);
+                        } catch (Exception e) {
+                            System.err.println("Could not invoke event handler!");
+                            e.printStackTrace(System.err);
+                        }
+                    }
                 }
             }
         }
+        for (Listener l : listenersToRemove) {
+            permanentEventMethodCache.remove(l);
+        }
+        listenersToRemove.clear();
     }
 
     private boolean canHandleEvents(Method method) {
@@ -65,12 +74,7 @@ public class EventDispatcher {
      * Removes an event handler.
      */
     public synchronized void removePermanentHandler(Listener listener) {
-        permanentEventMethodCache.remove(listener);
-    }
-
-    public synchronized void addTemporaryHandler(Listener listener) {
-        HashMap<Class, Collection<Method>> listenerMethods = generateMethodMap(listener);
-        temporaryEventMethodCache.add(listenerMethods);
+        listenersToRemove.add(listener);
     }
 
     private HashMap<Class, Collection<Method>> generateMethodMap(Listener listener) {

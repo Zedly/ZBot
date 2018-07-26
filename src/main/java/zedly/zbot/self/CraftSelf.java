@@ -68,12 +68,12 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void closeWindow(boolean sendPacket) {
         if (sendPacket) {
             context.getUpThread().sendPacket(new Packet08CloseWindow(inventory.windowId()));
-        } else {
-            if (!(inventory instanceof CraftPlayerInventory)) {
-                inventory.close();
-                inventory = new CraftPlayerInventory(context);
-            }
+        } else if (!(inventory instanceof CraftPlayerInventory)) {
+            inventory.close();
+            inventory = new CraftPlayerInventory(context);
         }
+        inventory.close();
+        inventory = new CraftPlayerInventory(context);
     }
 
     @Override

@@ -65,14 +65,26 @@ public class CraftItemStack implements ItemStack {
 
         NBTTagCompound rootCompoundTag = (NBTTagCompound) nbt;
 
-        if (!rootCompoundTag.hasKey("ench")) {
-            return null;
-        }
+        NBTBase enchTag;
 
-        NBTBase enchTag = rootCompoundTag.getTag("ench");
-        if (enchTag.getId() != 9) {
-            System.err.println("ItemStack has malformed NBT data: ench tag type " + enchTag.getId());
-            return null;
+        if (getType() == Material.ENCHANTED_BOOK) {
+            if (!rootCompoundTag.hasKey("StoredEnchantments")) {
+                return null;
+            }
+            enchTag = rootCompoundTag.getTag("StoredEnchantments");
+            if (enchTag.getId() != 9) {
+                System.err.println("ItemStack has malformed NBT data: ench tag type " + enchTag.getId());
+                return null;
+            }
+        } else {
+            if (!rootCompoundTag.hasKey("ench")) {
+                return null;
+            }
+            enchTag = rootCompoundTag.getTag("ench");
+            if (enchTag.getId() != 9) {
+                System.err.println("ItemStack has malformed NBT data: ench tag type " + enchTag.getId());
+                return null;
+            }
         }
 
         NBTTagList enchListTag = (NBTTagList) enchTag;

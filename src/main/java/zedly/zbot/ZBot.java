@@ -14,7 +14,7 @@ public class ZBot {
     private static String serverIP = "127.0.0.1";
     private static boolean onlineMode = false;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {        
         Session session;
 
         try {
