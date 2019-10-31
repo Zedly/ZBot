@@ -7,6 +7,7 @@ package zedly.zbot.entity;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import zedly.zbot.EntityType;
 import zedly.zbot.entity.Firework;
 import zedly.zbot.event.Event;
@@ -19,11 +20,20 @@ import zedly.zbot.inventory.ItemStack;
 public class CraftFirework extends CraftObject implements Firework {
 
     ItemStack fireworkItem;
-    
+    int shooterEntityId;
+    boolean shotAtAngle;
+
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(6)) {
-            fireworkItem = metaMap.get(6).asSlot();
+        if (metaMap.containsKey(7)) {
+            fireworkItem = metaMap.get(7).asSlot();
+        }
+        if (metaMap.containsKey(8)) {
+            shooterEntityId = metaMap.get(8).asInt();
+        }
+        if (metaMap.containsKey(9)) {
+            shotAtAngle = metaMap.get(9).asBoolean();
         }
         return list;
     }
@@ -37,5 +47,20 @@ public class CraftFirework extends CraftObject implements Firework {
     public synchronized ItemStack getItemStack() {
         return fireworkItem;
     }
-    
+
+    @Override
+    public boolean hasGravity() {
+        return false;
+    }
+
+    @Override
+    public int getUserEntityId() {
+        return shooterEntityId;
+    }
+
+    @Override
+    public boolean isShotAtAngle() {
+        return shotAtAngle;
+    }
+
 }

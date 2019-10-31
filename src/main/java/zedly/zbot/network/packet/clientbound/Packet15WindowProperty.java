@@ -1,4 +1,4 @@
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.GameContext;
@@ -12,11 +12,16 @@ import zedly.zbot.network.ExtendedDataInputStream;
  * This packet is used to inform the client that part of a GUI window should be
  * updated.
  */
-public class Packet15WindowProperty implements ClientBoundPacket {
 
+/**
+* This packet is used to inform the client that part of a GUI window should be updated.
+*/
+
+public class Packet15WindowProperty implements ClientBoundPacket {
     private int windowID;
     private int property;  // The property to be updated, see below
     private int value;  // The new value for the property, see below
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
@@ -29,7 +34,6 @@ public class Packet15WindowProperty implements ClientBoundPacket {
     public void process(GameContext context) {
         if (context.getSelf().getInventory().windowId() == windowID) {
             context.getSelf().getInventory().setProperty(property, value);
-        }
-    }
+        }    }
 
 }

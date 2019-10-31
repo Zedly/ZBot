@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.GameContext;
@@ -11,6 +11,11 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* With this packet, the server notifies the client of thunderbolts striking within a 512 block radius around the player. The coordinates specify where exactly the thunderbolt strikes.
+*/
+
 
 /**
 * With this packet, the server notifies the client of thunderbolts striking within a 512 block radius around the player. The coordinates specify where exactly the thunderbolt strikes.
@@ -32,9 +37,5 @@ public class Packet02SpawnGlobalEntity implements ClientBoundPacket {
         y = dis.readDouble();
         z = dis.readDouble();
     }
-
-    @Override
-    public void process(GameContext context) {
-        CraftEntity ent = context.getSelf().getEnvironment().spawnEntity(CraftUnknown.class, entityID, new Location(x, y, z));    }
 
 }

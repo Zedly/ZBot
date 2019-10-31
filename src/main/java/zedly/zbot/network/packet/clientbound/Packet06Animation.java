@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.GameContext;
@@ -10,6 +10,11 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* Sent whenever an entity should change animation.
+*/
+
 
 /**
 * Sent whenever an entity should change animation.
@@ -31,7 +36,6 @@ public class Packet06Animation implements ClientBoundPacket {
         Entity ent = context.getSelf().getEnvironment().getEntityById(entityID);
         if (ent != null) {
             context.getEventDispatcher().dispatchEvent(new EntityAnimationEvent(ent, animation));
-        }
-    }
+        }    }
 
 }

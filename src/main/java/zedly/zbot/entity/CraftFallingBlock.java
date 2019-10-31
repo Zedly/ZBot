@@ -22,35 +22,40 @@ public class CraftFallingBlock extends CraftObject implements FallingBlock {
     protected int blockData = 0;
     protected Location spawnLocation = new Location(0, 0, 0);
     
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(6)) {
-            location = metaMap.get(6).asLocation();
+        if(metaMap.containsKey(7)) {
+            location = metaMap.get(7).asLocation();
         }
-        //do additional stuff
         return list;
     }
     
+    @Override
     public synchronized void setObjectData(int objectData) {
         super.setObjectData(objectData);
         material = Material.getMaterial(objectData & 0xFFF);
         blockData = objectData >> 12;
     }
     
-    public synchronized Location getSpawnLocation() {
-        return spawnLocation;
-    }
-    
+    @Override
     public EntityType getType() {
         return EntityType.FALLING_BLOCK;
     }
     
+    @Override
     public synchronized Material getBlockType() {
         return material;
     }
-    
-    public synchronized int getBlockData() {
-        return blockData;
+
+    @Override
+    public Location getSpawnPosition() {
+        return spawnLocation;
+    }
+
+    @Override
+    public boolean hasGravity() {
+        return true;
     }
     
 }

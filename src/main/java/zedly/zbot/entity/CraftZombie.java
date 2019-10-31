@@ -8,8 +8,6 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.VillagerProfession;
-import zedly.zbot.entity.Zombie;
 import zedly.zbot.event.Event;
 
 /**
@@ -19,32 +17,21 @@ import zedly.zbot.event.Event;
 public class CraftZombie extends CraftMonster implements Zombie {
 
     protected boolean baby = false;
-    protected VillagerProfession profession = null;
-    protected boolean converting = false;
-    protected boolean holdingHandsUp = false;
+    protected boolean drowning = false;
 
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            baby = metaMap.get(12).asBoolean();
+        if (metaMap.containsKey(17)) {
+            baby = metaMap.get(17).asBoolean();
         }
-        if (metaMap.containsKey(13)) {
-            int p = metaMap.get(13).asInt();
-            if (p == 0) {
-                profession = null;
-            } else {
-                profession = VillagerProfession.getById(p);
-            }
-        }
-        if (metaMap.containsKey(14)) {
-            converting = metaMap.get(14).asBoolean();
-        }
-        if (metaMap.containsKey(15)) {
-            holdingHandsUp = metaMap.get(15).asBoolean();
+        if (metaMap.containsKey(18)) {
+            drowning = metaMap.get(18).asBoolean();
         }
         return list;
     }
 
+    @Override
     public EntityType getType() {
         return EntityType.ZOMBIE;
     }
@@ -55,23 +42,12 @@ public class CraftZombie extends CraftMonster implements Zombie {
     }
 
     @Override
-    public synchronized boolean isVillager() {
-        return profession != null;
+    public boolean hasGravity() {
+        return true;
     }
 
     @Override
-    public synchronized VillagerProfession getProfession() {
-        return profession;
+    public boolean isDrowning() {
+        return drowning;
     }
-
-    @Override
-    public synchronized boolean isConverting() {
-        return converting;
-    }
-
-    @Override
-    public synchronized boolean isHoldingHandsUp() {
-        return holdingHandsUp;
-    }
-
 }

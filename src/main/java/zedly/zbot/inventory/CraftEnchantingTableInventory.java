@@ -6,7 +6,7 @@
 package zedly.zbot.inventory;
 
 import zedly.zbot.GameContext;
-import zedly.zbot.network.packet.serverbound.Packet06EnchantItem;
+import zedly.zbot.network.packet.serverbound.Packet07ClickWindowButton;
 
 /**
  *
@@ -87,7 +87,7 @@ public class CraftEnchantingTableInventory extends CraftExternalInventory implem
     @Override
     public void enchant(int slot) {
         if (slot >= 0 && slot < 3) {
-            context.getUpThread().sendPacket(new Packet06EnchantItem(windowId, slot));
+            context.getUpThread().sendPacket(new Packet07ClickWindowButton(windowId, slot));
         }
     }
 }

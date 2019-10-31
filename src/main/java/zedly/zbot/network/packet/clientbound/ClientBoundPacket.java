@@ -5,11 +5,13 @@ import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;
 
-public interface ClientBoundPacket
-{
-	void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException;
+public interface ClientBoundPacket {
 
-	default void process(GameContext context)
-	{
-	}
+    default void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
+        while ((packetLen -= dis.skip(packetLen)) > 0) {
+        }
+    }
+
+    default void process(GameContext context) {
+    }
 }

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
 import zedly.zbot.event.Event;
+import zedly.zbot.event.entity.EndermanBlockChangeEvent;
 import zedly.zbot.inventory.ItemStack;
 import zedly.zbot.inventory.CraftItemStack;
 
@@ -18,33 +19,33 @@ import zedly.zbot.inventory.CraftItemStack;
  */
 public class CraftMinecart extends CraftObject implements Minecart {
 
-    int shakingPower;
-    int shakingDirection;
-    float shakingMultiplier;
-    ItemStack blockInCart;
-    int blockYPosition;
-    boolean showBlock;
+    int shakingPower = 0;
+    int shakingDirection = 1;
+    float shakingMultiplier = 0;
+    int blockInCart = 0;
+    int blockYPosition = 6;
+    boolean showBlock = false;
 
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(6)) {
-            shakingPower = metaMap.get(6).asInt();
-        }
         if (metaMap.containsKey(7)) {
-            shakingDirection = metaMap.get(7).asInt();
+            shakingPower = metaMap.get(7).asInt();
         }
         if (metaMap.containsKey(8)) {
-            shakingMultiplier = metaMap.get(8).asFloat();
+            shakingDirection = metaMap.get(8).asInt();
         }
         if (metaMap.containsKey(9)) {
-            int d = metaMap.get(9).asInt();
-            blockInCart = new CraftItemStack(d >> 4, d & 0xF);
+            shakingMultiplier = metaMap.get(9).asFloat();
         }
         if (metaMap.containsKey(10)) {
-            blockYPosition = metaMap.get(10).asInt();
+            blockInCart = metaMap.get(10).asInt();
         }
         if (metaMap.containsKey(11)) {
-            showBlock = metaMap.get(11).asBoolean();
+            blockYPosition = metaMap.get(11).asInt();
+        }
+        if (metaMap.containsKey(12)) {
+            showBlock = metaMap.get(12).asBoolean();
         }
         return list;
     }
@@ -71,7 +72,7 @@ public class CraftMinecart extends CraftObject implements Minecart {
 
     @Override
     public synchronized ItemStack getBlock() {
-        return blockInCart;
+        return null;
     }
 
     @Override

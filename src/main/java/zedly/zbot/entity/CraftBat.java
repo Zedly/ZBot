@@ -22,12 +22,13 @@ public class CraftBat extends CraftAmbient implements Bat {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            hanging = metaMap.get(12).asInt() != 0;
+        if (metaMap.containsKey(14)) {
+            hanging = metaMap.get(14).asInt() != 0;
         }
         return list;
     }
     
+    @Override
     public EntityType getType() {
         return EntityType.BAT;
     }

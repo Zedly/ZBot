@@ -5,23 +5,22 @@
  */
 package zedly.zbot.entity;
 
+import org.bukkit.Material;
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.SmallFireball;
+import zedly.zbot.inventory.CraftItemStack;
 
 /**
  *
  * @author Dennis
  */
-public class CraftSmallFireball extends CraftProjectile implements SmallFireball {
+public class CraftSmallFireball extends CraftItemedFireball implements SmallFireball {
 
-    @Override
-    public EntityType getType() {
-        return EntityType.FIRE_CHARGE;
-    }
-
-    @Override
-    public synchronized boolean hasGravity() {
-        return true;
+    public CraftSmallFireball() {
+        super(new CraftItemStack(Material.FIREWORK_CHARGE));
     }
     
+    @Override
+    public EntityType getType() {
+        return EntityType.FIREBALL;
+    }
 }

@@ -22,8 +22,8 @@ public class CraftRabbit extends CraftAnimal implements Rabbit {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(13)) {
-            rabbitType = metaMap.get(13).asInt();
+        if (metaMap.containsKey(15)) {
+            rabbitType = metaMap.get(15).asInt();
         }
         return list;
     }

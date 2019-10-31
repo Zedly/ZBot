@@ -19,55 +19,56 @@ public class CraftWither extends CraftMonster implements Wither {
 
     int target1 = 0, target2 = 0, target3 = 0, invulnerableTime = 0;
 
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            target1 = metaMap.get(12).asInt();
-        }
-        if (metaMap.containsKey(13)) {
-            target2 = metaMap.get(13).asInt();
-        }
-        if (metaMap.containsKey(14)) {
-            target3 = metaMap.get(14).asInt();
-        }
         if (metaMap.containsKey(15)) {
-            invulnerableTime = metaMap.get(15).asInt();
+            target1 = metaMap.get(15).asInt();
+        }
+        if (metaMap.containsKey(16)) {
+            target2 = metaMap.get(16).asInt();
+        }
+        if (metaMap.containsKey(17)) {
+            target3 = metaMap.get(17).asInt();
+        }
+        if (metaMap.containsKey(18)) {
+            invulnerableTime = metaMap.get(18).asInt();
         }
         return list;
     }
 
     @Override
     public EntityType getType() {
-        return EntityType.FISHING_FLOAT;
+        return EntityType.WITHER;
     }
 
     @Override
-    public synchronized boolean isFirstHeadTargeting() {
+    public synchronized boolean isCenterHeadTargeting() {
         return target1 != 0;
     }
 
     @Override
-    public synchronized int getFirstHeadTargetId() {
+    public synchronized int getCenterHeadTargetId() {
         return target1;
     }
 
     @Override
-    public synchronized boolean isSecondHeadTargeting() {
+    public synchronized boolean isLeftHeadTargeting() {
         return target3 != 0;
     }
 
     @Override
-    public synchronized int getSecondHeadTargetId() {
+    public synchronized int getLeftHeadTargetId() {
         return target2;
     }
 
     @Override
-    public synchronized boolean isThirdHeadTargeting() {
+    public synchronized boolean isRightHeadTargeting() {
         return target3 != 0;
     }
 
     @Override
-    public synchronized int getThirdHeadTargetId() {
+    public synchronized int getRightHeadTargetId() {
         return target3;
     }
 

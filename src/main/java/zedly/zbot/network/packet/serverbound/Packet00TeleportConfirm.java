@@ -2,8 +2,6 @@ package  zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
-//Play, Serverbound
-
 
 /**
 * Sent by client as confirmation of <a href="#Player_Position_And_Look_.28clientbound.29">Player Position And Look</a>.

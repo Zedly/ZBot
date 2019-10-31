@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.GameContext;
@@ -11,6 +11,11 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* Spawns one or more experience orbs.
+*/
+
 
 /**
 * Spawns one or more experience orbs.
@@ -32,9 +37,5 @@ public class Packet01SpawnExperienceOrb implements ClientBoundPacket {
         z = dis.readDouble();
         count = dis.readShort();
     }
-
-    @Override
-    public void process(GameContext context) {
-        CraftEntity ent = context.getSelf().getEnvironment().spawnEntity(CraftUnknown.class, entityID, new Location(x, y, z));    }
 
 }

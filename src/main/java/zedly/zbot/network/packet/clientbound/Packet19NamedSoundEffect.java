@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.GameContext;
@@ -14,8 +14,13 @@ import zedly.zbot.network.ExtendedDataInputStream;
 * Used to play a sound effect on the client. Custom sounds may be added by resource packs.
 */
 
+
+/**
+* Used to play a sound effect on the client. Custom sounds may be added by resource packs.
+*/
+
 public class Packet19NamedSoundEffect implements ClientBoundPacket {
-    private String soundName;  // All sound effect names as of 1.12.2 can be seen <a rel="nofollow" class="external text" href="http://pokechu22.github.io/Burger/1.12.2.html#sounds">here</a>.
+    private String soundName;  // All sound effect names as of 1.14.4 can be seen <a rel="nofollow" class="external text" href="https://pokechu22.github.io/Burger/1.14.4.html#sounds">here</a>.
     private int soundCategory;  // The category that this sound will be played from (<a rel="nofollow" class="external text" href="https://gist.github.com/konwboj/7c0c380d3923443e9d55">current categories</a>)
     private int effectPositionX;  // Effect X multiplied by 8 (<a href="/Data_types#Fixed-point_numbers" title="Data types">fixed-point number</a> with only 3 bits dedicated to the fractional part)
     private int effectPositionY;  // Effect Y multiplied by 8 (<a href="/Data_types#Fixed-point_numbers" title="Data types">fixed-point number</a> with only 3 bits dedicated to the fractional part)
@@ -38,7 +43,6 @@ public class Packet19NamedSoundEffect implements ClientBoundPacket {
     @Override
     public void process(GameContext context) {
         System.out.println("Debug: Sound effect " + soundName);
-        context.getEventDispatcher().dispatchEvent(new NamedSoundEffectEvent(soundName, soundCategory, effectPositionX, effectPositionY, effectPositionZ, volume, pitch));
-    }
+        context.getEventDispatcher().dispatchEvent(new NamedSoundEffectEvent(soundName, soundCategory, effectPositionX, effectPositionY, effectPositionZ, volume, pitch));    }
 
 }

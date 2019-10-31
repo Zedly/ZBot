@@ -5,18 +5,24 @@
  */
 package zedly.zbot.entity;
 
+import org.bukkit.Material;
 import zedly.zbot.EntityType;
 import zedly.zbot.entity.ExperienceBottle;
+import zedly.zbot.inventory.CraftItemStack;
 
 /**
  *
  * @author Dennis
  */
-public class CraftThrownExperienceBottle extends CraftProjectile implements ExperienceBottle {
+public class CraftThrownExperienceBottle extends CraftItemedThrowable implements ExperienceBottle {
 
+    public CraftThrownExperienceBottle() {
+        super(new CraftItemStack(Material.EXP_BOTTLE));
+    }
+    
     @Override
     public EntityType getType() {
-        return EntityType.EXPERIENCE_BOTTLE;
+        return EntityType.THROWN_EXP_BOTTLE;
     }
 
     @Override

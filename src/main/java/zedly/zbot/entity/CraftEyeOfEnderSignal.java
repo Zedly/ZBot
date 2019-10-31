@@ -6,22 +6,21 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.EyeOfEnderSignal;
+import org.bukkit.Material;
+import zedly.zbot.inventory.CraftItemStack;
 
 /**
  *
  * @author Dennis
  */
-public class CraftEyeOfEnderSignal extends CraftProjectile implements EyeOfEnderSignal {
+public class CraftEyeOfEnderSignal extends CraftItemedThrowable implements EyeOfEnderSignal {
 
-    @Override
-    public EntityType getType() {
-        return EntityType.EYE_OF_ENDER;
-    }
-
-    @Override
-    public boolean hasGravity() {
-        return false;
+    public CraftEyeOfEnderSignal() {
+        super(new CraftItemStack(Material.EYE_OF_ENDER));
     }
     
+    @Override
+    public EntityType getType() {
+        return EntityType.ENDER_SIGNAL;
+    }
 }

@@ -44,6 +44,9 @@ For $i = 0 To UBound($tableHtml) - 1
 	If UBound($cols) <> 6 Then
 		ConsoleWrite("-> Section " & $name & " has weird table (" & UBound($cols) & "): " & $lines[0] & @CRLF)
 	EndIf
+
+	If UBound($cols) = 0 Then ContinueLoop
+
 	If $cols[0] <> "Packet ID" Then
 		ConsoleWrite("-> Section " & $name & " has no table with packet ID. Instead: " & $cols[0] & @CRLF)
 		ContinueLoop

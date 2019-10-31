@@ -79,15 +79,12 @@ public class ExtendedDataOutputStream extends DataOutputStream {
 
     public void writeSlot(ItemStack item) throws IOException {
         if(item == null) {
-            writeShort(-1);
+            writeBoolean(false);
             return;
         }
-        writeShort(item.getTypeId());
-        if (item.getTypeId() == -1) {
-            return;
-        }
+        writeBoolean(true);
+        writeVarInt(item.getTypeId());
         writeByte(item.getAmount());
-        writeShort(item.getData());
         writeNBT(item.getNbt());
     }
     

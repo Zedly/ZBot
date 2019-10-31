@@ -20,20 +20,19 @@ public class CraftGuardian extends CraftMonster implements Guardian {
     protected boolean retractingSpikes = false;
     protected boolean elderly = false;
     protected int targetId = 0;
-    
+
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(12)) {
-            int d = metaMap.get(12).asInt();
-            retractingSpikes = (d & 0x02) != 0;
-            elderly = (d & 0x04) != 0;
+        if (metaMap.containsKey(12)) {
+            elderly = metaMap.get(12).asBoolean();
         }
-        if(metaMap.containsKey(13)) {
+        if (metaMap.containsKey(13)) {
             targetId = metaMap.get(13).asInt();
         }
         return list;
     }
-    
+
     @Override
     public EntityType getType() {
         return EntityType.GUARDIAN;
@@ -45,11 +44,6 @@ public class CraftGuardian extends CraftMonster implements Guardian {
     }
 
     @Override
-    public synchronized boolean isElderly() {
-        return elderly;
-    }
-
-    @Override
     public synchronized boolean isTargeting() {
         return targetId != 0;
     }
@@ -58,5 +52,5 @@ public class CraftGuardian extends CraftMonster implements Guardian {
     public synchronized int getTargetedEntityId() {
         return targetId;
     }
-    
+
 }

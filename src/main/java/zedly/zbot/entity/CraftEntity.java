@@ -20,14 +20,16 @@ public abstract class CraftEntity implements Entity {
     protected boolean onFire = false;
     protected boolean sneaking = false;
     protected boolean sprinting = false;
-    protected boolean eating = false;
+    protected boolean swimming = false;
     protected boolean invisible = false;
     protected boolean glowing = false;
     protected boolean gliding = false;
-    protected int air = 0;
+    protected int air = 300;
     protected String customName = null;
     protected boolean customNameVisible = false;
     protected boolean silent = false;
+    protected boolean noGravity = false;
+    protected int poseId = 0;
 
     @Override
     public int getEntityId() {
@@ -46,7 +48,7 @@ public abstract class CraftEntity implements Entity {
     public void setLocation(Location loc) {
         this.location = loc;
     }
-    
+
     public Event setStatus(int status) {
         return null;
     }
@@ -68,15 +70,15 @@ public abstract class CraftEntity implements Entity {
             if (this instanceof Player && nSneaking != sneaking) {
                 list.add(new PlayerSneakEvent((Player) this, nSneaking));
             }
-            sneaking = nSneaking;          
-            
+            sneaking = nSneaking;
+
             boolean nSprinting = (flags & 0x08) != 0;
             if (this instanceof Player && nSprinting != sprinting) {
                 list.add(new PlayerSprintEvent((Player) this, nSprinting));
             }
             sprinting = nSprinting;
-            
-            eating = (flags & 0x10) != 0;
+
+            swimming = (flags & 0x10) != 0;
             invisible = (flags & 0x20) != 0;
             glowing = (flags & 0x40) != 0;
             gliding = (flags & 0x80) != 0;
@@ -92,6 +94,12 @@ public abstract class CraftEntity implements Entity {
         }
         if (metaMap.containsKey(4)) {
             silent = metaMap.get(4).asBoolean();
+        }
+        if (metaMap.containsKey(5)) {
+            noGravity = metaMap.get(5).asBoolean();
+        }
+        if (metaMap.containsKey(6)) {
+            poseId = metaMap.get(6).asInt();
         }
         return list;
     }
@@ -112,8 +120,8 @@ public abstract class CraftEntity implements Entity {
     }
 
     @Override
-    public boolean isEating() {
-        return eating;
+    public boolean isSwimming() {
+        return swimming;
     }
 
     @Override
@@ -155,4 +163,20 @@ public abstract class CraftEntity implements Entity {
     public boolean isSilent() {
         return silent;
     }
+
+    @Override
+    public int getPoseId() {
+        return poseId;
+    }
+    
+    
+    @Override
+    public boolean hasGravity() {
+        return !noGravity;
+    }
+    
+    public String toString() {
+        return getType() + " " + getEntityId();
+    }
+    
 }

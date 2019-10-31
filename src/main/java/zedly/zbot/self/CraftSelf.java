@@ -23,10 +23,11 @@ import zedly.zbot.inventory.CraftEnchantingTableInventory;
 import zedly.zbot.inventory.CraftFurnaceInventory;
 import zedly.zbot.inventory.CraftPlayerInventory;
 import zedly.zbot.network.ThreadLocationUpdater;
-import zedly.zbot.network.packet.serverbound.Packet02ChatMessage;
-import zedly.zbot.network.packet.serverbound.Packet03ClientStatus;
-import zedly.zbot.network.packet.serverbound.Packet04ClientSettings;
-import zedly.zbot.network.packet.serverbound.Packet0AUseEntity;
+import zedly.zbot.network.mappings.InventoryType;
+import zedly.zbot.network.packet.serverbound.Packet03ChatMessage;
+import zedly.zbot.network.packet.serverbound.Packet04ClientStatus;
+import zedly.zbot.network.packet.serverbound.Packet05ClientSettings;
+import zedly.zbot.network.packet.serverbound.Packet0EUseEntity;
 import zedly.zbot.network.packet.serverbound.*;
 import zedly.zbot.plugin.ZBotPlugin;
 
@@ -52,7 +53,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void attackEntity(Entity ent) {
-        context.getUpThread().sendPacket(new Packet0AUseEntity(ent.getEntityId()));
+        context.getUpThread().sendPacket(new Packet0EUseEntity(ent.getEntityId()));
     }
 
     @Override
@@ -67,7 +68,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     public void closeWindow(boolean sendPacket) {
         if (sendPacket) {
-            context.getUpThread().sendPacket(new Packet08CloseWindow(inventory.windowId()));
+            context.getUpThread().sendPacket(new Packet0ACloseWindow(inventory.windowId()));
         } else if (!(inventory instanceof CraftPlayerInventory)) {
             inventory.close();
             inventory = new CraftPlayerInventory(context);
@@ -85,7 +86,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     public synchronized void setClientSettings(ClientSettings clientSettings) {
         this.clientSettings = clientSettings;
         if (context.getSession().isOnlineMode()) {
-            context.getUpThread().sendPacket(new Packet04ClientSettings(clientSettings));
+            context.getUpThread().sendPacket(new Packet05ClientSettings(clientSettings));
         }
     }
 
@@ -111,12 +112,12 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void interactWithEntity(Entity ent, boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet0AUseEntity(ent.getEntityId(), (leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet0EUseEntity(ent.getEntityId(), (leftHand ? 1 : 0)));
     }
 
     @Override
     public void interactWithEntity(Entity ent, Location loc, boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet0AUseEntity(ent.getEntityId(), loc, (leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet0EUseEntity(ent.getEntityId(), loc, (leftHand ? 1 : 0)));
     }
 
     @Override
@@ -143,7 +144,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void performAction(int action) {
-        context.getUpThread().sendPacket(new Packet15EntityAction(getEntityId(), action, 0));
+        context.getUpThread().sendPacket(new Packet1BEntityAction(getEntityId(), action, 0));
     }
 
     @Override
@@ -158,23 +159,23 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void breakBlock(Location loc) {
-        context.getUpThread().sendPacket(new Packet14PlayerDigging(0, loc, 0));
-        context.getUpThread().sendPacket(new Packet14PlayerDigging(2, loc, 0));
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(0, loc, 0));
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(2, loc, 0));
     }
 
     @Override
     public void breakBlock(Location loc, int millis, Runnable callback) {
-        context.getUpThread().sendPacket(new Packet14PlayerDigging(0, loc, 1));
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(0, loc, 1));
         context.getMainThread().schedule(() -> {
-            context.getUpThread().sendPacket(new Packet14PlayerDigging(2, loc, 1));
+            context.getUpThread().sendPacket(new Packet1APlayerDigging(2, loc, 1));
             callback.run();
         }, millis, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void clickBlock(Location loc) {
-        context.getUpThread().sendPacket(new Packet14PlayerDigging(0, loc, 0));
-        context.getUpThread().sendPacket(new Packet14PlayerDigging(1, loc, 0));
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(0, loc, 0));
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(1, loc, 0));
     }
 
     @Override
@@ -189,6 +190,10 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void placeBlock(Location loc, BlockFace face) {
+        placeBlock(loc, face, 0);
+    }
+
+    public void placeBlock(Location loc, BlockFace face, int usedHand) {
         int iFace = 255;
         if (face != null) {
             switch (face) {
@@ -212,7 +217,7 @@ public class CraftSelf extends CraftPlayer implements Self {
                     break;
             }
         }
-        context.getUpThread().sendPacket(new Packet1FPlayerBlockPlacement(loc, (byte) iFace, 0, (byte) 0, (byte) 0, (byte) 0));
+        context.getUpThread().sendPacket(new Packet2CPlayerBlockPlacement(usedHand, loc, (byte) iFace, 0, 0, 0, false));
     }
 
     @Override
@@ -222,7 +227,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void respawn() {
-        context.getUpThread().sendPacket(new Packet03ClientStatus(0));
+        context.getUpThread().sendPacket(new Packet04ClientStatus(0));
     }
 
     @Override
@@ -243,20 +248,20 @@ public class CraftSelf extends CraftPlayer implements Self {
     @Override
     public void selectSlot(int i) {
         inventory.selectSlot(i);
-        context.getUpThread().sendPacket(new Packet1AHeldItemChange(i));
+        context.getUpThread().sendPacket(new Packet23HeldItemChange(i));
     }
 
     @Override
     public void sendChat(String message) {
         ArrayList<String> lines = StringUtil.wrap(message, 240);
         for (String line : lines) {
-            context.getUpThread().sendPacket(new Packet02ChatMessage(line));
+            context.getUpThread().sendPacket(new Packet03ChatMessage(line));
         }
     }
 
     @Override
     public void setAbilities(int abilities) {
-        context.getUpThread().sendPacket(new Packet13PlayerAbilities((byte) abilities, 0, 0));
+        context.getUpThread().sendPacket(new Packet19PlayerAbilities((byte) abilities, 0, 0));
     }
 
     @Override
@@ -268,22 +273,22 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void sneak(boolean sneak) {
-        context.getUpThread().sendPacket(new Packet15EntityAction(entityId, (sneak ? 0 : 1), 0));
+        context.getUpThread().sendPacket(new Packet1BEntityAction(entityId, (sneak ? 0 : 1), 0));
     }
 
     @Override
     public void sprint(boolean sprint) {
-        context.getUpThread().sendPacket(new Packet15EntityAction(entityId, (sprint ? 3 : 4), 0));
+        context.getUpThread().sendPacket(new Packet1BEntityAction(entityId, (sprint ? 3 : 4), 0));
     }
 
     @Override
     public void swingArm(boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet1DAnimation((leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet2AAnimation((leftHand ? 1 : 0)));
     }
 
     @Override
     public void useItem(boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet20UseItem((leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet2DUseItem((leftHand ? 1 : 0)));
     }
 
     @Override
@@ -293,7 +298,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void writeToSign(Location loc, String line1, String line2, String line3, String line4) {
-        context.getUpThread().sendPacket(new Packet1CUpdateSign(loc, line1, line2, line3, line4));
+        context.getUpThread().sendPacket(new Packet29UpdateSign(loc, line1, line2, line3, line4));
     }
 
     @Override
@@ -311,20 +316,74 @@ public class CraftSelf extends CraftPlayer implements Self {
         return clientSettings.isLeftHanded();
     }
 
-    public void openWindow(String type, int id, int size, String title) {
+    public void openWindow(InventoryType type, int id, String title) {
+        
         CraftInventory inv = null;
         switch (type) {
-            case "minecraft:furnace":
+            case MINECRAFT_BLAST_FURNACE:
+            case MINECRAFT_FURNACE:
+            case MINECRAFT_SMOKER:
                 inv = new CraftFurnaceInventory(context, id, title);
                 break;
-            case "minecraft:container":
-            case "minecraft:chest":
-            case "minecraft:shulker_box":
-                inv = new CraftChestInventory(context, id, size, title);
-                break;
-            case "minecraft:enchanting_table":
+            case MINECRAFT_ENCHANTMENT:
                 inv = new CraftEnchantingTableInventory(context, id, title);
                 break;
+            case MINECRAFT_GENERIC_9X1:
+                inv = new CraftChestInventory(context, id, 9, title);
+                break;
+            case MINECRAFT_GENERIC_9X2:
+                inv = new CraftChestInventory(context, id, 18, title);
+                break;
+            case MINECRAFT_GENERIC_9X3:
+            case MINECRAFT_SHULKER_BOX:
+                inv = new CraftChestInventory(context, id, 27, title);
+                break;
+            case MINECRAFT_GENERIC_9X4:
+                inv = new CraftChestInventory(context, id, 36, title);
+                break;
+            case MINECRAFT_GENERIC_9X5:
+                inv = new CraftChestInventory(context, id, 45, title);
+                break;
+            case MINECRAFT_GENERIC_9X6:
+                inv = new CraftChestInventory(context, id, 54, title);
+                break;
+            case MINECRAFT_GENERIC_3X3:
+                inv = new CraftChestInventory(context, id, 9, title);
+                break;
+            case MINECRAFT_ANVIL:
+                inv = new CraftChestInventory(context, id, 3, title);
+                break;
+            case MINECRAFT_BEACON:
+                inv = new CraftChestInventory(context, id, 1, title);
+                break;
+            case MINECRAFT_BREWING_STAND:
+                inv = new CraftChestInventory(context, id, 5, title);
+                break;
+            case MINECRAFT_CRAFTING:
+                inv = new CraftChestInventory(context, id, 9, title);
+                break;
+            case MINECRAFT_GRINDSTONE:
+                inv = new CraftChestInventory(context, id, 3, title);
+                break;
+            case MINECRAFT_HOPPER:
+                inv = new CraftChestInventory(context, id, 5, title);
+                break;
+            case MINECRAFT_LECTERN:
+                inv = new CraftChestInventory(context, id, 1, title);
+                break;
+            case MINECRAFT_LOOM:
+                inv = new CraftChestInventory(context, id, 4, title);
+                break;
+            case MINECRAFT_MERCHANT:
+                inv = new CraftChestInventory(context, id, 3, title);
+                break;
+            case MINECRAFT_CARTOGRAPHY:
+                inv = new CraftChestInventory(context, id, 3, title);
+                break;
+            case MINECRAFT_STONECUTTER:
+                inv = new CraftChestInventory(context, id, 2, title);
+                break;
+
         }
         if (inv == null) {
             System.err.println("Opened unknown inventory: " + type);

@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.Location;
 import zedly.zbot.GameContext;
@@ -17,10 +17,15 @@ import zedly.zbot.entity.CraftUnknown;
 * Sent by the server when a vehicle or other object is created.
 */
 
+
+/**
+* Sent by the server when a vehicle or other object is created.
+*/
+
 public class Packet00SpawnObject implements ClientBoundPacket {
     private int entityID;  // EID of the object
     private UUID objectUUID;
-    private int type;  // The type of object (see <a href="/Entities#Objects" class="mw-redirect" title="Entities">Entities#Objects</a>)
+    private int type;  // The type of object (same as in <a href="#Spawn_Mob">Spawn Mob</a>)
     private double x;
     private double y;
     private double z;
@@ -36,7 +41,7 @@ public class Packet00SpawnObject implements ClientBoundPacket {
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         entityID = dis.readVarInt();
         objectUUID = dis.readUUID();
-        type = dis.readByte();
+        type = dis.readVarInt();
         x = dis.readDouble();
         y = dis.readDouble();
         z = dis.readDouble();
@@ -52,7 +57,6 @@ public class Packet00SpawnObject implements ClientBoundPacket {
     public void process(GameContext context) {
         CraftObject ent = context.getSelf().getEnvironment().spawnObject(type, entityID, data, new Location(x, y, z, yaw, pitch));
         //ent.setVelocity(velocity);
-        context.getMainThread().fireEvent(new EntitySpawnEvent(ent));
-    }
+        context.getMainThread().fireEvent(new EntitySpawnEvent(ent));    }
 
 }

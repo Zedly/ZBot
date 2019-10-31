@@ -8,32 +8,38 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.Ocelot;
 import zedly.zbot.event.Event;
 
 /**
  *
  * @author Dennis
  */
-public class CraftOcelot extends CraftTameable implements Ocelot {
+public class CraftOcelot extends CraftAgeable implements Ocelot {
 
-    protected int ocelotType = 0;
+    protected boolean trusting = false;
     
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(15)) {
-            ocelotType = metaMap.get(15).asInt();
+            trusting = metaMap.get(15).asBoolean();
         }
         return list;
     }
     
+    @Override
     public EntityType getType() {
-        return EntityType.BAT;
+        return EntityType.OCELOT;
     }
     
-    public synchronized int getOcelotType() {
-        return ocelotType;
+    @Override
+    public boolean isTrusting() {
+        return trusting;
+    }
+
+    @Override
+    public boolean hasGravity() {
+        return true;
     }
     
 }

@@ -16,33 +16,28 @@ import zedly.zbot.entity.AbstractHorse;
  *
  * @author Dennis
  */
-public class CraftAbstractHorse extends CraftAnimal implements AbstractHorse {
+public abstract class CraftAbstractHorse extends CraftAnimal implements AbstractHorse {
 
-    protected boolean tame = false, saddled = false, bred = false, chest = false, rearing = false,
+    protected boolean tame = false, saddled = false, bred = false, eating = false, rearing = false,
             mouthOpen = false;
     UUID owner = null;
 
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(13)) {
-            int d = metaMap.get(13).asInt();
+        if (metaMap.containsKey(15)) {
+            int d = metaMap.get(15).asInt();
             tame = (d & 0x02) != 0;
             saddled = (d & 0x04) != 0;
-            chest = (d & 0x08) != 0;
-            bred = (d & 0x10) != 0;
-            eating = (d & 0x20) != 0;
-            rearing = (d & 0x40) != 0;
-            mouthOpen = (d & 0x80) != 0;
+            bred = (d & 0x08) != 0;
+            eating = (d & 0x10) != 0;
+            rearing = (d & 0x20) != 0;
+            mouthOpen = (d & 0x40) != 0;
         }
-        if (metaMap.containsKey(14)) {
-            owner = metaMap.get(14).asUUID();
+        if (metaMap.containsKey(16)) {
+            owner = metaMap.get(16).asUUID();
         }
         return list;
-    }
-
-    public EntityType getType() {
-        return EntityType.UNKNOWN;
     }
 
     @Override
@@ -56,13 +51,13 @@ public class CraftAbstractHorse extends CraftAnimal implements AbstractHorse {
     }
 
     @Override
-    public synchronized boolean hasChest() {
-        return chest;
+    public synchronized boolean hasBred() {
+        return bred;
     }
 
     @Override
-    public synchronized boolean isBred() {
-        return bred;
+    public synchronized boolean isEating() {
+        return eating;
     }
 
     @Override
@@ -83,6 +78,11 @@ public class CraftAbstractHorse extends CraftAnimal implements AbstractHorse {
     @Override
     public synchronized UUID getOwner() {
         return owner;
+    }
+
+    @Override
+    public boolean hasGravity() {
+        return true;
     }
 
 }

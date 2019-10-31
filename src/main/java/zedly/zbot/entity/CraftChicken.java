@@ -6,7 +6,6 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.Chicken;
 
 /**
  *

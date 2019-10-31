@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,6 +15,11 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* This packet is sent by the server when a player comes into visible range, <i>not</i> when a player joins.
+*/
+
 
 /**
 * This packet is sent by the server when a player comes into visible range, <i>not</i> when a player joins.
@@ -52,7 +57,6 @@ public class Packet05SpawnPlayer implements ClientBoundPacket {
         ent.setUUID(playerUUID);
         ent.setMeta(metadata);
         context.getSelf().getEnvironment().addEntity(ent);
-        context.getMainThread().fireEvent(new PlayerSpawnEvent(ent));
-    }
+        context.getMainThread().fireEvent(new PlayerSpawnEvent(ent));    }
 
 }

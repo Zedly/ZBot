@@ -1,12 +1,12 @@
 package zedly.zbot.network;
 
 import zedly.zbot.HTTP;
-import zedly.zbot.network.Packet.Packet00Handshake;
-import zedly.zbot.network.Packet.Packet00LoginStart;
-import zedly.zbot.network.Packet.Packet01EncryptionRequest;
-import zedly.zbot.network.Packet.Packet01EncryptionResponse;
-import zedly.zbot.network.Packet.Packet02LoginSuccess;
-import zedly.zbot.network.Packet.Packet03SetCompression;
+import zedly.zbot.network.packet.clientbound.Packet00Disconnect;
+import zedly.zbot.network.packet.serverbound.Packet00LoginStart;
+import zedly.zbot.network.packet.clientbound.Packet01EncryptionRequest;
+import zedly.zbot.network.packet.serverbound.Packet01EncryptionResponse;
+import zedly.zbot.network.packet.clientbound.Packet02LoginSuccess;
+import zedly.zbot.network.packet.clientbound.Packet03SetCompression;
 import zedly.zbot.Session;
 import zedly.zbot.Util;
 import java.io.IOException;
@@ -16,11 +16,14 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.security.PublicKey;
+import java.util.zip.DataFormatException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import zedly.zbot.GameContext;
 import zedly.zbot.HTTP.HTTPResponse;
-import zedly.zbot.network.packet.clientbound.Packet23JoinGame;
+import zedly.zbot.network.packet.clientbound.ClientBoundPacket;
+import zedly.zbot.network.packet.clientbound.Packet25JoinGame;
+import zedly.zbot.network.packet.serverbound.Packet00Handshake;
 
 public class ThreadConnectionWatcher extends Thread {
 
@@ -41,7 +44,6 @@ public class ThreadConnectionWatcher extends Thread {
     public void run() {
         while (!isInterrupted()) {
             try {
-                boolean compressionEnabled = false;
                 System.out.print("\rLogging in.. [#   ]");
                 sock = new Socket();
                 sock.setSoTimeout(60000);
@@ -52,101 +54,91 @@ public class ThreadConnectionWatcher extends Thread {
                 PacketInputStream dis = new PacketInputStream(is, StreamState.LOGIN);
                 PacketOutputStream dos = new PacketOutputStream(os, StreamState.LOGIN);
 
-                Packet00Handshake pack = new Packet00Handshake(340, serverIP, serverPort, 2);
+                Packet00Handshake pack = new Packet00Handshake(498, serverIP, serverPort, 2);
                 Packet00LoginStart loginStart = new Packet00LoginStart(session.getActualUsername());
 
                 dos.writePacket(pack);
                 dos.writePacket(loginStart);
 
                 while (true) {
-                    int len = dis.readVarInt();
-                    //System.out.println("Login Debug: Len " + len);
-                    if (compressionEnabled) {
-                        int clen = dis.readVarInt();
-                        //System.out.println("Login Debug: CLen " + clen);
-                    }
-                    int op = dis.readVarInt();
-                    if (op == 1) {
-                        System.out.print("\rLogging in.. [##  ]");
-                        //System.out.println("Exchanging keys...");
-                        Packet01EncryptionRequest encReq = new Packet01EncryptionRequest();
-                        encReq.readPacket(dis, 0);
-                        //System.out.println("Server Public Key " + Util.bytesToHex((encReq.getPublicKey())));
-                        PublicKey key = CryptManager.func_75896_a(encReq.getPublicKey());
-                        byte[] aes_key = "icetubeisafoggot".getBytes();
-                        SecretKey secretKey = new SecretKeySpec(aes_key, "AES");
+                    try {
+                        ClientBoundPacket p = dis.readPacket();
+                        if (p instanceof Packet01EncryptionRequest) {
+                            System.out.print("\rLogging in.. [##  ]");
+                            System.out.println("Exchanging keys...");
+                            Packet01EncryptionRequest encReq = (Packet01EncryptionRequest) p;
+                            System.out.println("Server Public Key " + Util.bytesToHex((encReq.getPublicKey())));
+                            PublicKey publicKey = CryptManager.decodePublicKey(encReq.getPublicKey());
+                            byte[] secretKeyBytes = "icetubeisafoggot".getBytes();
+                            SecretKey secretKey = new SecretKeySpec(secretKeyBytes, "AES");
 
-                        byte[] serverhash = CryptManager.func_75895_a(encReq.getServerID(), key, secretKey);
-                        String s_serverhash = CryptManager.getHexString(serverhash);
-                        //System.out.println("Server Hash " + s_serverhash);
+                            byte[] serverhash = CryptManager.calculateServerHash(encReq.getServerID(), publicKey, secretKey);
+                            String s_serverhash = CryptManager.getHexString(serverhash);
+                            System.out.println("Server Hash " + s_serverhash);
 
-                        byte[] sharedSecret = CryptManager.func_75894_a(key, secretKey.getEncoded());
-                        byte[] verifyToken = CryptManager.func_75894_a(key, encReq.getVerifyToken());
+                            byte[] sharedSecret = CryptManager.encryptWithPublicKey(publicKey, secretKey.getEncoded());
+                            byte[] verifyToken = CryptManager.encryptWithPublicKey(publicKey, encReq.getVerifyToken());
 
-                        if (session.isOnlineMode()) {
-                            HTTPResponse http = HTTP.https("https://sessionserver.mojang.com/session/minecraft/join", "{\r\n"
-                                    + "\"accessToken\": \"" + session.getAccessToken() + "\",\r\n"
-                                    + "\"selectedProfile\": \"" + session.getProfileID() + "\",\r\n"
-                                    + "\"serverId\": \"" + s_serverhash + "\"\r\n"
-                                    + "}");
-                            //System.out.println(http.getHeaders().get(null));
-                            if (http == null || http.getHeaders().get(null).get(0).contains("403")) {
-                                dis.close();
-                                dos.close();
-                                do {
-                                    System.out.println("\rLogging in.. [FAIL]");
-                                    System.err.println("Session invalid! Renewing");
-                                    sleep(30000);
-                                    System.out.print("Logging in.. [    ]");
-                                } while (!session.renew());
-                                break;
+                            if (session.isOnlineMode()) {
+                                HTTPResponse http = HTTP.https("https://sessionserver.mojang.com/session/minecraft/join", "{\r\n"
+                                        + "\"accessToken\": \"" + session.getAccessToken() + "\",\r\n"
+                                        + "\"selectedProfile\": \"" + session.getProfileID() + "\",\r\n"
+                                        + "\"serverId\": \"" + s_serverhash + "\"\r\n"
+                                        + "}");
+                                //System.out.println(http.getHeaders().get(null));
+                                if (http == null || http.getHeaders().get(null).get(0).contains("403")) {
+                                    dis.close();
+                                    dos.close();
+                                    do {
+                                        System.out.println("\rLogging in.. [FAIL]");
+                                        System.err.println("Session invalid! Renewing");
+                                        sleep(30000);
+                                        System.out.print("Logging in.. [    ]");
+                                    } while (!session.renew());
+                                    break;
+                                }
                             }
+                            System.out.print("\rLogging in.. [### ]");
+                            dos.writePacket(new Packet01EncryptionResponse(sharedSecret, verifyToken));
+                            is = CryptManager.decryptInputStream(secretKey, sock.getInputStream());
+                            os = CryptManager.encryptOuputStream(secretKey, sock.getOutputStream());
+                            dis = new PacketInputStream(is, StreamState.LOGIN);
+                            dos = new PacketOutputStream(os, StreamState.LOGIN);
+                        } else if (p instanceof Packet00Disconnect) {
+                            Packet00Disconnect p00 = (Packet00Disconnect) p;
+                            String reason = p00.getFormattedReason();
+                            System.out.println("\rLogging in [FAIL]");
+                            if (reason.contains("40")) {
+                                session.renew();
+                            }
+                            sleep(30000);
+                        } else if (p instanceof Packet02LoginSuccess) {
+                            System.out.print("\rLogging in.. [####]");
+                        } else if (p instanceof Packet25JoinGame) {
+                            Packet25JoinGame p25 = (Packet25JoinGame) p;
+                            System.out.print("\rLogging in.. [ OK ]\r");
+                            p25.process(context);
+                            context.openConnection(dis, dos);
+                            context.joinThreads();
+                            break;
                         }
-                        System.out.print("\rLogging in.. [### ]");
-                        dos.writePacket(new Packet01EncryptionResponse(sharedSecret, verifyToken));
-                        is = CryptManager.decryptInputStream(secretKey, sock.getInputStream());
-                        os = CryptManager.encryptOuputStream(secretKey, sock.getOutputStream());
-                        dis = new PacketInputStream(is, StreamState.PLAY);
-                        dos = new PacketOutputStream(os, StreamState.PLAY);
-                    } else if (op == 0) {
-                        int slen = dis.readVarInt();
-                        byte[] stuff = new byte[slen];
-                        dis.readFully(stuff);
-                        String reason = new String(stuff);
-                        System.out.println("\rLogging in [FAIL]");
-                        System.out.println("Disconneted: " + reason);
-                        if (reason.contains("40")) {
-                            session.renew();
-                        }
-                        sleep(30000);
-                    } else if (op == 2) {
-                        Packet02LoginSuccess p2 = new Packet02LoginSuccess();
-                        p2.readPacket(dis, 0);
-                        System.out.print("\rLogging in.. [####]");
-                    } else if (op == 3) {
-                        Packet03SetCompression p3 = new Packet03SetCompression();
-                        p3.readPacket(dis, 0);
-                        compressionEnabled = true;
-                        //System.out.println("Set Compression Threshold " + p3.getThreshold());
-                    } else if (op == 35) {
-                        Packet23JoinGame p23 = new Packet23JoinGame();
-                        p23.readPacket(dis, 0);
-                        System.out.print("\rLogging in.. [ OK ]\r");
-                        p23.process(context);
-                        context.openConnection(is, os, compressionEnabled);
-                        context.joinThreads();
-                        break;
-                    } else {
-                        System.out.println("\rLogging in.. [FAIL]");
-                        System.err.println("Protocol Error: Op " + op);
+                    } catch (IllegalArgumentException | DataFormatException ex) {
+                        ex.printStackTrace();
+                        dis.printCrashInfo();
                         break;
                     }
                 }
                 context.closeConnection();
                 sock.close();
                 sleep(10000);
-            } catch (IOException | InterruptedException ex) {
+            } catch (Exception ex) {
                 System.err.println("Disconnected from " + serverIP + "! " + ex.getClass() + ": " + ex.getMessage());
+                ex.printStackTrace();
+
+                try {
+                    sleep(10000);
+                } catch (InterruptedException ex2) {
+                }
             }
         }
     }

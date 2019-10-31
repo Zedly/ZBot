@@ -5,12 +5,16 @@
  */
 package zedly.zbot.entity;
 
-import zedly.zbot.entity.DragonFireball;
+import zedly.zbot.EntityType;
 
 /**
  *
  * @author Dennis
  */
-public class CraftDragonFireball extends CraftFireball implements DragonFireball {
-    
+public class CraftDragonFireball extends CraftAbstractFireball implements DragonFireball {
+
+    @Override
+    public EntityType getType() {
+        return EntityType.DRAGON_FIREBALL;
+    }    
 }

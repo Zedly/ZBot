@@ -5,23 +5,27 @@
  */
 package zedly.zbot.entity;
 
+import org.bukkit.Material;
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.ThrownEgg;
+import zedly.zbot.inventory.CraftItemStack;
 
 /**
  *
  * @author Dennis
  */
-public class CraftThrownEgg extends CraftProjectile implements ThrownEgg {
+public class CraftThrownEgg extends CraftItemedThrowable implements ThrownEgg {
 
+    public CraftThrownEgg() {
+        super(new CraftItemStack(Material.EGG));
+    }
+    
     @Override
     public EntityType getType() {
-        return EntityType.THROWN_EGG;
+        return EntityType.EGG;
     }
 
     @Override
     public boolean hasGravity() {
         return true;
     }
-    
 }

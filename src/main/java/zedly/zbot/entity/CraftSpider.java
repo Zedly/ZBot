@@ -20,8 +20,8 @@ public class CraftSpider extends CraftMonster implements Spider {
     
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(12)) {
-            climbing = metaMap.get(12).asInt() != 0;
+        if(metaMap.containsKey(15)) {
+            climbing = metaMap.get(15).asInt() != 0;
         }
         return list;
     }

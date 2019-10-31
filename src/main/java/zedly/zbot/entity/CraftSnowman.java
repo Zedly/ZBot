@@ -22,8 +22,8 @@ public class CraftSnowman extends CraftGolem implements Snowman {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(11)) {
-            hasPumpkinHead = (metaMap.get(11).asInt() & 0x10) != 0;
+        if (metaMap.containsKey(12)) {
+            hasPumpkinHead = (metaMap.get(12).asInt() & 0x10) != 0;
         }
         return list;
     }

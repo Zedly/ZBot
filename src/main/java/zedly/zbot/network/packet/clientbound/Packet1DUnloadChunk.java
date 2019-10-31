@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.event.UnloadChunkEvent;
@@ -14,6 +14,11 @@ import java.io.IOException;
 * Tells the client to unload a chunk column.
 */
 
+
+/**
+* Tells the client to unload a chunk column.
+*/
+
 public class Packet1DUnloadChunk implements ClientBoundPacket {
     private int chunkX;  // Block coordinate divided by 16, rounded down
     private int chunkZ;  // Block coordinate divided by 16, rounded down
@@ -24,9 +29,5 @@ public class Packet1DUnloadChunk implements ClientBoundPacket {
         chunkX = dis.readInt();
         chunkZ = dis.readInt();
     }
-
-    @Override
-    public void process(GameContext context) {
-        context.getMainThread().fireEvent(new UnloadChunkEvent(chunkX, chunkZ));    }
 
 }

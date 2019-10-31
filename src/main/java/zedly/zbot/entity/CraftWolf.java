@@ -8,7 +8,7 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.WoolColor;
+import zedly.zbot.DyeColor;
 import zedly.zbot.entity.Wolf;
 import zedly.zbot.event.Event;
 
@@ -20,7 +20,7 @@ public class CraftWolf extends CraftTameable implements Wolf {
 
     protected float damageTaken = 0;
     protected boolean begging = false;
-    protected WoolColor collarColor = WoolColor.RED;
+    protected DyeColor collarColor = DyeColor.RED;
 
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
@@ -32,11 +32,12 @@ public class CraftWolf extends CraftTameable implements Wolf {
             begging = metaMap.get(16).asBoolean();
         }
         if (metaMap.containsKey(17)) {
-            collarColor = WoolColor.values()[metaMap.get(17).asInt()];
+            collarColor = DyeColor.values()[metaMap.get(17).asInt()];
         }
         return list;
     }
 
+    @Override
     public EntityType getType() {
         return EntityType.WOLF;
     }
@@ -52,7 +53,7 @@ public class CraftWolf extends CraftTameable implements Wolf {
     }
 
     @Override
-    public synchronized WoolColor getCollarColor() {
+    public synchronized DyeColor getCollarColor() {
         return collarColor;
     }
 

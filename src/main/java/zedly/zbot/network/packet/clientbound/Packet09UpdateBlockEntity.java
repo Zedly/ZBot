@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.Location;
@@ -12,6 +12,11 @@ import zedly.zbot.network.ExtendedDataInputStream;
 
 /**
 * Sets tile entity associated with the block at the given location.
+*/
+
+
+/**
+* Sets the block entity associated with the block at the given location.
 */
 
 public class Packet09UpdateBlockEntity implements ClientBoundPacket {

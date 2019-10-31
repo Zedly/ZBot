@@ -8,7 +8,6 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.IronGolem;
 import zedly.zbot.event.Event;
 
 /**
@@ -17,30 +16,24 @@ import zedly.zbot.event.Event;
  */
 public class CraftIronGolem extends CraftGolem implements IronGolem {
 
-    boolean playerCreated = false;
-    boolean isHidingRose = false;
+    boolean playerCreated;
     
-    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(13)) {
-            playerCreated = metaMap.get(13).asInt() != 0;
+        if (metaMap.containsKey(12)) {
+            playerCreated = metaMap.get(12).asBoolean();
         }
         return list;
     }
     
+    @Override
     public EntityType getType() {
         return EntityType.IRON_GOLEM;
     }
 
     @Override
-    public synchronized boolean isPlayerCreated() {
+    public boolean isPlayerCreated() {
         return playerCreated;
-    }
-    
-    
-    public synchronized boolean isHidingRose() {
-        return isHidingRose;
     }
     
 }

@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.event.SlotUpdateEvent;
@@ -10,6 +10,11 @@ import java.io.IOException;
 /**
  * @author Dennis
  */
+
+/**
+* Sent by the server when an item in a slot (in a window) is added/removed.
+*/
+
 
 /**
 * Sent by the server when an item in a slot (in a window) is added/removed.
@@ -31,7 +36,6 @@ public class Packet16SetSlot implements ClientBoundPacket {
     @Override
     public void process(GameContext context) {
         context.getSelf().getInventory().setSlot(slot, slotData);
-        context.getMainThread().fireEvent(new SlotUpdateEvent(slot, slotData));
-    }
+        context.getMainThread().fireEvent(new SlotUpdateEvent(slot, slotData));    }
 
 }

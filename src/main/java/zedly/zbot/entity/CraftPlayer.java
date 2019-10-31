@@ -11,6 +11,7 @@ import zedly.zbot.EntityType;
 import zedly.zbot.entity.Player;
 
 import java.util.UUID;
+import net.minecraft.server.NBTBase;
 import zedly.zbot.event.Event;
 
 public class CraftPlayer extends CraftLivingEntity implements Player {
@@ -21,22 +22,30 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     protected boolean leftHanded = false;
     protected int score = 0;
     protected int skinFlags = 0;
+    NBTBase leftShoulderEntity;
+    NBTBase rightShoulderEntity;
     
     
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);       
-        if (metaMap.containsKey(11)) {
-            additionalHearts = metaMap.get(11).asFloat();
-        }
-        if (metaMap.containsKey(12)) {
-            score = metaMap.get(12).asInt();
-        }
         if (metaMap.containsKey(13)) {
-            skinFlags = metaMap.get(13).asInt();
+            additionalHearts = metaMap.get(13).asFloat();
         }
         if (metaMap.containsKey(14)) {
-            leftHanded = metaMap.get(14).asInt() == 0;
+            score = metaMap.get(14).asInt();
+        }
+        if (metaMap.containsKey(15)) {
+            skinFlags = metaMap.get(15).asInt();
+        }
+        if (metaMap.containsKey(16)) {
+            leftHanded = metaMap.get(16).asInt() == 0;
+        }
+        if (metaMap.containsKey(17)) {
+            leftShoulderEntity = metaMap.get(17).asNBT();
+        }
+        if (metaMap.containsKey(18)) {
+            rightShoulderEntity = metaMap.get(18).asNBT();
         }
         return list;
     }
@@ -87,5 +96,15 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     @Override
     public synchronized boolean isLeftHanded() {
         return leftHanded;
+    }
+
+    @Override
+    public NBTBase getLeftShoulderEntity() {
+        return leftShoulderEntity;
+    }
+
+    @Override
+    public NBTBase getRightShoulderEntity() {
+        return rightShoulderEntity;
     }
 }

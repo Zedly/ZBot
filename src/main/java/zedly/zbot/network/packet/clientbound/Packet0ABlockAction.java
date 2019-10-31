@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.Location;
@@ -6,7 +6,6 @@ import zedly.zbot.event.block.BlockActionEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;
-
 
 /**
 * This packet is used for a number of actions and animations performed by blocks, usually non-persistent.
@@ -16,7 +15,7 @@ public class Packet0ABlockAction implements ClientBoundPacket {
     private Location location;  // Block coordinates
     private int actionID;  // Varies depending on block — see <a href="/Block_Actions" title="Block Actions">Block Actions</a>
     private int actionParam;  // Varies depending on block — see <a href="/Block_Actions" title="Block Actions">Block Actions</a>
-    private int blockType;  // The block type ID for the block, not including metadata/damage value.  This must match the block at the given coordinates.
+    private int blockType;  // The block type ID for the block.  This must match the block at the given coordinates.
 
 
     @Override

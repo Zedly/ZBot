@@ -39,16 +39,11 @@ public class Packet14WindowItems implements ClientBoundPacket {
         boolean initialized = context.getSelf().getInventory().isInitialized();
         CraftInventory inv = context.getSelf().getInventory();
         for (int i = 0; i < slotData.length; i++) {
-            if(slotData[i].getTypeId() == -1) {
-                inv.setSlot(i, null);
-            } else {
-                inv.setSlot(i, slotData[i]);
-            }
+            inv.setSlot(i, slotData[i]);
         }
         context.getMainThread().fireEvent(new WindowItemsEvent(windowID, slotData));
         if (!(inv instanceof CraftPlayerInventory) && !initialized) {
             context.getEventDispatcher().dispatchEvent(new WindowOpenFinishEvent(context.getSelf().getInventory()));
         }
     }
-
 }

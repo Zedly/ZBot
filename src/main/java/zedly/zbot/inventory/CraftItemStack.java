@@ -21,32 +21,34 @@ import net.minecraft.server.NBTTagString;
  */
 public class CraftItemStack implements ItemStack {
 
-    protected short itemId = -1;
-    protected short data = 0;
+    protected Material type = Material.AIR;
     protected NBTBase nbt;
-    protected byte itemCount = 0;
+    protected int itemCount = 0;
 
     public CraftItemStack() {
     }
 
-    public CraftItemStack(int materialId, int damage) {
-        itemId = (short) materialId;
-        this.data = (short) damage;
+    public CraftItemStack(int materialId) {
+        this.type = Material.getMaterial(materialId);
+    }
+    
+    public CraftItemStack(Material mat) {
+        this.type = mat;
+    }
+    
+    public CraftItemStack(Material mat, int amount) {
+        this.type = mat;
+        this.itemCount = 1;
     }
 
     @Override
     public synchronized Material getType() {
-        return Material.getMaterial(itemId);
+        return type;
     }
 
     @Override
     public synchronized int getTypeId() {
-        return itemId;
-    }
-
-    @Override
-    public synchronized short getData() {
-        return data;
+        return type.getId();
     }
 
     @Override
@@ -209,16 +211,12 @@ public class CraftItemStack implements ItemStack {
     }
 
     @Override
-    public synchronized byte getAmount() {
+    public synchronized int getAmount() {
         return itemCount;
     }
 
-    public synchronized void setItemId(short itemId) {
-        this.itemId = itemId;
-    }
-
-    public synchronized void setData(short damageValue) {
-        this.data = damageValue;
+    public synchronized void setItemId(int itemId) {
+        this.type = Material.getMaterial(itemId);
     }
 
     public synchronized void setNbt(NBTBase nbt) {

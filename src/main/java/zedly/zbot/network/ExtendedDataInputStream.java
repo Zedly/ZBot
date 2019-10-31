@@ -65,13 +65,12 @@ public class ExtendedDataInputStream extends DataInputStream {
     }
 
     public CraftItemStack readSlot() throws IOException {
-        CraftItemStack stack = new CraftItemStack();
-        stack.setItemId(readShort());
-        if (stack.getTypeId() == -1) {
-            return stack;
+        if(!readBoolean()) {
+            return null;
         }
+        CraftItemStack stack = new CraftItemStack();
+        stack.setItemId(readVarInt());
         stack.setItemCount(readByte());
-        stack.setData(readShort());
         stack.setNbt(readNBT());
         return stack;
     }
@@ -122,12 +121,13 @@ public class ExtendedDataInputStream extends DataInputStream {
             if (id == 0xff) {
                 return metaMap;
             }
-            int type = read();
+            int type = readVarInt();
             try {
                 CraftEntityMeta emd = CraftEntityMeta.getByType(type);
                 emd.read(this);
                 metaMap.put(id, emd);
             } catch (Exception ex) {
+                ex.printStackTrace();
                 throw new IOException("Unrecognized EntityMeta type " + id);
             }
         }

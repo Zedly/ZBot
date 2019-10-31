@@ -22,15 +22,15 @@ public class CraftEnderdragon extends CraftInsentient implements Enderdragon {
 
     public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            phase = metaMap.get(12).asInt();
+        if (metaMap.containsKey(14)) {
+            phase = metaMap.get(14).asInt();
         }
         return list;
     }
 
     @Override
     public EntityType getType() {
-        return EntityType.ENDERDRAGON;
+        return EntityType.ENDER_DRAGON;
     }
 
     @Override

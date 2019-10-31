@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,6 +15,11 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* Sent by the server when a mob entity is spawned.
+*/
+
 
 /**
 * Sent by the server when a mob entity is spawned.
@@ -62,9 +67,8 @@ public class Packet03SpawnMob implements ClientBoundPacket {
             context.getMainThread().fireEvent(new EntitySpawnEvent(ent));
         } catch (Exception ex) {
             System.out.println("failed to set meta");
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
-
     }
 
 }

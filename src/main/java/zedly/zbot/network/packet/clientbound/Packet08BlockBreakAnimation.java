@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.Location;
@@ -8,6 +8,11 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
+
+/**
+* 0–9 are the displayable destroy stages and each other number means that there is no animation on this coordinate.
+*/
+
 
 /**
 * 0–9 are the displayable destroy stages and each other number means that there is no animation on this coordinate.

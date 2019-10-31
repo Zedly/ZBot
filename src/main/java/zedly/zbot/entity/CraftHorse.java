@@ -17,33 +17,23 @@ import zedly.zbot.event.Event;
 public class CraftHorse extends CraftAbstractHorse implements Horse {
 
     private int variant;
-    private int armor;
     
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            variant  = metaMap.get(15).asInt();
-        }
-        if (metaMap.containsKey(16)) {
-            armor = metaMap.get(16).asInt();
+        if (metaMap.containsKey(17)) {
+            variant  = metaMap.get(17).asInt();
         }
         return list;
     }
 
+    @Override
     public EntityType getType() {
         return EntityType.HORSE;
     }
     
-    
     @Override
     public int getVariant() {
         return variant;
-    }
-
-    @Override
-    public int getArmor() {
-        return armor;
-    }
-    
+    }    
 }

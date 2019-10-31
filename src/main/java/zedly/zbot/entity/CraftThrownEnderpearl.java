@@ -12,16 +12,10 @@ import zedly.zbot.entity.ThrownEnderPearl;
  *
  * @author Dennis
  */
-public class CraftThrownEnderpearl extends CraftProjectile implements ThrownEnderPearl {
+public class CraftThrownEnderpearl extends CraftItemedThrowable implements ThrownEnderPearl {
     
     @Override
     public EntityType getType() {
-        return EntityType.ENDERPEARL;
-    }
-
-    @Override
-    public boolean hasGravity() {
-        return true;
-    }
-    
+        return EntityType.ENDER_PEARL;
+    }   
 }
