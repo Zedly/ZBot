@@ -38,5 +38,13 @@ public class Packet25JoinGame implements ClientBoundPacket {
         viewDistance = dis.readVarInt();
         reducedDebugInfo = dis.readBoolean();
     }
+    
+    @Override
+    public void process(GameContext context) {
+        context.getSelf().setEntityId(entityID);
+        context.getPluginManager().onJoin();
+        context.getSelf().getEnvironment().reset(dimension);
+        //context.getMainThread().fireEvent(new SelfJoinEvent(entityID, gamemode));
+    }
 
 }

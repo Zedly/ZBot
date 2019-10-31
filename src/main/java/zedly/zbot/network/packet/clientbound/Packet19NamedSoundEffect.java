@@ -42,7 +42,7 @@ public class Packet19NamedSoundEffect implements ClientBoundPacket {
 
     @Override
     public void process(GameContext context) {
-        System.out.println("Debug: Sound effect " + soundName);
+        //System.out.println("Debug: Sound effect " + soundName);
         context.getEventDispatcher().dispatchEvent(new NamedSoundEffectEvent(soundName, soundCategory, effectPositionX, effectPositionY, effectPositionZ, volume, pitch));    }
 
 }

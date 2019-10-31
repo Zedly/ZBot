@@ -6,22 +6,16 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.SpectralArrow;
 
 /**
  *
  * @author Dennis
  */
-public class CraftArrowSpectral extends CraftArrow implements SpectralArrow {
+public class CraftLightningBolt extends CraftEntity implements LightningBolt {
 
     @Override
-    public synchronized EntityType getType() {
-        return EntityType.SPECTRAL_ARROW;
-    }
-
-    @Override
-    public boolean hasGravity() {
-        return true;
+    public EntityType getType() {
+        return EntityType.LIGHTNING;
     }
     
 }

@@ -1,6 +1,6 @@
 package zedly.zbot.environment;
 
-import org.bukkit.Material;
+import zedly.zbot.Material;
 import zedly.zbot.Location;
 
 public class CraftBlock implements Block {
@@ -19,41 +19,41 @@ public class CraftBlock implements Block {
     public Location getLocation() {
         return new Location(x, y, z);
     }
-    
+
     @Override
-    public int getTypeId() {
-        return getChunk().getTypeIdAt(x, y, z);
-    }
-    
     public Material getType() {
-        return Material.getMaterial(getTypeId());
+        return getChunk().getDataAt(x, y, z).getType();
     }
-    
+
+    private int getDataId() {
+        return getChunk().getDataIdAt(x, y, z);
+    }
+
     @Override
-    public int getData() {
+    public BlockData getData() {
         return getChunk().getDataAt(x, y, z);
     }
-    
+
     @Override
     public int getBlockLight() {
         return getChunk().getBlockLightAt(x, y, z);
     }
-    
+
     @Override
     public int getSkyLight() {
         return getChunk().getSkyLightAt(x, y, z);
     }
-    
+
     @Override
     public int getX() {
         return x;
     }
-    
+
     @Override
     public int getY() {
         return y;
     }
-    
+
     @Override
     public int getZ() {
         return z;
@@ -67,8 +67,8 @@ public class CraftBlock implements Block {
     @Override
     public boolean isLiquid() {
         Material mat = getType();
-        return mat == Material.WATER || mat == Material.STATIONARY_WATER
-                || mat == Material.LAVA || mat == Material.STATIONARY_LAVA;
+        return mat == Material.WATER
+                || mat == Material.LAVA;
     }
 
     @Override
@@ -85,13 +85,13 @@ public class CraftBlock implements Block {
     public boolean isLoaded() {
         return env.isChunkLoaded(x, y, z);
     }
-    
+
     private CraftChunk getChunk() {
         return env.getChunkAt(x, y, z);
     }
-    
+
     @Override
     public String toString() {
-        return "{CraftBlock " + (isLoaded() ? "loaded" : "unloaded") + " " + getType() + ":" + getData() + " (" + getTypeId() + ") at " + x + " " + y + " " + z + "}";
+        return "{CraftBlock " + (isLoaded() ? "loaded" : "unloaded") + " Type " + getDataId() +  " (" + getData() + ") at " + x + " " + y + " " + z + "}";
     }
 }

@@ -22,7 +22,7 @@ public class CraftVex extends CraftMonster implements Vex {
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(14)) {
-            attacking = metaMap.get(14).asBoolean();
+            attacking = metaMap.get(14).asInt() != 0;
         }
         return list;
     }

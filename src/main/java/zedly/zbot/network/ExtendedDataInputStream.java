@@ -81,10 +81,11 @@ public class ExtendedDataInputStream extends DataInputStream {
     }
 
     public CraftChunk readChunkSection(boolean readSkyLight) throws IOException {
+        int blockCount = readShort();
         int bitsPerBlock = readUnsignedByte();
 
         int[] palette;
-        if (bitsPerBlock == 0) {
+        if (bitsPerBlock > 8) {
             palette = null;
         } else {
             int length = readVarInt();
@@ -98,19 +99,10 @@ public class ExtendedDataInputStream extends DataInputStream {
         for (int i = 0; i < dataLength; i++) {
             blockData[i] = readLong();
         }
-        byte[] blockLight = new byte[2048];
-        byte[] skyLight;
-        readFully(blockLight);
-        if (readSkyLight) {
-            skyLight = new byte[2048];
-            readFully(skyLight);
+        if (bitsPerBlock > 8) {
+            return new CraftChunk(blockData);
         } else {
-            skyLight = null;
-        }
-        if (bitsPerBlock == 0) {
-            return new CraftChunk(blockData, blockLight, skyLight);
-        } else {
-            return new CraftChunk(blockData, bitsPerBlock, palette, blockLight, skyLight);
+            return new CraftChunk(blockData, bitsPerBlock, palette);
         }
     }
 

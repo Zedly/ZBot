@@ -6,21 +6,16 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.Material;
-import zedly.zbot.inventory.CraftItemStack;
 
 /**
  *
  * @author Dennis
  */
-public class CraftEyeOfEnderSignal extends CraftItemedThrowable implements EyeOfEnderSignal {
+public class CraftPainting extends CraftEntity implements Painting {
 
-    public CraftEyeOfEnderSignal() {
-        super(new CraftItemStack(Material.ENDER_EYE));
-    }
-    
     @Override
     public EntityType getType() {
-        return EntityType.ENDER_SIGNAL;
+        return EntityType.PAINTING;
     }
+    
 }

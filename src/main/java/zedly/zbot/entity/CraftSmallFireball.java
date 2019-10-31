@@ -5,7 +5,7 @@
  */
 package zedly.zbot.entity;
 
-import org.bukkit.Material;
+import zedly.zbot.Material;
 import zedly.zbot.EntityType;
 import zedly.zbot.inventory.CraftItemStack;
 
@@ -16,7 +16,7 @@ import zedly.zbot.inventory.CraftItemStack;
 public class CraftSmallFireball extends CraftItemedFireball implements SmallFireball {
 
     public CraftSmallFireball() {
-        super(new CraftItemStack(Material.FIREWORK_CHARGE));
+        super(new CraftItemStack(Material.FIRE_CHARGE));
     }
     
     @Override

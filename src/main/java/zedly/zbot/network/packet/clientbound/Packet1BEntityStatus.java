@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.clientbound;
+package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 //import zedly.zbot.event.entity.EntityStatusEvent;
@@ -11,20 +11,20 @@ import zedly.zbot.entity.CraftEntity;
 /**
  * @author Dennis
  */
-
 /**
-* Entity statuses generally trigger an animation for an entity.  The available statuses vary by the entity's type (and are available to subclasses of that type as well).
-*/
-
-
+ * Entity statuses generally trigger an animation for an entity. The available
+ * statuses vary by the entity's type (and are available to subclasses of that
+ * type as well).
+ */
 /**
-* Entity statuses generally trigger an animation for an entity.  The available statuses vary by the entity's type (and are available to subclasses of that type as well).
-*/
-
+ * Entity statuses generally trigger an animation for an entity. The available
+ * statuses vary by the entity's type (and are available to subclasses of that
+ * type as well).
+ */
 public class Packet1BEntityStatus implements ClientBoundPacket {
+
     private int entityID;
     private int entityStatus;  // See below
-
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
@@ -46,6 +46,7 @@ public class Packet1BEntityStatus implements ClientBoundPacket {
                     context.getMainThread().fireEvent(evt);
                 }
             }
-        }    }
+        }
+    }
 
 }

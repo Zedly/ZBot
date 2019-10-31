@@ -14,7 +14,7 @@ import zedly.zbot.inventory.ItemStack;
  *
  * @author Dennis
  */
-public abstract class CraftItemedFireball extends CraftEntity implements ItemedFireball {
+public abstract class CraftItemedFireball extends CraftObject implements ItemedFireball {
     protected ItemStack item;
 
     protected CraftItemedFireball(ItemStack item) {

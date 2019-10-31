@@ -5,10 +5,17 @@
  */
 package zedly.zbot.entity;
 
+import zedly.zbot.EntityType;
+
 /**
  *
  * @author Dennis
  */
-public abstract class CraftMinecartRideable extends CraftMinecart implements MinecartRideable {
+public class CraftMinecartRideable extends CraftMinecart implements MinecartRideable {
+    
+    @Override
+    public EntityType getType() {
+        return EntityType.MINECART;
+    }
     
 }

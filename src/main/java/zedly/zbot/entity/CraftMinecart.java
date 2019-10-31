@@ -17,7 +17,7 @@ import zedly.zbot.inventory.CraftItemStack;
  *
  * @author Dennis
  */
-public class CraftMinecart extends CraftObject implements Minecart {
+public abstract class CraftMinecart extends CraftObject implements Minecart {
 
     int shakingPower = 0;
     int shakingDirection = 1;
@@ -48,11 +48,6 @@ public class CraftMinecart extends CraftObject implements Minecart {
             showBlock = metaMap.get(12).asBoolean();
         }
         return list;
-    }
-
-    @Override
-    public EntityType getType() {
-        return EntityType.MINECART;
     }
 
     @Override

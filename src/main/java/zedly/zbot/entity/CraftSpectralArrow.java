@@ -5,27 +5,23 @@
  */
 package zedly.zbot.entity;
 
-import zedly.zbot.Material;
 import zedly.zbot.EntityType;
-import zedly.zbot.inventory.CraftItemStack;
+import zedly.zbot.entity.SpectralArrow;
 
 /**
  *
  * @author Dennis
  */
-public class CraftThrownEgg extends CraftItemedThrowable implements ThrownEgg {
+public class CraftSpectralArrow extends CraftArrow implements SpectralArrow {
 
-    public CraftThrownEgg() {
-        super(new CraftItemStack(Material.EGG));
-    }
-    
     @Override
-    public EntityType getType() {
-        return EntityType.EGG;
+    public synchronized EntityType getType() {
+        return EntityType.SPECTRAL_ARROW;
     }
 
     @Override
     public boolean hasGravity() {
         return true;
     }
+    
 }

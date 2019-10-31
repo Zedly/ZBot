@@ -5,7 +5,7 @@
  */
 package zedly.zbot.entity;
 
-import org.bukkit.Material;
+import zedly.zbot.Material;
 import zedly.zbot.EntityType;
 import zedly.zbot.entity.ExperienceBottle;
 import zedly.zbot.inventory.CraftItemStack;
@@ -17,7 +17,7 @@ import zedly.zbot.inventory.CraftItemStack;
 public class CraftThrownExperienceBottle extends CraftItemedThrowable implements ExperienceBottle {
 
     public CraftThrownExperienceBottle() {
-        super(new CraftItemStack(Material.EXP_BOTTLE));
+        super(new CraftItemStack(Material.EXPERIENCE_BOTTLE));
     }
     
     @Override

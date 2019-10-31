@@ -10,6 +10,7 @@ import zedly.zbot.GameContext;
 import zedly.zbot.event.block.BlockChangeEvent;
 import zedly.zbot.Location;
 import zedly.zbot.network.ExtendedDataInputStream;
+import zedly.zbot.network.mappings.BlockDataIds;
 
 /**
  *
@@ -19,7 +20,6 @@ public class Packet0FMultiBlockChange implements ClientBoundPacket {
 
     private int chunkX;
     private int chunkZ;
-    private int dataSize;
     private int[] blockPos;
     private int[] blockIds;
 
@@ -42,8 +42,8 @@ public class Packet0FMultiBlockChange implements ClientBoundPacket {
             int x = chunkX * 16 + ((blockPos[i] >> 12) & 0xF);
             int y = blockPos[i] & 0xFF;
             int z = chunkZ * 16 + ((blockPos[i] >> 8) & 0xF);
-            context.getMainThread().fireEvent(new BlockChangeEvent(new Location(x, y, z), blockIds[i]));
-            context.getSelf().getEnvironment().setBlockAt(x, y, z, (blockIds[i] >> 4), blockIds[i] & 0xF);
+            context.getMainThread().fireEvent(new BlockChangeEvent(new Location(x, y, z), BlockDataIds.fromId(blockIds[i])));
+            context.getSelf().getEnvironment().setBlockAt(x, y, z, blockIds[i]);
         }
     }
 }

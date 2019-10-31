@@ -15,11 +15,11 @@ import zedly.zbot.event.Event;
  *
  * @author Dennis
  */
-public class CraftArrow extends CraftEntity implements Arrow {
+public class CraftArrow extends CraftObject implements Arrow {
 
     protected boolean critical;
     protected boolean noclip;
-    protected UUID shooter;
+    protected int shooter;
     protected int piercingLevel;
 
     @Override
@@ -30,7 +30,7 @@ public class CraftArrow extends CraftEntity implements Arrow {
             noclip = (metaMap.get(7).asInt() & 0x2) != 0;
         }
         if (metaMap.containsKey(8)) {
-            shooter = UUID.fromString(metaMap.get(8).asString());
+            shooter = metaMap.get(8).asInt();
         }
         if (metaMap.containsKey(9)) {
             piercingLevel = metaMap.get(9).asInt();
@@ -55,7 +55,7 @@ public class CraftArrow extends CraftEntity implements Arrow {
     }
 
     @Override
-    public UUID getShooter() {
+    public int getShooter() {
         return shooter;
     }
 

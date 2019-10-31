@@ -7,6 +7,7 @@ package zedly.zbot.entity;
 
 import java.util.HashMap;
 import java.util.List;
+import zedly.zbot.EntityType;
 import zedly.zbot.VillagerProfession;
 import zedly.zbot.event.Event;
 
@@ -22,11 +23,11 @@ public class CraftZombieVillager extends CraftZombie implements ZombieVillager {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(17)) {
-            converting = metaMap.get(17).asBoolean();
+        if (metaMap.containsKey(19)) {
+            converting = metaMap.get(19).asBoolean();
         }
-        if (metaMap.containsKey(18)) {
-            villagerTypeId = metaMap.get(18).asInt();
+        if (metaMap.containsKey(20)) {
+            villagerTypeId = metaMap.get(20).asInt();
         }
         return list;
     }
@@ -39,6 +40,10 @@ public class CraftZombieVillager extends CraftZombie implements ZombieVillager {
     @Override
     public boolean isConverting() {
         return converting;
+    }
+    
+    public EntityType getType() {
+        return EntityType.ZOMBIE_VILLAGER;
     }
 
 }

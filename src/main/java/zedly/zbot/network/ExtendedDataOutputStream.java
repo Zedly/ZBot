@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
 import zedly.zbot.Location;
+import zedly.zbot.inventory.CraftItemStack;
 
 /**
  *
@@ -83,7 +84,7 @@ public class ExtendedDataOutputStream extends DataOutputStream {
             return;
         }
         writeBoolean(true);
-        writeVarInt(item.getTypeId());
+        writeVarInt(((CraftItemStack)item).getTypeId());
         writeByte(item.getAmount());
         writeNBT(item.getNbt());
     }

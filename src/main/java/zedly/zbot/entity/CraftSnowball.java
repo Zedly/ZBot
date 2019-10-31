@@ -6,7 +6,7 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import org.bukkit.Material;
+import zedly.zbot.Material;
 import zedly.zbot.entity.Snowball;
 import zedly.zbot.inventory.CraftItemStack;
 import zedly.zbot.inventory.ItemStack;
@@ -18,7 +18,7 @@ import zedly.zbot.inventory.ItemStack;
 public class CraftSnowball extends CraftItemedThrowable implements Snowball {
 
     public CraftSnowball() {
-        super(new CraftItemStack(Material.SNOW_BALL));
+        super(new CraftItemStack(Material.SNOWBALL));
     }
     
     @Override

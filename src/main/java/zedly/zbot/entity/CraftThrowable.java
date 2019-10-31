@@ -11,6 +11,6 @@ import zedly.zbot.inventory.ItemStack;
  *
  * @author Dennis
  */
-public abstract class CraftThrowable extends CraftEntity implements Throwable {
+public abstract class CraftThrowable extends CraftObject implements Throwable {
     
 }

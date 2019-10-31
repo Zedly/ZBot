@@ -11,7 +11,7 @@ import zedly.zbot.EntityType;
  *
  * @author Dennis
  */
-public class CraftEvocationFangs extends CraftEntity implements EvocationFangs {
+public class CraftEvocationFangs extends CraftObject implements EvocationFangs {
 
     @Override
     public EntityType getType() {

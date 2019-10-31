@@ -5,54 +5,49 @@
  */
 package zedly.zbot.environment;
 
+import zedly.zbot.Material;
+import zedly.zbot.network.mappings.BlockDataIds;
+
 /**
  *
  * @author Dennis
  */
 public class CraftChunk implements Chunk {
 
-    private final short[] blockIds;
-    private final byte[] blockData;
+    private static final int GLOBAL_PALETTE_ENTROPY = 14;
+
+    private final int[] dataIds;
     private final byte[] blockLight;
     private final byte[] skyLight;
 
-    public CraftChunk(long[] packedBlockData, byte[] packedBlockLight, byte[] packedSkyLight) {
+    public CraftChunk(long[] packedBlockData) {
         this();
-        
-        int bitOffset = 13;
+        int blockBitMask = (1 << GLOBAL_PALETTE_ENTROPY) - 1;
+        int bitOffset = GLOBAL_PALETTE_ENTROPY;
+
         for (int i = 0; i < 4096; i++) {
             int blockField;
-            if ((bitOffset % 64) > 12) {
-                blockField = (int) (packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & 0x1FFF;
+            if ((bitOffset % 64) > bitOffset - 1) {
+                blockField = (int) (packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & blockBitMask;
             } else {
                 blockField = (int) ((packedBlockData[bitOffset / 64 - 1] << (bitOffset % 64))
-                        | packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & 0x1FFF;
+                        | packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & blockBitMask;
             }
-            blockIds[i] = (short) (blockField >> 4);
-            blockData[i] = (byte) (blockField & 0xF);
-            if (i % 2 == 0) {
-                blockLight[i] = (byte) (packedBlockLight[i / 2] >> 4);
-            } else {
-                blockLight[i] = (byte) (packedBlockLight[i / 2] & 0xF);
-            }
-            bitOffset += 13;
-        }        
 
-        if (packedSkyLight != null) {
-            for (int i = 0; i < 4096; i++) {
-                if (i % 2 == 0) {
-                    skyLight[i] = (byte) (packedSkyLight[i / 2] >> 4);
-                } else {
-                    skyLight[i] = (byte) (packedSkyLight[i / 2] & 0xF);
-                }
-            }
+            dataIds[i] = blockField;
+            bitOffset += GLOBAL_PALETTE_ENTROPY;
+        }
+
+        for (int i = 0; i < 4096; i++) {
+            skyLight[i] = 0;
+            blockLight[i] = 0;
         }
     }
 
-    public CraftChunk(long[] packedBlockData, int bitsPerBlock, int[] palette, byte[] packedBlockLight, byte[] packedSkyLight) {
+    public CraftChunk(long[] packedBlockData, int bitsPerBlock, int[] palette) {
         this();
         int bitOffset = 0;
-        
+
         for (int i = 0; i < 4096; i++) {
             int blockField;
             if (64 - (bitOffset % 64) >= bitsPerBlock) {
@@ -61,41 +56,32 @@ public class CraftChunk implements Chunk {
                 blockField = (int) ((packedBlockData[bitOffset / 64] >>> (bitOffset % 64))
                         | packedBlockData[bitOffset / 64 + 1] << (64 - (bitOffset % 64))) & ~(-1 << bitsPerBlock);
             }
-            blockField = palette[blockField];
-            blockIds[i] = (short) (blockField >> 4);
-            blockData[i] = (byte) (blockField & 0xF);
-            if (i % 2 == 0) {
-                blockLight[i] = (byte) (packedBlockLight[i / 2] >> 4);
-            } else {
-                blockLight[i] = (byte) (packedBlockLight[i / 2] & 0xF);
-            }
+            dataIds[i] = palette[blockField];
             bitOffset += bitsPerBlock;
-        }        
+        }
 
-        if (packedSkyLight != null) {
-            for (int i = 0; i < 4096; i++) {
-                if (i % 2 == 0) {
-                    skyLight[i] = (byte) (packedSkyLight[i / 2] >> 4);
-                } else {
-                    skyLight[i] = (byte) (packedSkyLight[i / 2] & 0xF);
-                }
-            }
+        for (int i = 0; i < 4096; i++) {
+            skyLight[i] = 0;
+            blockLight[i] = 0;
         }
     }
 
     public CraftChunk() {
-        this.blockIds = new short[4096];
-        this.blockData = new byte[4096];
+        this.dataIds = new int[4096];
         this.skyLight = new byte[4096];
         this.blockLight = new byte[4096];
     }
-    
-    public int getTypeIdAt(int x, int y, int z) {
-        return blockIds[toArrayIndex(x, y, z)];
+
+    public int getDataIdAt(int x, int y, int z) {
+        return dataIds[toArrayIndex(x, y, z)];
     }
 
-    public int getDataAt(int x, int y, int z) {
-        return blockData[toArrayIndex(x, y, z)];
+    public BlockData getDataAt(int x, int y, int z) {
+        return BlockDataIds.fromId(getDataIdAt(x, y, z));
+    }
+
+    public Material getTypeAt(int x, int y, int z) {
+        return getDataAt(x, y, z).getType();
     }
 
     public int getBlockLightAt(int x, int y, int z) {
@@ -105,11 +91,10 @@ public class CraftChunk implements Chunk {
     public int getSkyLightAt(int x, int y, int z) {
         return skyLight[toArrayIndex(x, y, z)];
     }
-    
-    public void setBlockAt(int x, int y, int z, int typeId, int blockData) {
+
+    public void setBlockAt(int x, int y, int z, int dataId) {
         int arrayIndex = toArrayIndex(x, y, z);
-        blockIds[arrayIndex] = (short) typeId;
-        this.blockData[arrayIndex] = (byte) blockData;
+        dataIds[arrayIndex] = (short) dataId;
     }
 
     private int toArrayIndex(int x, int y, int z) {
@@ -120,7 +105,7 @@ public class CraftChunk implements Chunk {
             localX = x % 16;
         }
         if (y < 0) {
-            localY= 15 + ((y + 1) % 16);
+            localY = 15 + ((y + 1) % 16);
         } else {
             localY = y % 16;
         }
@@ -131,5 +116,5 @@ public class CraftChunk implements Chunk {
         }
         return 256 * localY + 16 * localZ + localX;
     }
-    
+
 }

@@ -9,8 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.EntityType;
 import zedly.zbot.Location;
-import org.bukkit.Material;
+import zedly.zbot.Material;
 import zedly.zbot.event.Event;
+import zedly.zbot.network.mappings.MaterialIds;
 
 /**
  *
@@ -34,7 +35,7 @@ public class CraftFallingBlock extends CraftObject implements FallingBlock {
     @Override
     public synchronized void setObjectData(int objectData) {
         super.setObjectData(objectData);
-        material = Material.getMaterial(objectData & 0xFFF);
+        material = MaterialIds.fromBlockId(objectData);
         blockData = objectData >> 12;
     }
     

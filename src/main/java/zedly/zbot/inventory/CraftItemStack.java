@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.Material;
+import zedly.zbot.network.mappings.MaterialIds;
 import net.minecraft.server.NBTBase;
 import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.NBTTagList;
 import net.minecraft.server.NBTTagString;
+import zedly.zbot.Material;
 
 /**
  *
@@ -21,7 +22,7 @@ import net.minecraft.server.NBTTagString;
  */
 public class CraftItemStack implements ItemStack {
 
-    protected Material type = Material.AIR;
+    protected int typeId;
     protected NBTBase nbt;
     protected int itemCount = 0;
 
@@ -29,26 +30,25 @@ public class CraftItemStack implements ItemStack {
     }
 
     public CraftItemStack(int materialId) {
-        this.type = Material.getMaterial(materialId);
+        this.typeId = materialId;
     }
     
     public CraftItemStack(Material mat) {
-        this.type = mat;
+        this(mat, 1);
     }
     
     public CraftItemStack(Material mat, int amount) {
-        this.type = mat;
+        this.typeId = MaterialIds.getItemId(mat);
         this.itemCount = 1;
     }
 
     @Override
     public synchronized Material getType() {
-        return type;
+        return MaterialIds.fromItemId(typeId);
     }
-
-    @Override
+    
     public synchronized int getTypeId() {
-        return type.getId();
+        return typeId;
     }
 
     @Override
@@ -216,7 +216,7 @@ public class CraftItemStack implements ItemStack {
     }
 
     public synchronized void setItemId(int itemId) {
-        this.type = Material.getMaterial(itemId);
+        this.typeId = itemId;
     }
 
     public synchronized void setNbt(NBTBase nbt) {

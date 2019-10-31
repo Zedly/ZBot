@@ -22,11 +22,11 @@ public class CraftZombie extends CraftMonster implements Zombie {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(17)) {
-            baby = metaMap.get(17).asBoolean();
+        if (metaMap.containsKey(14)) {
+            baby = metaMap.get(14).asBoolean();
         }
-        if (metaMap.containsKey(18)) {
-            drowning = metaMap.get(18).asBoolean();
+        if (metaMap.containsKey(16)) {
+            drowning = metaMap.get(16).asBoolean();
         }
         return list;
     }
