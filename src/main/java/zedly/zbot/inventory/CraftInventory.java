@@ -23,6 +23,7 @@ public abstract class CraftInventory implements Inventory {
     protected int transactionId = 0;
     protected boolean open = true;
     protected boolean initialized = false;
+    protected boolean changed = false;
 
     public CraftInventory(GameContext context, int size, int staticInventoryOffset, int windowId) {
         this.context = context;
@@ -68,6 +69,7 @@ public abstract class CraftInventory implements Inventory {
             itemOnCursor = is;
             context.getUpThread().sendPacket(new Packet09ClickWindow((byte) windowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, is));
         }
+        changed = true;
     }
 
     public void selectSlot(int i) {
@@ -121,4 +123,12 @@ public abstract class CraftInventory implements Inventory {
     
     public abstract void setProperty(int property, int value);
 
+    public void rollbackTransactionId() {
+        transactionId--;
+    }
+    
+    public boolean changed() {
+        return changed;
+    }
+    
 }

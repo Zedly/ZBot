@@ -10,11 +10,6 @@ import zedly.zbot.network.ExtendedDataOutputStream;
  */
 
 /**
-* This packet is sent by the player when it clicks on a slot in a window.
-*/
-
-
-/**
 * Used when clicking on window buttons.  Until 1.14, this was only used by enchantment tables.
 */
 
@@ -30,7 +25,7 @@ public class Packet07ClickWindowButton implements ServerBoundPacket {
 
     @Override
     public int opCode() {
-        return 0x07;
+        return 0x08;
     }
 
     @Override

@@ -46,7 +46,7 @@ public class Packet21ChunkData implements ClientBoundPacket {
     @Override
     public void process(GameContext context) {
         CraftEnvironment environment = context.getSelf().getEnvironment();
-        environment.loadChunkColumn(blockData, chunkX, chunkZ, groundUpContinuous, primaryBitMask);
+        environment.loadChunkColumn(blockData, chunkX, chunkZ, groundUpContinuous, primaryBitMask, blockEntities);
     }
 }
 //Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture

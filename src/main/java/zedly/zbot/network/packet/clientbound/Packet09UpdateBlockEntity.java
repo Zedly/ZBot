@@ -3,6 +3,8 @@ package   zedly.zbot.network.packet.clientbound;
 import java.io.IOException;
 import zedly.zbot.Location;
 import net.minecraft.server.NBTBase;
+import net.minecraft.server.NBTTagCompound;
+import zedly.zbot.GameContext;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**
@@ -30,6 +32,11 @@ public class Packet09UpdateBlockEntity implements ClientBoundPacket {
         location = dis.readPosition();
         action = dis.readUnsignedByte();
         nBTData = dis.readNBT();
+    }
+    
+    @Override
+    public void process(GameContext context) {
+        context.getSelf().getEnvironment().setTileAt(location, (NBTTagCompound) nBTData);
     }
 
 }

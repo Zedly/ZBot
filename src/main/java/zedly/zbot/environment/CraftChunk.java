@@ -5,7 +5,13 @@
  */
 package zedly.zbot.environment;
 
+import java.util.HashMap;
+import net.minecraft.server.NBTBase;
+import net.minecraft.server.NBTTagCompound;
+import zedly.zbot.Location;
 import zedly.zbot.Material;
+import zedly.zbot.block.CraftTile;
+import zedly.zbot.block.data.BlockData;
 import zedly.zbot.network.mappings.BlockDataIds;
 
 /**
@@ -19,6 +25,7 @@ public class CraftChunk implements Chunk {
     private final int[] dataIds;
     private final byte[] blockLight;
     private final byte[] skyLight;
+    private final HashMap<Long, NBTTagCompound> tiles = new HashMap<>();
 
     public CraftChunk(long[] packedBlockData) {
         this();
@@ -81,7 +88,7 @@ public class CraftChunk implements Chunk {
     }
 
     public Material getTypeAt(int x, int y, int z) {
-        return getDataAt(x, y, z).getType();
+        return getDataAt(x, y, z).getMaterial();
     }
 
     public int getBlockLightAt(int x, int y, int z) {
@@ -95,6 +102,7 @@ public class CraftChunk implements Chunk {
     public void setBlockAt(int x, int y, int z, int dataId) {
         int arrayIndex = toArrayIndex(x, y, z);
         dataIds[arrayIndex] = (short) dataId;
+        tiles.remove(new Location(x, y, z).toLong());
     }
 
     private int toArrayIndex(int x, int y, int z) {
@@ -116,5 +124,36 @@ public class CraftChunk implements Chunk {
         }
         return 256 * localY + 16 * localZ + localX;
     }
+    
+    public boolean hasTileAt(int x, int y, int z) {
+        return CraftChunk.this.hasTileAt(new Location(x, y, z));
+    }
+    
+    public boolean hasTileAt(Location loc) {
+        return tiles.containsKey(loc.toLong());
+    }
 
+    public NBTTagCompound getTileAt(Location loc) {
+        return tiles.get(loc.toLong());
+    }
+
+    public CraftTile getTileAt(int x, int y, int z) {
+        long chunkLong = new Location(x, y, z).toLong();
+        if (tiles.containsKey(chunkLong)) {
+            return CraftTile.forNbt(tiles.get(chunkLong));
+        }
+        return null;
+    }
+
+    public void setTileAt(Location loc, NBTTagCompound tile) {
+        tiles.put(loc.toLong(), tile);
+    }
+
+    public void setTileAt(int x, int y, int z, NBTTagCompound tile) {
+        setTileAt(new Location(x, y, z), tile);
+    }
+
+    public void removeTileAt(long chunkCoords) {
+        tiles.remove(chunkCoords);
+    }
 }

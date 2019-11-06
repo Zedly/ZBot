@@ -12,6 +12,8 @@ import zedly.zbot.entity.CraftEntity;
 
 import java.util.HashMap;
 import java.util.UUID;
+import net.minecraft.server.NBTBase;
+import net.minecraft.server.NBTTagCompound;
 import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.*;
@@ -95,7 +97,7 @@ public class CraftEnvironment implements Environment {
         }
     }
 
-    public void loadChunkColumn(byte[] rawData, int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask) {
+    public void loadChunkColumn(byte[] rawData, int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask, NBTBase[] blockEntities) {
         ExtendedDataInputStream edis = new ExtendedDataInputStream(new ByteArrayInputStream(rawData));
         for (int i = 0; i < 16; i++) {
             if (((1 << i) & primaryBitMask) != 0) {
@@ -107,6 +109,14 @@ public class CraftEnvironment implements Environment {
             } else {
                 chunks.put(chunkCoordinatesToChunkLong(chunkX, i, chunkZ), new CraftChunk());
             }
+        }
+        
+        for(NBTBase tile : blockEntities) {
+            NBTTagCompound compound = (NBTTagCompound) tile;
+            int x = compound.getInteger("x");
+            int y = compound.getInteger("y");
+            int z = compound.getInteger("z");
+            setTileAt(x, y, z, compound);
         }
     }
 
@@ -121,18 +131,34 @@ public class CraftEnvironment implements Environment {
             return AIR_CHUNK;
         }
         long chunkLong = blockCoordinatesToChunkLong(x, y, z);
+        return getChunkAt(chunkLong);
+    }
+
+    private CraftChunk getChunkAt(long chunkLong) {
         if (chunks.containsKey(chunkLong)) {
             return chunks.get(chunkLong);
         }
         return AIR_CHUNK;
     }
-
+    
     public void setBlockAt(int x, int y, int z, int typeId) {
         CraftChunk cc = getChunkAt(x, y, z);
         if (cc == null) {
             return;
         }
         cc.setBlockAt(x, y, z, typeId);
+    }
+    
+    public void setTileAt(int x, int y, int z, NBTTagCompound tile) {
+        setTileAt(new Location(x, y, z), tile);
+    }
+    
+    public void setTileAt(Location loc, NBTTagCompound tile) {
+        CraftChunk cc = getChunkAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        if (cc == null) {
+            return;
+        }
+        cc.setTileAt(loc, tile);
     }
 
     public CraftEntity spawnEntity(int typeId, int entityId, Location loc) {
@@ -193,7 +219,7 @@ public class CraftEnvironment implements Environment {
     }
 
     private long chunkCoordinatesToChunkLong(long chunkX, long chunkY, long chunkZ) {
-        return (chunkY & 0xF) | ((chunkZ & 0xFFFFFF) << 12) | ((chunkX & 0xFFFFFF) << 38);
+        return new Location(chunkX, chunkY, chunkZ).toLong();
     }
     
     private long blockCoordinatesToChunkLong(long x, long y, long z) {

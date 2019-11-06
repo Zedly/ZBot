@@ -1,7 +1,11 @@
 package zedly.zbot.environment;
 
+import net.minecraft.server.NBTBase;
+import zedly.zbot.BlockFace;
 import zedly.zbot.Material;
 import zedly.zbot.Location;
+import zedly.zbot.block.CraftTile;
+import zedly.zbot.block.data.BlockData;
 
 public class CraftBlock implements Block {
 
@@ -22,7 +26,7 @@ public class CraftBlock implements Block {
 
     @Override
     public Material getType() {
-        return getChunk().getDataAt(x, y, z).getType();
+        return getChunk().getDataAt(x, y, z).getMaterial();
     }
 
     private int getDataId() {
@@ -78,7 +82,7 @@ public class CraftBlock implements Block {
 
     @Override
     public Block getRelative(BlockFace bf) {
-        return getRelative(bf.getX(), bf.getY(), bf.getZ());
+        return getRelative(bf.getModX(), bf.getModY(), bf.getModZ());
     }
 
     @Override
@@ -88,6 +92,15 @@ public class CraftBlock implements Block {
 
     private CraftChunk getChunk() {
         return env.getChunkAt(x, y, z);
+    }
+    
+    @Override
+    public boolean hasTile() {
+        return getChunk().hasTileAt(x, y, z);
+    }
+    
+    public CraftTile getTile() {
+        return getChunk().getTileAt(x, y, z);
     }
 
     @Override

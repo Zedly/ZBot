@@ -17,7 +17,7 @@ import zedly.zbot.environment.CraftEnvironment;
 import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
-import zedly.zbot.environment.BlockFace;
+import zedly.zbot.BlockFace;
 import zedly.zbot.inventory.CraftChestInventory;
 import zedly.zbot.inventory.CraftEnchantingTableInventory;
 import zedly.zbot.inventory.CraftFurnaceInventory;
@@ -42,6 +42,8 @@ public class CraftSelf extends CraftPlayer implements Self {
     private CraftEnvironment environment;
     private CraftInventory inventory;
     private ClientSettings clientSettings;
+    private int xpLevels = 0;
+    private double xpPercent = 0;
 
     public CraftSelf(GameContext context, CraftEnvironment env, ThreadLocationUpdater locationUpdater, ClientSettings clientSettings) {
         this.context = context;
@@ -54,6 +56,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     @Override
     public void attackEntity(Entity ent) {
         context.getUpThread().sendPacket(new Packet0EUseEntity(ent.getEntityId()));
+        swingArm(false);
     }
 
     @Override
@@ -217,7 +220,7 @@ public class CraftSelf extends CraftPlayer implements Self {
                     break;
             }
         }
-        context.getUpThread().sendPacket(new Packet2CPlayerBlockPlacement(usedHand, loc, (byte) iFace, 0, 0, 0, false));
+        context.getUpThread().sendPacket(new Packet2CPlayerBlockPlacement(usedHand, loc, (byte) iFace, 0.5, 0.5, 0.5, false));
     }
 
     @Override
@@ -282,8 +285,8 @@ public class CraftSelf extends CraftPlayer implements Self {
     }
 
     @Override
-    public void swingArm(boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet2AAnimation((leftHand ? 1 : 0)));
+    public void swingArm(boolean offHand) {
+        context.getUpThread().sendPacket(new Packet2AAnimation(offHand ? 1 : 0));
     }
 
     @Override
@@ -398,6 +401,21 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void setInventory(CraftInventory inventory) {
         this.inventory.close();
         this.inventory = inventory;
+    }
+    
+    public void setExperience(int levels, double percent) {
+        this.xpLevels = levels;
+        this.xpPercent = percent;
+    }
+
+    @Override
+    public int getXPLevels() {
+        return xpLevels;
+    }
+
+    @Override
+    public double getXPPercent() {
+        return xpPercent;
     }
 
 }

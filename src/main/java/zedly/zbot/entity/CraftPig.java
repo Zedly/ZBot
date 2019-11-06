@@ -27,7 +27,7 @@ public class CraftPig extends CraftAnimal implements Pig {
             saddle = metaMap.get(15).asBoolean();
         }
         if (metaMap.containsKey(16)) {
-            saddle = metaMap.get(16).asBoolean();
+            carrotBoostTime = metaMap.get(16).asInt();
         }
         return list;
     }

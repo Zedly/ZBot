@@ -61,15 +61,11 @@ public class ExtendedDataOutputStream extends DataOutputStream {
     }
 
     public void writePosition(int x, int y, int z) throws IOException {
-        long raw = ((long) x & 0x3FFFFFF) << 38 | (((long) y & 0xFFF) << 26) | ((long) z & 0x3FFFFFF);
-        writeLong(raw);
+        writePosition(new Location(x, y, z));
     }
     
     public void writePosition(Location loc) throws IOException {
-        int x = loc.getBlockX();
-        int y = loc.getBlockY();
-        int z = loc.getBlockZ();
-        long raw = ((long) x & 0x3FFFFFF) << 38 | (((long) y & 0xFFF) << 26) | ((long) z & 0x3FFFFFF);
+        long raw = loc.toLong();
         writeLong(raw);
     }
 

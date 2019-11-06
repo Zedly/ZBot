@@ -103,14 +103,14 @@ public class CraftItemStack implements ItemStack {
                 continue;
             }
 
-            int id = enchantmentCompoundTag.getShort("id");
+            Enchantment ench = Enchantment.byCanonicalId(enchantmentCompoundTag.getString("id"));
             int lvl = enchantmentCompoundTag.getShort("lvl");
 
-            if (Enchantment.byId(id) == null) {
-                System.err.println("ItemStack has unknown enchantment, id " + id);
+            if (ench == null) {
+                System.err.println("ItemStack has unknown enchantment, id " + enchantmentCompoundTag.getString("id"));
                 continue;
             }
-            enchList.put(Enchantment.byId(id), lvl);
+            enchList.put(ench, lvl);
         }
         return enchList;
     }
@@ -156,7 +156,7 @@ public class CraftItemStack implements ItemStack {
                 continue;
             }
             NBTTagString lineStringTag = (NBTTagString) lineTag;
-            loreList.add(lineStringTag.data);
+            loreList.add(zedly.zbot.Util.interpretJson(lineStringTag.data));
         }
         return loreList;
     }
