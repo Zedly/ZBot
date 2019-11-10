@@ -9,7 +9,7 @@ package zedly.zbot.inventory;
  *
  * @author Dennis
  */
-public class ZTrade implements Trade {
+public class CraftTrade implements Trade {
 
     private final ItemStack input1;
     private final ItemStack input2;
@@ -22,7 +22,7 @@ public class ZTrade implements Trade {
     private final double priceMultiplier;
     private final int demand;
 
-    public ZTrade(ItemStack input1, ItemStack input2, ItemStack output, boolean enabled, int numTradeUses, int maxTradeUses, int xpReward, int specialPrice, double priceMultiplier, int demand) {
+    public CraftTrade(ItemStack input1, ItemStack input2, ItemStack output, boolean enabled, int numTradeUses, int maxTradeUses, int xpReward, int specialPrice, double priceMultiplier, int demand) {
         this.input1 = input1;
         this.input2 = input2;
         this.output = output;
@@ -79,6 +79,11 @@ public class ZTrade implements Trade {
     @Override
     public int getDemand() {
         return demand;
+    }
+    
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
 }

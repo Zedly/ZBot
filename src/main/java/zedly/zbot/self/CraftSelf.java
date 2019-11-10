@@ -22,6 +22,7 @@ import zedly.zbot.inventory.CraftChestInventory;
 import zedly.zbot.inventory.CraftEnchantingTableInventory;
 import zedly.zbot.inventory.CraftFurnaceInventory;
 import zedly.zbot.inventory.CraftPlayerInventory;
+import zedly.zbot.inventory.CraftVillagerInventory;
 import zedly.zbot.network.ThreadLocationUpdater;
 import zedly.zbot.network.mappings.InventoryType;
 import zedly.zbot.network.packet.serverbound.Packet03ChatMessage;
@@ -72,12 +73,13 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void closeWindow(boolean sendPacket) {
         if (sendPacket) {
             context.getUpThread().sendPacket(new Packet0ACloseWindow(inventory.windowId()));
-        } else if (!(inventory instanceof CraftPlayerInventory)) {
-            inventory.close();
-            inventory = new CraftPlayerInventory(context);
+        }
+        CraftInventory newInventory = new CraftPlayerInventory(context);
+        for (int i = 0; i < 36; i++) {
+            newInventory.setSlot(newInventory.getStaticOffset() + i, inventory.getSlot(inventory.getStaticOffset() + i));
         }
         inventory.close();
-        inventory = new CraftPlayerInventory(context);
+        inventory = newInventory;
     }
 
     @Override
@@ -106,6 +108,11 @@ public class CraftSelf extends CraftPlayer implements Self {
     @Override
     public Location getLocation() {
         return context.getLocationUpdater().getLocation();
+    }
+    
+    @Override
+    public String getName() {
+        return context.getSession().getActualUsername();
     }
 
     @Override
@@ -320,7 +327,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     }
 
     public void openWindow(InventoryType type, int id, String title) {
-        
+
         CraftInventory inv = null;
         switch (type) {
             case MINECRAFT_BLAST_FURNACE:
@@ -378,7 +385,7 @@ public class CraftSelf extends CraftPlayer implements Self {
                 inv = new CraftChestInventory(context, id, 4, title);
                 break;
             case MINECRAFT_MERCHANT:
-                inv = new CraftChestInventory(context, id, 3, title);
+                inv = new CraftVillagerInventory(context, id, title);
                 break;
             case MINECRAFT_CARTOGRAPHY:
                 inv = new CraftChestInventory(context, id, 3, title);
@@ -402,7 +409,7 @@ public class CraftSelf extends CraftPlayer implements Self {
         this.inventory.close();
         this.inventory = inventory;
     }
-    
+
     public void setExperience(int levels, double percent) {
         this.xpLevels = levels;
         this.xpPercent = percent;

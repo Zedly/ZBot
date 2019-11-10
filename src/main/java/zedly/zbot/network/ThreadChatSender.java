@@ -24,7 +24,10 @@ public class ThreadChatSender extends Thread {
             String s;
             try {
                 s = bufferRead.readLine();
-                ArrayList<String> chatLines = StringUtil.wrap(s, 100);
+                if (s.equals("")) {
+                    continue;
+                }
+                ArrayList<String> chatLines = StringUtil.wrap(s, 250);
                 for (String line : chatLines) {
                     sendChat(line);
                     sleep(50);

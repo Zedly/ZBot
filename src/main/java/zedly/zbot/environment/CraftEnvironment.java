@@ -5,6 +5,8 @@
  */
 package zedly.zbot.environment;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,10 +31,12 @@ public class CraftEnvironment implements Environment {
     private static final CraftChunk AIR_CHUNK = new CraftChunk();
 
     private final HashMap<Integer, CraftEntity> entities = new HashMap<>();
-    private final HashMap<UUID, String> playerNameCache = new HashMap<>();
+    private final BiMap<UUID, String> playerNameCache = HashBiMap.create();
     private final HashMap<Long, CraftChunk> chunks = new HashMap<>();
     private int worldType = 1;
     private int difficulty = 0;
+    private long timeOfDay = 0;
+    private long worldAge = 0;
 
     @Override
     public Collection<Entity> getEntities() {
@@ -47,6 +51,11 @@ public class CraftEnvironment implements Environment {
     @Override
     public String getPlayerNameByUUID(UUID uuid) {
         return playerNameCache.get(uuid);
+    }
+    
+    @Override
+    public UUID getUUIDByPlayerName(String name) {
+        return playerNameCache.inverse().get(name);
     }
 
     @Override
@@ -72,6 +81,14 @@ public class CraftEnvironment implements Environment {
         return chunks.size();
     }
 
+    public long getTimeOfDay() {
+        return timeOfDay;
+    }
+
+    public long getWorldAge() {
+        return worldAge;
+    }
+
     public void addEntity(CraftEntity ent) {
         entities.put(ent.getEntityId(), ent);
     }
@@ -84,8 +101,15 @@ public class CraftEnvironment implements Environment {
         playerNameCache.put(uuid, name);
     }
 
+    public void setTimeOfDay(long timeOfDay) {
+        this.timeOfDay = timeOfDay;
+    }
+
+    public void setWorldAge(long worldAge) {
+        this.worldAge = worldAge;
+    }
+
     // Non-API methods start here
-    
     public void loadChunkColumn(int x, int z, CraftChunk[] chunkArray, boolean completeWithAirChunks) {
         for (int i = 0; i < 16; i++) {
             long chunkId = chunkCoordinatesToChunkLong(x, i, z);
@@ -110,8 +134,8 @@ public class CraftEnvironment implements Environment {
                 chunks.put(chunkCoordinatesToChunkLong(chunkX, i, chunkZ), new CraftChunk());
             }
         }
-        
-        for(NBTBase tile : blockEntities) {
+
+        for (NBTBase tile : blockEntities) {
             NBTTagCompound compound = (NBTTagCompound) tile;
             int x = compound.getInteger("x");
             int y = compound.getInteger("y");
@@ -140,7 +164,7 @@ public class CraftEnvironment implements Environment {
         }
         return AIR_CHUNK;
     }
-    
+
     public void setBlockAt(int x, int y, int z, int typeId) {
         CraftChunk cc = getChunkAt(x, y, z);
         if (cc == null) {
@@ -148,11 +172,11 @@ public class CraftEnvironment implements Environment {
         }
         cc.setBlockAt(x, y, z, typeId);
     }
-    
+
     public void setTileAt(int x, int y, int z, NBTTagCompound tile) {
         setTileAt(new Location(x, y, z), tile);
     }
-    
+
     public void setTileAt(Location loc, NBTTagCompound tile) {
         CraftChunk cc = getChunkAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         if (cc == null) {
@@ -221,7 +245,7 @@ public class CraftEnvironment implements Environment {
     private long chunkCoordinatesToChunkLong(long chunkX, long chunkY, long chunkZ) {
         return new Location(chunkX, chunkY, chunkZ).toLong();
     }
-    
+
     private long blockCoordinatesToChunkLong(long x, long y, long z) {
         long chunkX, chunkY, chunkZ;
         if (x < 0) {

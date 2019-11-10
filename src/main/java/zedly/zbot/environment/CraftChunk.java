@@ -30,24 +30,30 @@ public class CraftChunk implements Chunk {
     public CraftChunk(long[] packedBlockData) {
         this();
         int blockBitMask = (1 << GLOBAL_PALETTE_ENTROPY) - 1;
-        int bitOffset = GLOBAL_PALETTE_ENTROPY;
+        int bitOffset = 0;
 
-        for (int i = 0; i < 4096; i++) {
-            int blockField;
-            if ((bitOffset % 64) > bitOffset - 1) {
-                blockField = (int) (packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & blockBitMask;
-            } else {
-                blockField = (int) ((packedBlockData[bitOffset / 64 - 1] << (bitOffset % 64))
-                        | packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & blockBitMask;
+        int i = 0;
+        try {
+            for (i = 0; i < 4096; i++) {
+                int blockField;
+                if ((bitOffset % 64) > 0 && ((bitOffset - GLOBAL_PALETTE_ENTROPY) % 64) >= (bitOffset % 64)) {
+                    // If this field spans two longs, snip them together
+                    blockField = (int) ((packedBlockData[bitOffset / 64 - 1] << (bitOffset % 64))
+                            | packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & blockBitMask;
+                } else {
+                    blockField = (int) (packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & blockBitMask;
+                }
+
+                dataIds[i] = blockField;
+                bitOffset += GLOBAL_PALETTE_ENTROPY;
             }
 
-            dataIds[i] = blockField;
-            bitOffset += GLOBAL_PALETTE_ENTROPY;
-        }
-
-        for (int i = 0; i < 4096; i++) {
-            skyLight[i] = 0;
-            blockLight[i] = 0;
+            for (i = 0; i < 4096; i++) {
+                skyLight[i] = 0;
+                blockLight[i] = 0;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -124,11 +130,11 @@ public class CraftChunk implements Chunk {
         }
         return 256 * localY + 16 * localZ + localX;
     }
-    
+
     public boolean hasTileAt(int x, int y, int z) {
         return CraftChunk.this.hasTileAt(new Location(x, y, z));
     }
-    
+
     public boolean hasTileAt(Location loc) {
         return tiles.containsKey(loc.toLong());
     }

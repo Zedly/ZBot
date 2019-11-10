@@ -1,6 +1,8 @@
 package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
+import zedly.zbot.GameContext;
+import zedly.zbot.event.WorldTimeChangeEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**
@@ -26,6 +28,13 @@ public class Packet4ETimeUpdate implements ClientBoundPacket {
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         worldAge = dis.readLong();
         timeofday = dis.readLong();
+    }
+    
+    @Override
+    public void process(GameContext context) {
+        context.getEventDispatcher().dispatchEvent(new WorldTimeChangeEvent(timeofday, worldAge));
+        context.getSelf().getEnvironment().setTimeOfDay(timeofday);
+        context.getSelf().getEnvironment().setWorldAge(worldAge);
     }
 
 }
