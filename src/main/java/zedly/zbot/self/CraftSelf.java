@@ -19,6 +19,7 @@ import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
 import zedly.zbot.BlockFace;
 import zedly.zbot.inventory.CraftChestInventory;
+import zedly.zbot.inventory.CraftCraftingTableInventory;
 import zedly.zbot.inventory.CraftEnchantingTableInventory;
 import zedly.zbot.inventory.CraftFurnaceInventory;
 import zedly.zbot.inventory.CraftPlayerInventory;
@@ -370,7 +371,7 @@ public class CraftSelf extends CraftPlayer implements Self {
                 inv = new CraftChestInventory(context, id, 5, title);
                 break;
             case MINECRAFT_CRAFTING:
-                inv = new CraftChestInventory(context, id, 9, title);
+                inv = new CraftCraftingTableInventory(context, id, title);
                 break;
             case MINECRAFT_GRINDSTONE:
                 inv = new CraftChestInventory(context, id, 3, title);
