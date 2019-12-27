@@ -13,7 +13,7 @@ import zedly.zbot.Util;
  *
  * @author Dennis
  */
-public class CraftTileSign extends CraftTile {
+public class CraftTileSign extends CraftTile implements TileSign {
     
     private String[] lines = new String[4];
     private DyeColor color;
