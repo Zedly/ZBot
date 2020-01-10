@@ -12,6 +12,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import zedly.zbot.network.PacketInputStream;
+import zedly.zbot.network.PacketOutputStream;
 import zedly.zbot.network.ThreadConnectionWatcher;
 import zedly.zbot.network.ThreadDown;
 import zedly.zbot.network.ThreadLocationUpdater;
@@ -53,9 +55,9 @@ public class GameContext {
         mainThread = new ZBotThreadPoolExecutor(this, 1);
     }
 
-    public synchronized void openConnection(InputStream is, OutputStream os, boolean compressionEnabled) {
+    public synchronized void openConnection(PacketInputStream is, PacketOutputStream os) {
         threadUp = new ThreadUp(os);
-        threadDown = new ThreadDown(is, this, compressionEnabled);
+        threadDown = new ThreadDown(is, this);
         locationUpdater = new ThreadLocationUpdater(this);
         self.setClientSettings(self.getClientSettings()); // Force re-send if online mode
         threadUp.start();

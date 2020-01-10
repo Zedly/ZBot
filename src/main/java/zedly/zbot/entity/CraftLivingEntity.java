@@ -7,6 +7,7 @@ package zedly.zbot.entity;
 
 import java.util.HashMap;
 import java.util.List;
+import zedly.zbot.Location;
 import zedly.zbot.entity.LivingEntity;
 import zedly.zbot.event.Event;
 import zedly.zbot.event.entity.EntityHealthChangeEvent;
@@ -24,28 +25,33 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
     protected int potionEffectColor = 0;
     protected boolean potionEffectAmbient = false;
     protected int arrowsStuck = 0;
+    protected Location bedLocation;
 
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(6)) {
-            int d = metaMap.get(6).asInt();
+        if (metaMap.containsKey(7)) {
+            int d = metaMap.get(7).asInt();
             handActive = (d & 0x01) != 0;
             leftHandActive = (d & 0x02) != 0;
         }
-        if (metaMap.containsKey(7)) {
-            float nHealth = metaMap.get(7).asFloat();
+        if (metaMap.containsKey(8)) {
+            float nHealth = metaMap.get(8).asFloat();
             list.add(new EntityHealthChangeEvent(this, health, nHealth));
             health = nHealth;
         }
-        if (metaMap.containsKey(8)) {
-            potionEffectColor = metaMap.get(8).asInt();
+        if (metaMap.containsKey(9)) {
+            potionEffectColor = metaMap.get(9).asInt();
             list.add(new EntityPotionEffectEvent(this, potionEffectColor));
         }
-        if (metaMap.containsKey(9)) {
-            potionEffectAmbient = metaMap.get(9).asBoolean();
-        }
         if (metaMap.containsKey(10)) {
-            arrowsStuck = metaMap.get(10).asInt();
+            potionEffectAmbient = metaMap.get(10).asBoolean();
+        }
+        if (metaMap.containsKey(11)) {
+            arrowsStuck = metaMap.get(11).asInt();
+        }
+        if (metaMap.containsKey(12)) {
+            bedLocation = metaMap.get(12).asLocation();
         }
         return list;
     }
@@ -80,4 +86,9 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
         return arrowsStuck;
     }
 
+    @Override
+    public Location getBedLocation() {
+        return bedLocation;
+    }
+    
 }

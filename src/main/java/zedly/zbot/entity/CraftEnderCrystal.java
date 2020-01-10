@@ -19,12 +19,16 @@ import zedly.zbot.event.Event;
 public class CraftEnderCrystal extends CraftObject implements EnderCrystal {
     
     protected Location beamTarget;
+    boolean bottomVisible = true;
     
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(6)) {
-            beamTarget = metaMap.get(6).asLocation();
+        if (metaMap.containsKey(7)) {
+            beamTarget = metaMap.get(7).asLocation();
+        }
+        if (metaMap.containsKey(8)) {
+            bottomVisible = metaMap.get(8).asBoolean();
         }
         return list;
     }
@@ -42,6 +46,11 @@ public class CraftEnderCrystal extends CraftObject implements EnderCrystal {
     @Override
     public synchronized boolean hasBeamTarget() {
         return beamTarget != null;
+    }
+
+    @Override
+    public boolean isBottomVisible() {
+        return bottomVisible;
     }
     
 }

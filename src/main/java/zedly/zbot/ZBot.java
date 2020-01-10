@@ -13,8 +13,8 @@ public class ZBot {
     private static int serverPort = 25565;
     private static String serverIP = "127.0.0.1";
     private static boolean onlineMode = false;
-    
-    public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) throws Exception {        
         Session session;
 
         try {
@@ -26,15 +26,18 @@ public class ZBot {
         }
 
         System.out.print("Logging in.. [    ]");
-        
+
         if (onlineMode) {
             session = new Session(username, password);
             while (!session.renew()) {
+                System.out.println("\rLogging in.. [FAIL]");
+                System.out.println("Login to Mojang failed. Waiting to retry...");
                 Thread.sleep(60000);
+                System.out.print("Logging in.. [    ]");
             }
             //System.out.println("logged in as player " + session.getActualUsername());
         } else {
-            session = new Session(username);
+            session = new Session(username); 
             //System.out.println("Playing as " + username + " in offline mode");
         }
         ClientSettings clientSettings = new ClientSettings();
@@ -59,7 +62,8 @@ public class ZBot {
             if (map.containsKey("password")) {
                 password = (String) map.get("password");
             } else {
-                throw new Exception("Missing field password in Online Mode!");
+                System.out.println("Missing field password in Online Mode! Falling back to Offline Mode.");
+                onlineMode = false;
             }
         }
         if (map.containsKey("serverIp")) {
@@ -68,7 +72,7 @@ public class ZBot {
             System.out.println("Missing field serverIp. Defaulting to 127.0.0.1");
         }
         if (map.containsKey("serverPort")) {
-            serverPort = ((Integer) map.get("serverPort")).intValue();
+            serverPort = (Integer) map.get("serverPort");
         } else {
             System.out.println("Missing field serverPort. Defaulting to 25565");
         }

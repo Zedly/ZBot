@@ -25,17 +25,17 @@ public class CraftCreeper extends CraftMonster implements Creeper {
     
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(12)) {
-            state = metaMap.get(12).asInt();
+        if(metaMap.containsKey(14)) {
+            state = metaMap.get(14).asInt();
         }
-        if(metaMap.containsKey(13)) {
-            charged = metaMap.get(13).asBoolean();
+        if(metaMap.containsKey(15)) {
+            charged = metaMap.get(15).asBoolean();
             if(charged) {
                 list.add(new CreeperChargeEvent(this));
             }
         }
-        if(metaMap.containsKey(14)) {
-            lit = metaMap.get(14).asBoolean();
+        if(metaMap.containsKey(16)) {
+            lit = metaMap.get(16).asBoolean();
             list.add(new CreeperFuseEvent(this, lit));
         }
         return list;

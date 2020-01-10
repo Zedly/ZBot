@@ -16,7 +16,7 @@ import zedly.zbot.event.Event;
  *
  * @author Dennis
  */
-public class CraftVillager extends CraftAgeable implements Villager {
+public class CraftVillager extends CraftAbstractMerchant implements Villager {
 
     protected VillagerProfession type;
 
@@ -29,6 +29,7 @@ public class CraftVillager extends CraftAgeable implements Villager {
         return list;
     }
 
+    @Override
     public EntityType getType() {
         return EntityType.VILLAGER;
     }

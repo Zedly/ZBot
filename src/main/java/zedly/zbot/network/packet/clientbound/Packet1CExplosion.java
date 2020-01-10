@@ -49,3 +49,4 @@ public class Packet1CExplosion implements ClientBoundPacket {
         context.getMainThread().fireEvent(new ExplosionEvent(x, y, z, radius, records, playerMotionX, playerMotionY, playerMotionZ));
     }
 }
+//Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture

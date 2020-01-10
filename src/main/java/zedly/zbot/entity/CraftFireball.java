@@ -6,22 +6,16 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.Fireball;
 
 /**
  *
  * @author Dennis
  */
-public class CraftFireball extends CraftProjectile implements Fireball {
+public class CraftFireball extends CraftItemedFireball implements Fireball {
 
+    
     @Override
     public EntityType getType() {
         return EntityType.FIREBALL;
     }
-
-    @Override
-    public synchronized boolean hasGravity() {
-        return false;
-    }
-    
 }

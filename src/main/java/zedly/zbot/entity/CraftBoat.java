@@ -21,21 +21,33 @@ public class CraftBoat extends CraftObject implements Boat {
     protected int forwardDirection = 0;
     protected float damageTaken = 0;
     protected int type = 0;
+    protected boolean leftPaddleTurning = false;
+    protected boolean rightPaddleTurning = false;
+    protected int splashTimer = 0;
 
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(6)) {
-            timeSinceLastHit = metaMap.get(6).asInt();
-        }
         if (metaMap.containsKey(7)) {
-            forwardDirection = metaMap.get(7).asInt();
+            timeSinceLastHit = metaMap.get(7).asInt();
         }
         if (metaMap.containsKey(8)) {
-            damageTaken = metaMap.get(8).asFloat();
+            forwardDirection = metaMap.get(8).asInt();
         }
         if (metaMap.containsKey(9)) {
-            type = metaMap.get(9).asInt();
+            damageTaken = metaMap.get(9).asFloat();
+        }
+        if (metaMap.containsKey(10)) {
+            type = metaMap.get(10).asInt();
+        }
+        if (metaMap.containsKey(11)) {
+            leftPaddleTurning = metaMap.get(11).asBoolean();
+        }
+        if (metaMap.containsKey(12)) {
+            rightPaddleTurning = metaMap.get(12).asBoolean();
+        }
+        if (metaMap.containsKey(13)) {
+            splashTimer = metaMap.get(13).asInt();
         }
         return list;
     }
@@ -63,6 +75,21 @@ public class CraftBoat extends CraftObject implements Boat {
     @Override
     public synchronized int getTypeId() {
         return type;
+    }
+
+    @Override
+    public boolean isLeftPaddleTurning() {
+        return leftPaddleTurning;
+    }
+
+    @Override
+    public boolean isRightPaddleTurning() {
+        return rightPaddleTurning;
+    }
+
+    @Override
+    public int getSplashTimer() {
+        return splashTimer;
     }
 
 }

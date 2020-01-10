@@ -5,7 +5,14 @@
  */
 package zedly.zbot.environment;
 
-import zedly.zbot.block.CraftBlock;
+import java.util.HashMap;
+import net.minecraft.server.NBTBase;
+import net.minecraft.server.NBTTagCompound;
+import zedly.zbot.Location;
+import zedly.zbot.Material;
+import zedly.zbot.block.CraftTile;
+import zedly.zbot.block.data.BlockData;
+import zedly.zbot.network.mappings.BlockDataIds;
 
 /**
  *
@@ -13,48 +20,47 @@ import zedly.zbot.block.CraftBlock;
  */
 public class CraftChunk implements Chunk {
 
-    private final short[] blockIds;
-    private final byte[] blockData;
+    private static final int GLOBAL_PALETTE_ENTROPY = 14;
+
+    private final int[] dataIds;
     private final byte[] blockLight;
     private final byte[] skyLight;
+    private final HashMap<Long, NBTTagCompound> tiles = new HashMap<>();
 
-    public CraftChunk(long[] packedBlockData, byte[] packedBlockLight, byte[] packedSkyLight) {
+    public CraftChunk(long[] packedBlockData) {
         this();
-        
-        int bitOffset = 13;
-        for (int i = 0; i < 4096; i++) {
-            int blockField;
-            if ((bitOffset % 64) > 12) {
-                blockField = (int) (packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & 0x1FFF;
-            } else {
-                blockField = (int) ((packedBlockData[bitOffset / 64 - 1] << (bitOffset % 64))
-                        | packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & 0x1FFF;
-            }
-            blockIds[i] = (short) (blockField >> 4);
-            blockData[i] = (byte) (blockField & 0xF);
-            if (i % 2 == 0) {
-                blockLight[i] = (byte) (packedBlockLight[i / 2] >> 4);
-            } else {
-                blockLight[i] = (byte) (packedBlockLight[i / 2] & 0xF);
-            }
-            bitOffset += 13;
-        }        
+        int blockBitMask = (1 << GLOBAL_PALETTE_ENTROPY) - 1;
+        int bitOffset = 0;
 
-        if (packedSkyLight != null) {
-            for (int i = 0; i < 4096; i++) {
-                if (i % 2 == 0) {
-                    skyLight[i] = (byte) (packedSkyLight[i / 2] >> 4);
+        int i = 0;
+        try {
+            for (i = 0; i < 4096; i++) {
+                int blockField;
+                if ((bitOffset % 64) > 0 && ((bitOffset - GLOBAL_PALETTE_ENTROPY) % 64) >= (bitOffset % 64)) {
+                    // If this field spans two longs, snip them together
+                    blockField = (int) ((packedBlockData[bitOffset / 64 - 1] << (bitOffset % 64))
+                            | packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & blockBitMask;
                 } else {
-                    skyLight[i] = (byte) (packedSkyLight[i / 2] & 0xF);
+                    blockField = (int) (packedBlockData[bitOffset / 64] >> (64 - (bitOffset % 64))) & blockBitMask;
                 }
+
+                dataIds[i] = blockField;
+                bitOffset += GLOBAL_PALETTE_ENTROPY;
             }
+
+            for (i = 0; i < 4096; i++) {
+                skyLight[i] = 0;
+                blockLight[i] = 0;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-    public CraftChunk(long[] packedBlockData, int bitsPerBlock, int[] palette, byte[] packedBlockLight, byte[] packedSkyLight) {
+    public CraftChunk(long[] packedBlockData, int bitsPerBlock, int[] palette) {
         this();
         int bitOffset = 0;
-        
+
         for (int i = 0; i < 4096; i++) {
             int blockField;
             if (64 - (bitOffset % 64) >= bitsPerBlock) {
@@ -63,46 +69,97 @@ public class CraftChunk implements Chunk {
                 blockField = (int) ((packedBlockData[bitOffset / 64] >>> (bitOffset % 64))
                         | packedBlockData[bitOffset / 64 + 1] << (64 - (bitOffset % 64))) & ~(-1 << bitsPerBlock);
             }
-            blockField = palette[blockField];
-            blockIds[i] = (short) (blockField >> 4);
-            blockData[i] = (byte) (blockField & 0xF);
-            if (i % 2 == 0) {
-                blockLight[i] = (byte) (packedBlockLight[i / 2] >> 4);
-            } else {
-                blockLight[i] = (byte) (packedBlockLight[i / 2] & 0xF);
-            }
+            dataIds[i] = palette[blockField];
             bitOffset += bitsPerBlock;
-        }        
+        }
 
-        if (packedSkyLight != null) {
-            for (int i = 0; i < 4096; i++) {
-                if (i % 2 == 0) {
-                    skyLight[i] = (byte) (packedSkyLight[i / 2] >> 4);
-                } else {
-                    skyLight[i] = (byte) (packedSkyLight[i / 2] & 0xF);
-                }
-            }
+        for (int i = 0; i < 4096; i++) {
+            skyLight[i] = 0;
+            blockLight[i] = 0;
         }
     }
 
     public CraftChunk() {
-        this.blockIds = new short[4096];
-        this.blockData = new byte[4096];
+        this.dataIds = new int[4096];
         this.skyLight = new byte[4096];
         this.blockLight = new byte[4096];
     }
-    
-    public synchronized CraftBlock getBlockAt(int x, int y, int z) {
-        int id = blockIds[256 * y + 16 * z + x];
-        int data = blockData[256 * y + 16 * z + x];
-        int slight = skyLight[256 * y + 16 * z + x];
-        int blight = blockLight[256 * y + 16 * z + x];
-        return new CraftBlock(x, y, z, id, data, blight, slight);
-    }
-    
-    public synchronized void setBlockAt(int x, int y, int z, int typeId, int blockData) {
-        blockIds[256 * y + 16 * z + x] = (short) typeId;
-        this.blockData[256 * y + 16 * z + x] = (byte) blockData;
+
+    public int getDataIdAt(int x, int y, int z) {
+        return dataIds[toArrayIndex(x, y, z)];
     }
 
+    public BlockData getDataAt(int x, int y, int z) {
+        return BlockDataIds.fromId(getDataIdAt(x, y, z));
+    }
+
+    public Material getTypeAt(int x, int y, int z) {
+        return getDataAt(x, y, z).getMaterial();
+    }
+
+    public int getBlockLightAt(int x, int y, int z) {
+        return blockLight[toArrayIndex(x, y, z)];
+    }
+
+    public int getSkyLightAt(int x, int y, int z) {
+        return skyLight[toArrayIndex(x, y, z)];
+    }
+
+    public void setBlockAt(int x, int y, int z, int dataId) {
+        int arrayIndex = toArrayIndex(x, y, z);
+        dataIds[arrayIndex] = (short) dataId;
+        tiles.remove(new Location(x, y, z).toLong());
+    }
+
+    private int toArrayIndex(int x, int y, int z) {
+        int localX, localY, localZ;
+        if (x < 0) {
+            localX = 15 + ((x + 1) % 16);
+        } else {
+            localX = x % 16;
+        }
+        if (y < 0) {
+            localY = 15 + ((y + 1) % 16);
+        } else {
+            localY = y % 16;
+        }
+        if (z < 0) {
+            localZ = 15 + ((z + 1) % 16);
+        } else {
+            localZ = z % 16;
+        }
+        return 256 * localY + 16 * localZ + localX;
+    }
+
+    public boolean hasTileAt(int x, int y, int z) {
+        return CraftChunk.this.hasTileAt(new Location(x, y, z));
+    }
+
+    public boolean hasTileAt(Location loc) {
+        return tiles.containsKey(loc.toLong());
+    }
+
+    public NBTTagCompound getTileAt(Location loc) {
+        return tiles.get(loc.toLong());
+    }
+
+    public CraftTile getTileAt(int x, int y, int z) {
+        long chunkLong = new Location(x, y, z).toLong();
+        if (tiles.containsKey(chunkLong)) {
+            return CraftTile.forNbt(tiles.get(chunkLong));
+        }
+        return null;
+    }
+
+    public void setTileAt(Location loc, NBTTagCompound tile) {
+        tiles.put(loc.toLong(), tile);
+    }
+
+    public void setTileAt(int x, int y, int z, NBTTagCompound tile) {
+        setTileAt(new Location(x, y, z), tile);
+    }
+
+    public void removeTileAt(long chunkCoords) {
+        tiles.remove(chunkCoords);
+    }
 }

@@ -6,74 +6,129 @@
 package zedly.zbot.inventory;
 
 import zedly.zbot.GameContext;
-import zedly.zbot.inventory.ItemStack;
-import zedly.zbot.inventory.Inventory;
-import zedly.zbot.network.packet.serverbound.Packet07ClickWindow;
+import zedly.zbot.network.packet.serverbound.Packet09ClickWindow;
 
 /**
  *
  * @author Dennis
  */
-public class CraftInventory implements Inventory {
+public abstract class CraftInventory implements Inventory {
 
+    protected final GameContext context;
+    protected final ItemStack[] items;
+    protected final int windowId;
+    protected final int staticBlockOffset;
     protected ItemStack itemOnCursor;
-    protected final ItemStack[] items = new ItemStack[46];
-    protected int selectedSlot = 36;
-    private final CraftItemStack nullItem = new CraftItemStack();
-    private final GameContext context;
-    private int activeWindowId = 0;
-    private int transactionId = 0;
+    protected int selectedSlot = 0;
+    protected int transactionId = 0;
+    protected boolean open = true;
+    protected boolean initialized = false;
+    protected boolean changed = false;
 
-    public CraftInventory(GameContext context) {
+    public CraftInventory(GameContext context, int size, int staticInventoryOffset, int windowId) {
         this.context = context;
+        items = new ItemStack[size];
+        this.windowId = windowId;
+        this.staticBlockOffset = staticInventoryOffset;
     }
 
-    public synchronized ItemStack getSlot(int i) {
-        if(i == -1) {
-            return itemOnCursor;
-        }
+    @Override
+    public int size() {
+        return items.length;
+    }
+    
+    public int windowId() {
+        return windowId;
+    }
+
+    @Override
+    public int getStaticOffset() {
+        return staticBlockOffset;
+    }
+    
+    @Override
+    public ItemStack getSlot(int i) {
         return items[i];
     }
 
-    public synchronized int getSelectedSlot() {
-        return selectedSlot;
+    public void dropStackOnCursor() {
+        click(-999, 0, 1);
     }
 
-    public synchronized ItemStack getItemInHand() {
-        return items[selectedSlot];
+    public void dropItemOnCursor() {
+        click(-999, 0, 1);
     }
 
-    public synchronized ItemStack getItemOnCursor() {
-        return itemOnCursor;
-    }
-    
-    public synchronized void clickSlot(int slot, int mode, int button) {
+    @Override
+    public void click(int slot, int mode, int button) {
         if (slot == -999) {
-            context.getUpThread().sendPacket(new Packet07ClickWindow((byte) activeWindowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, null));
+            context.getUpThread().sendPacket(new Packet09ClickWindow((byte) windowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, null));
         } else {
             ItemStack is = items[slot];
             items[slot] = itemOnCursor;
             itemOnCursor = is;
-            context.getUpThread().sendPacket(new Packet07ClickWindow((byte) activeWindowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, is));
+            context.getUpThread().sendPacket(new Packet09ClickWindow((byte) windowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, is));
         }
+        changed = true;
     }
 
-    public synchronized void setSlot(int i, ItemStack is) {
-        if (i == -1) {
+    public void selectSlot(int i) {
+        selectedSlot = i;
+    }
+
+    public void setSlot(int slot, ItemStack is) {
+        if (slot >= 0 && slot < items.length) {
+            items[slot] = is;
+        } else if (slot == -1) {
             itemOnCursor = is;
         } else {
-            items[i] = is;
+            System.err.println("Invalid slot ID " + slot + " in inventory " + getClass() + " set to " + is);
         }
+        initialized = true;
     }
 
-    public synchronized void selectSlot(int i) {
-        selectedSlot = 36 + i;
-    }
-
-    public synchronized void reset() {
+    public void reset() {
         for (int i = 0; i < items.length; i++) {
             items[i] = null;
         }
     }
 
+    @Override
+    public boolean isOpen() {
+        return open;
+    }
+
+    @Override
+    public int getSelectedSlot() {
+        return selectedSlot + staticBlockOffset + 27;
+    }
+
+    @Override
+    public ItemStack getItemInHand() {
+        return items[selectedSlot + staticBlockOffset + 27];
+    }
+
+    @Override
+    public ItemStack getItemOnCursor() {
+        return itemOnCursor;
+    }
+
+    public void close() {
+        open = false;
+    }
+    
+    public boolean isInitialized() {
+        return initialized;
+    }
+    
+    public abstract void setProperty(int property, int value);
+
+    public void rollbackTransactionId() {
+        transactionId--;
+    }
+    
+    public boolean changed() {
+        return changed;
+    }
+    
 }

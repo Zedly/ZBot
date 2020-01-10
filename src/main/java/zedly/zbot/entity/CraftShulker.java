@@ -8,6 +8,7 @@ package zedly.zbot.entity;
 import java.util.HashMap;
 import java.util.List;
 import zedly.zbot.Direction;
+import zedly.zbot.DyeColor;
 import zedly.zbot.EntityType;
 import zedly.zbot.Location;
 import zedly.zbot.entity.Shulker;
@@ -22,6 +23,7 @@ public class CraftShulker extends CraftGolem implements Shulker {
     protected Direction direction;
     protected Location attachedLocation;
     protected int shieldHeight;
+    protected int colorId;
     
     
     @Override
@@ -35,6 +37,9 @@ public class CraftShulker extends CraftGolem implements Shulker {
         }
         if (metaMap.containsKey(14)) {
             shieldHeight = metaMap.get(14).asInt();
+        }
+        if (metaMap.containsKey(15)) {
+            colorId = metaMap.get(15).asInt();
         }
         return list;
     }
@@ -56,6 +61,11 @@ public class CraftShulker extends CraftGolem implements Shulker {
     @Override
     public synchronized int getShieldHeight() {
         return shieldHeight;
+    }
+
+    @Override
+    public DyeColor getColor() {
+        return DyeColor.values()[colorId];
     }
     
 }

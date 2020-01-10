@@ -33,6 +33,7 @@ public class Session {
                     + "\"username\": \"" + username + "\",\r\n"
                     + "\"password\": \"" + password + "\"\r\n"
                     + "}");
+            
             String response = new String(http.getContent());
             response = response.substring(16);
             int position = response.indexOf("\"");
@@ -46,6 +47,8 @@ public class Session {
             position = response.indexOf("\"");
             actualUsername = response.substring(0, position);
         } catch (Exception ex) {
+            System.out.println("Exception renewing Session:");
+            ex.printStackTrace();
             return false;
         }
         return true;

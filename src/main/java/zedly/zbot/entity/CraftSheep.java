@@ -8,8 +8,7 @@ package zedly.zbot.entity;
 import zedly.zbot.EntityType;
 import java.util.HashMap;
 import java.util.List;
-import zedly.zbot.WoolColor;
-import zedly.zbot.entity.Sheep;
+import zedly.zbot.DyeColor;
 import zedly.zbot.event.Event;
 
 /**
@@ -19,21 +18,21 @@ import zedly.zbot.event.Event;
 public class CraftSheep extends CraftAnimal implements Sheep {
 
     protected boolean sheared = false;
-    protected WoolColor color = WoolColor.WHITE;
+    protected DyeColor color = DyeColor.WHITE;
 
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(13)) {
-            int d = metaMap.get(13).asInt();
+        if (metaMap.containsKey(15)) {
+            int d = metaMap.get(15).asInt();
             sheared = (d & 0x10) != 0;
-            color = WoolColor.values()[d & 0xF];
+            color = DyeColor.values()[d & 0xF];
         }
         return list;
     }
 
     @Override
-    public synchronized WoolColor getColor() {
+    public synchronized DyeColor getColor() {
         return color;
     }
 
@@ -45,6 +44,10 @@ public class CraftSheep extends CraftAnimal implements Sheep {
     @Override
     public EntityType getType() {
         return EntityType.SHEEP;
+    }
+    
+    public String toString() {
+        return super.toString() + ", color: " + color + ", sheared: " + sheared;
     }
 
 }

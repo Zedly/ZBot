@@ -39,7 +39,7 @@ public class CryptManager {
         }
     }
 
-    public static byte[] func_75895_a(String par0Str, PublicKey par1PublicKey, SecretKey par2SecretKey) {
+    public static byte[] calculateServerHash(String par0Str, PublicKey par1PublicKey, SecretKey par2SecretKey) {
         try {
             return hash("SHA-1", new byte[][]{par0Str.getBytes("ISO_8859_1"), par2SecretKey.getEncoded(), par1PublicKey.getEncoded()});
         } catch (UnsupportedEncodingException var4) {
@@ -66,7 +66,7 @@ public class CryptManager {
         }
     }
 
-    public static PublicKey func_75896_a(byte[] par0ArrayOfByte) {
+    public static PublicKey decodePublicKey(byte[] par0ArrayOfByte) {
         try {
             X509EncodedKeySpec var1 = new X509EncodedKeySpec(par0ArrayOfByte);
             KeyFactory var2 = KeyFactory.getInstance("RSA");
@@ -85,7 +85,7 @@ public class CryptManager {
         return new SecretKeySpec(func_75889_b(par0PrivateKey, par1ArrayOfByte), "AES");
     }
 
-    public static byte[] func_75894_a(Key par0Key, byte[] par1ArrayOfByte) {
+    public static byte[] encryptWithPublicKey(Key par0Key, byte[] par1ArrayOfByte) {
         return func_75885_a(1, par0Key, par1ArrayOfByte);
     }
 

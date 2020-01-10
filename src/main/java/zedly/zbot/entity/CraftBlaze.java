@@ -18,13 +18,14 @@ import zedly.zbot.event.entity.BlazeChargeEvent;
  */
 public class CraftBlaze extends CraftMonster implements Blaze {
 
-    protected boolean charging;
+    protected boolean onFire;
 
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            charging = (metaMap.get(12).asInt() & 0x01) == 0x01;
-            if (charging) {
+        if (metaMap.containsKey(14)) {
+            onFire = (metaMap.get(14).asInt() & 0x01) == 0x01;
+            if (onFire) {
                 list.add(new BlazeChargeEvent(this));
             }
         }
@@ -37,8 +38,8 @@ public class CraftBlaze extends CraftMonster implements Blaze {
     }
 
     @Override
-    public synchronized boolean isCharging() {
-        return charging;
+    public synchronized boolean isOnFire() {
+        return onFire;
     }
 
 }

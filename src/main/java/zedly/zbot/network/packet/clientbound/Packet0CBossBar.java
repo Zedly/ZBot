@@ -42,3 +42,4 @@ public class Packet0CBossBar implements ClientBoundPacket {
         }
     }
 }
+//Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture

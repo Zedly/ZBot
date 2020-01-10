@@ -17,35 +17,36 @@ import zedly.zbot.event.Event;
  */
 public class CraftAreaEffectCloud extends CraftObject implements AreaEffectCloud {
 
-    protected float radius = 0;
+    protected double radius = 0.5;
     protected int colorId = 0;
     protected boolean ignoreRadius = false;
-    protected int particleId = 0;
+    protected String particleId = "effect";
 
     @Override
     public EntityType getType() {
-        return EntityType.CLOUD;
+        return EntityType.AREA_EFFECT_CLOUD;
     }
 
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(6)) {
-            radius = metaMap.get(6).asFloat();
-        }
         if (metaMap.containsKey(7)) {
-            colorId = metaMap.get(7).asInt();
+            radius = metaMap.get(7).asFloat();
         }
         if (metaMap.containsKey(8)) {
-            ignoreRadius = metaMap.get(8).asBoolean();
+            colorId = metaMap.get(8).asInt();
         }
         if (metaMap.containsKey(9)) {
-            particleId = metaMap.get(9).asInt();
+            ignoreRadius = metaMap.get(9).asBoolean();
+        }
+        if (metaMap.containsKey(10)) {
+            particleId = metaMap.get(10).asString();
         }
         return list;
     }
 
     @Override
-    public synchronized float getRadius() {
+    public synchronized double getRadius() {
         return radius;
     }
 
@@ -60,8 +61,13 @@ public class CraftAreaEffectCloud extends CraftObject implements AreaEffectCloud
     }
 
     @Override
-    public synchronized int getParticleId() {
+    public synchronized String getParticleId() {
         return particleId;
+    }
+
+    @Override
+    public boolean hasGravity() {
+        return false;
     }
 
 }

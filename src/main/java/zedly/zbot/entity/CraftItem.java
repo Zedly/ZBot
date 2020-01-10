@@ -20,17 +20,18 @@ public class CraftItem extends CraftObject implements Item {
 
     protected ItemStack itemStack;
     
+    @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(6)) {
-            itemStack = metaMap.get(6).asSlot();
+        if (metaMap.containsKey(7)) {
+            itemStack = metaMap.get(7).asSlot();
         }
         return list;
     }
 
     @Override
     public EntityType getType() {
-        return EntityType.ITEM;
+        return EntityType.DROPPED_ITEM;
     }
 
     @Override

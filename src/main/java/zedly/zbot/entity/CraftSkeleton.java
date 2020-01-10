@@ -5,36 +5,18 @@
  */
 package zedly.zbot.entity;
 
-import java.util.HashMap;
-import java.util.List;
 import zedly.zbot.EntityType;
-import zedly.zbot.entity.Skeleton;
-import zedly.zbot.event.Event;
+
 
 /**
  *
  * @author Dennis
  */
-public class CraftSkeleton extends CraftMonster implements Skeleton {
+public class CraftSkeleton extends CraftAbstractSkeleton implements Skeleton {
 
-    boolean swingingArms = false;
-    
-    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
-        List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(12)) {
-            swingingArms = metaMap.get(12).asBoolean();
-        }
-        return list;
-    }
-    
     @Override
     public EntityType getType() {
         return EntityType.SKELETON;
     }
 
-    @Override
-    public synchronized boolean isSwingingArms() {
-        return swingingArms;
-    }
-    
 }

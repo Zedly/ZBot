@@ -12,16 +12,10 @@ import zedly.zbot.entity.ShulkerBullet;
  *
  * @author Dennis
  */
-public class CraftShulkerBullet extends CraftFireball implements ShulkerBullet {
+public class CraftShulkerBullet extends CraftProjectile implements ShulkerBullet {
     
     @Override
     public EntityType getType() {
         return EntityType.SHULKER_BULLET;
     }
-
-    @Override
-    public synchronized boolean hasGravity() {
-        return true;
-    }
-    
 }

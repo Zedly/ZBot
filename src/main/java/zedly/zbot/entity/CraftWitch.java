@@ -15,14 +15,14 @@ import zedly.zbot.event.Event;
  *
  * @author Dennis
  */
-public class CraftWitch extends CraftMonster implements Witch {
+public class CraftWitch extends CraftRaidParticipant implements Witch {
 
-    protected boolean aggressive;
+    protected boolean drinking;
     
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(12)) {
-            aggressive = metaMap.get(12).asBoolean();
+        if(metaMap.containsKey(15)) {
+            drinking = metaMap.get(15).asBoolean();
         }
         return list;
     }
@@ -33,8 +33,8 @@ public class CraftWitch extends CraftMonster implements Witch {
     }
 
     @Override
-    public synchronized boolean isAggressive() {
-        return aggressive;
+    public synchronized boolean isDrinking() {
+        return drinking;
     }
     
 }

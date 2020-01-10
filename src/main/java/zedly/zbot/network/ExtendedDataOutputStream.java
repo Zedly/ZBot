@@ -11,6 +11,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
+import zedly.zbot.Location;
+import zedly.zbot.inventory.CraftItemStack;
 
 /**
  *
@@ -20,6 +22,10 @@ public class ExtendedDataOutputStream extends DataOutputStream {
 
     public ExtendedDataOutputStream(OutputStream out) {
         super(out);
+    }
+    
+    public void writeFloat(double d) throws IOException {
+        super.writeFloat((float) d);
     }
 
     public void writeString(String str) throws IOException {
@@ -55,7 +61,11 @@ public class ExtendedDataOutputStream extends DataOutputStream {
     }
 
     public void writePosition(int x, int y, int z) throws IOException {
-        long raw = ((long) x & 0x3FFFFFF) << 38 | (((long) y & 0xFFF) << 26) | ((long) z & 0x3FFFFFF);
+        writePosition(new Location(x, y, z));
+    }
+    
+    public void writePosition(Location loc) throws IOException {
+        long raw = loc.toLong();
         writeLong(raw);
     }
 
@@ -66,15 +76,12 @@ public class ExtendedDataOutputStream extends DataOutputStream {
 
     public void writeSlot(ItemStack item) throws IOException {
         if(item == null) {
-            writeShort(-1);
+            writeBoolean(false);
             return;
         }
-        writeShort(item.getTypeId());
-        if (item.getTypeId() == -1) {
-            return;
-        }
+        writeBoolean(true);
+        writeVarInt(((CraftItemStack)item).getTypeId());
         writeByte(item.getAmount());
-        writeShort(item.getDamageValue());
         writeNBT(item.getNbt());
     }
     

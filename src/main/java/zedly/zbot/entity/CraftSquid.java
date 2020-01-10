@@ -12,7 +12,7 @@ import zedly.zbot.entity.Squid;
  *
  * @author Dennis
  */
-public class CraftSquid extends CraftInsentient implements Squid {
+public class CraftSquid extends CraftWaterMob implements Squid {
 
     @Override
     public EntityType getType() {

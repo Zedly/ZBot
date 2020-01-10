@@ -21,11 +21,11 @@ public class CraftMinecartCommandBlock extends CraftMinecart implements Minecart
     
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            command = metaMap.get(12).asString();
+        if (metaMap.containsKey(14)) {
+            command = metaMap.get(14).asString();
         }
-        if (metaMap.containsKey(13)) {
-            lastOutput = metaMap.get(13).asString();
+        if (metaMap.containsKey(15)) {
+            lastOutput = metaMap.get(15).asString();
         }
         return list;
     }

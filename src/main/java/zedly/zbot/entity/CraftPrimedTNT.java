@@ -21,15 +21,15 @@ public class CraftPrimedTNT extends CraftObject implements PrimedTNT {
     
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(6)) {
-            fuseTicks = metaMap.get(6).asInt();
+        if (metaMap.containsKey(7)) {
+            fuseTicks = metaMap.get(7).asInt();
         }
         return list;
     }
 
     @Override
     public EntityType getType() {
-        return EntityType.FALLING_BLOCK;
+        return EntityType.PRIMED_TNT;
     }
 
     @Override

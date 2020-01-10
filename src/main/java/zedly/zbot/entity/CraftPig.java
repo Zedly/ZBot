@@ -17,13 +17,17 @@ import zedly.zbot.event.Event;
  */
 public class CraftPig extends CraftAnimal implements Pig {
 
+    int carrotBoostTime = 0;
     protected boolean saddle = false;
 
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(13)) {
-            saddle = metaMap.get(13).asBoolean();
+        if (metaMap.containsKey(15)) {
+            saddle = metaMap.get(15).asBoolean();
+        }
+        if (metaMap.containsKey(16)) {
+            carrotBoostTime = metaMap.get(16).asInt();
         }
         return list;
     }
@@ -35,5 +39,10 @@ public class CraftPig extends CraftAnimal implements Pig {
     @Override
     public synchronized boolean hasSaddle() {
         return saddle;
+    }
+
+    @Override
+    public int getCarrotBoostTime() {
+        return carrotBoostTime;
     }
 }

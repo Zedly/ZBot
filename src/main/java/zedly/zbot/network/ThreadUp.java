@@ -17,8 +17,8 @@ public class ThreadUp extends Thread {
     private final int[] lastOps = new int[16];
     private int opPtr = 0;
 
-    public ThreadUp(OutputStream os) {
-        dos = new ExtendedDataOutputStream(os);
+    public ThreadUp(PacketOutputStream os) {
+        dos = os;
         byteBuffer = new ByteArrayOutputStream();
         dataBuffer = new ExtendedDataOutputStream(byteBuffer);
     }

@@ -19,10 +19,11 @@ public abstract class CraftAgeable extends CraftCreature implements Ageable {
     
     protected boolean baby = false;
     
+    @Override
      public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(12)) {
-            boolean nbaby = metaMap.get(12).asBoolean();
+        if(metaMap.containsKey(14)) {
+            boolean nbaby = metaMap.get(14).asBoolean();
             if(baby && !nbaby) {
                 list.add(new EntityGrowUpEvent(this));
             }
@@ -31,6 +32,7 @@ public abstract class CraftAgeable extends CraftCreature implements Ageable {
         return list;
     }
     
+    @Override
     public synchronized boolean isBaby() {
         return baby;
     }

@@ -6,22 +6,24 @@
 package zedly.zbot.entity;
 
 import zedly.zbot.EntityType;
+import zedly.zbot.Material;
 import zedly.zbot.entity.Snowball;
+import zedly.zbot.inventory.CraftItemStack;
+import zedly.zbot.inventory.ItemStack;
 
 /**
  *
  * @author Dennis
  */
-public class CraftSnowball extends CraftProjectile implements Snowball {
+public class CraftSnowball extends CraftItemedThrowable implements Snowball {
 
+    public CraftSnowball() {
+        super(new CraftItemStack(Material.SNOWBALL));
+    }
+    
     @Override
     public EntityType getType() {
         return EntityType.SNOWBALL;
-    }
-
-    @Override
-    public boolean hasGravity() {
-        return true;
     }
     
 }

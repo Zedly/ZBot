@@ -5,18 +5,37 @@
  */
 package zedly.zbot.entity;
 
+import java.util.HashMap;
+import java.util.List;
 import zedly.zbot.EntityType;
 import zedly.zbot.entity.Mooshroom;
+import zedly.zbot.event.Event;
 
 /**
  *
  * @author Dennis
  */
-public class CraftMooshroom extends CraftAnimal implements Mooshroom {
+public class CraftMooshroom extends CraftCow implements Mooshroom {
+
+    String canonicalType = "red";
+
+    @Override
+    public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
+        List<Event> list = super.setMeta(metaMap);
+        if (metaMap.containsKey(15)) {
+            canonicalType = metaMap.get(15).asString();
+        }
+        return list;
+    }
 
     @Override
     public EntityType getType() {
-        return EntityType.MOOSHROOM;
+        return EntityType.MUSHROOM_COW;
     }
-    
+
+    @Override
+    public String getCanonicalType() {
+        return canonicalType;
+    }
+
 }

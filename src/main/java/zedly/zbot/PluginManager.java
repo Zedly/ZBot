@@ -6,14 +6,11 @@
 package zedly.zbot;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 import zedly.zbot.plugin.ZBotPlugin;
 import zedly.zbot.self.Self;
@@ -35,12 +32,7 @@ public class PluginManager {
             }
 
             // List Plugin files
-            File[] pluginFiles = pluginDir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.matches("(.+)\\.jar");
-                }
-            });
+            File[] pluginFiles = pluginDir.listFiles((File dir, String name) -> name.matches("(.+)\\.jar"));
 
             // Convert them to URLs
             URL[] pluginUrls = new URL[pluginFiles.length];
@@ -49,50 +41,39 @@ public class PluginManager {
             }
 
             // Create ClassLoader
-            ClassLoader loader = URLClassLoader.newInstance(pluginUrls, ZBot.class.getClassLoader());
-            Enumeration<URL> pluginYmls = loader.getResources("plugin.yml");
-
             // Find Main classes in plugin ymls
-            while (pluginYmls.hasMoreElements()) {
+            for (URL pluginUrl : pluginUrls) {
+                System.out.println(pluginUrl.toString());
+                URLClassLoader loader = URLClassLoader.newInstance(new URL[]{pluginUrl}, ZBot.class.getClassLoader());
+                YamlConfiguration pluginYml = YamlConfiguration.read(loader.getResourceAsStream("plugin.yml"));
+                String mainClass = pluginYml.getString("main", null);
+                String pluginName = pluginYml.getString("name", null);
+                if (mainClass == null || pluginName == null) {
+                    System.err.println("Could not load " + pluginUrl.getPath() + ": Malformed plugin.yml");
+                    continue;
+                }
+                if (plugins.containsKey(pluginName)) {
+                    System.err.println("Plugin " + pluginName + " is already registered!");
+                    continue;
+                }
+                System.out.println("Loading Plugin: " + pluginName);
                 try {
-                    URL url = pluginYmls.nextElement();
-                    Map map = (Map) yaml.load(url.openStream());
-
-                    if (!map.containsKey("main") || !map.containsKey("name")) {
-                        System.err.println("Could not load " + url.getPath() + ": Malformed plugin.yml");
-                        continue;
-                    }
-
-                    String mainClass = (String) map.get("main");
-                    String pluginName = (String) map.get("name");
-                    System.out.println("Loading Plugin: " + pluginName);
-
-                    if(plugins.containsKey(pluginName)) {
-                        System.err.println("Plugin " + pluginName + " is already registered!");
-                        continue;
-                    }
-                    
                     // Instantiate Main classes!
                     Class clazz = Class.forName(mainClass, true, loader);
                     Class<? extends ZBotPlugin> pluginClass = clazz.asSubclass(ZBotPlugin.class);
                     Constructor<? extends ZBotPlugin> ctor = pluginClass.getConstructor();
                     ZBotPlugin plugin = ctor.newInstance();
-
                     // Awwwww
-                    try {
-                        plugin.onLoad();
-                        plugins.put(pluginName, plugin);
-                    } catch (Exception ex) {
-                        System.err.println("Error loading plugin " + pluginName + "!");
-                        ex.printStackTrace();
-                    }
+                    plugin.createDataFolder();
+                    plugin.onLoad();
+                    plugins.put(pluginName, plugin);
                     // Yissss
-
                 } catch (Exception ex) {
+                    System.err.println("Error loading plugin " + pluginName + "!");
                     ex.printStackTrace();
                 }
             }
-        } catch (IOException ex) {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
         }
     }
@@ -120,7 +101,7 @@ public class PluginManager {
             }
         }
     }
-    
+
     public synchronized void onJoin() {
         for (String pluginName : plugins.keySet()) {
             ZBotPlugin plugin = plugins.get(pluginName);
@@ -132,7 +113,7 @@ public class PluginManager {
             }
         }
     }
-    
+
     public synchronized void onQuit() {
         for (String pluginName : plugins.keySet()) {
             ZBotPlugin plugin = plugins.get(pluginName);
