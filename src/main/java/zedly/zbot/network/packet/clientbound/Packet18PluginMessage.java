@@ -18,6 +18,9 @@ public class Packet18PluginMessage implements ClientBoundPacket {
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
+        if(packetLen == 161)
+            packetLen = 160;
+        
         channel = dis.readString();
         data = new byte[packetLen - 1 - channel.length()];
         dis.readFully(data);

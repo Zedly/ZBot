@@ -8,8 +8,8 @@ import java.io.IOException;
 public interface ClientBoundPacket {
 
     default void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        while ((packetLen -= dis.skip(packetLen)) > 0) {
-        }
+        byte[] data = new byte[packetLen];
+        dis.read(data);
     }
 
     default void process(GameContext context) {

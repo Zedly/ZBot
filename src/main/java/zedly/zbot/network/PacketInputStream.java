@@ -97,6 +97,11 @@ public final class PacketInputStream extends ExtendedDataInputStream {
                 readFully(compressedData);
                 inflater.setInput(compressedData);
                 inflater.inflate(data);
+                long actualLength = inflater.getBytesWritten();
+                if(actualLength != dataLength) {
+                    System.err.println("Compressed packet claiming length " + dataLength + ", actual len " + actualLength);
+                }
+                
                 inflater.reset();
                 ByteArrayInputStream bbis = new ByteArrayInputStream(data);
                 ExtendedDataInputStream bis = new ExtendedDataInputStream(bbis);
@@ -105,7 +110,7 @@ public final class PacketInputStream extends ExtendedDataInputStream {
                 lastOps[(lastOpPtr++) % 16] = op;
                 //System.out.println("Play Debug: Op " + Integer.toHexString(op));
                 p = newPacketForId(op);
-                p.readPacket(bis, dataLength - 1);
+                p.readPacket(bis, (int) actualLength - 1);
                 if (bbis.available() != 0) {
                     System.err.println("Dropped " + bbis.available() + " bytes in compressed packet " + Integer.toHexString(op) + " of size " + dataLength + "!");
                 }
