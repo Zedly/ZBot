@@ -13,15 +13,23 @@ import zedly.zbot.network.ExtendedDataInputStream;
  * @author Dennis
  */
 public class Packet18PluginMessage implements ClientBoundPacket {
+
     private String channel;
     private byte[] data;
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        if(packetLen == 161)
-            packetLen = 160;
-        
         channel = dis.readString();
+
+        if (channel.equals("minecraft:register") && packetLen == 161) {
+            packetLen--;
+        }
+        if (channel.startsWith("multichat:")) {
+            packetLen--;
+        }
+        
+        
+        
         data = new byte[packetLen - 1 - channel.length()];
         dis.readFully(data);
     }
