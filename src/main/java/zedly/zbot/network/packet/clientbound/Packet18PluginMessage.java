@@ -21,7 +21,7 @@ public class Packet18PluginMessage implements ClientBoundPacket {
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         channel = dis.readString();
 
-        if (channel.equals("minecraft:register") && packetLen == 161) {
+        if (channel.equals("minecraft:register") && packetLen == 180) {
             packetLen--;
         }
         if (channel.startsWith("multichat:")) {
