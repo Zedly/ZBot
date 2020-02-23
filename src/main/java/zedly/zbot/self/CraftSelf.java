@@ -110,7 +110,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     public Location getLocation() {
         return context.getLocationUpdater().getLocation();
     }
-    
+
     @Override
     public String getName() {
         return context.getSession().getActualUsername();
@@ -232,8 +232,28 @@ public class CraftSelf extends CraftPlayer implements Self {
     }
 
     @Override
+    public void recipeBookStatus(boolean craftingRecipeBookOpen, boolean craftingRecipeFilterActive,
+            boolean smeltingRecipeBookOpen, boolean smeltingRecipeFilterActive,
+            boolean blastingRecipeBookOpen, boolean blastingRecipeFilterActive,
+            boolean smokingRecipeBookOpen, boolean smokingRecipeFilterActive) {
+        context.getUpThread().sendPacket(new Packet1DRecipeBookData(craftingRecipeBookOpen, craftingRecipeFilterActive, smeltingRecipeBookOpen, smeltingRecipeFilterActive, blastingRecipeBookOpen, blastingRecipeFilterActive, smokingRecipeBookOpen, smokingRecipeFilterActive));
+    }
+
+    @Override
+    public void recipeBookStatus(String recipeId,
+            boolean blastingRecipeBookOpen, boolean blastingRecipeFilterActive,
+            boolean smokingRecipeBookOpen, boolean smokingRecipeFilterActive) {
+        context.getUpThread().sendPacket(new Packet1DRecipeBookData(recipeId, blastingRecipeBookOpen, blastingRecipeFilterActive, smokingRecipeBookOpen, smokingRecipeFilterActive));
+    }
+
+    @Override
     public void registerEvents(Listener listener) {
         context.getEventDispatcher().addPermanentHandler(listener);
+    }
+
+    @Override
+    public void requestRecipe(String recipeId, boolean makeAll) {
+        context.getUpThread().sendPacket(new Packet18CraftRecipeRequest(getInventory().windowId(), recipeId, makeAll));
     }
 
     @Override
