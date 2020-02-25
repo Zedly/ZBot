@@ -24,6 +24,7 @@ public class Packet30CraftRecipeResponse implements ClientBoundPacket {
         recipe = dis.readString();
     }
     
+    @Override
     public void process(GameContext context) {
         context.getEventDispatcher().dispatchEvent(new RecipeResponseEvent(windowID, recipe));
     }
