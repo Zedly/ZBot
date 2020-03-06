@@ -43,14 +43,19 @@ public class CraftTile implements Tile {
     public static CraftTile forNbt(NBTTagCompound nbt) {
         switch (nbt.getString("id")) {
             case "minecraft:sign":
+            case "sign":
                 return new CraftTileSign(nbt);
             case "minecraft:mob_spawner":
+            case "mob_spawner":
                 return new CraftTileSpawner(nbt);
             case "minecraft:bed":
+            case "bed":
                 return new CraftTileBed(nbt);
             case "minecraft:skull":
+            case "skull":
                 return new CraftTileSkull(nbt);
             case "minecraft:command_block":
+            case "command_block":
                 return new CraftTileCommandBlock(nbt);    
         }
         return null;
