@@ -9,23 +9,24 @@ import org.json.simple.JSONObject;
 import zedly.zbot.BlockFace;
 import zedly.zbot.Material;
 import zedly.zbot.block.data.CraftBlockData;
+import zedly.zbot.block.data.AgeableBlock;
 
 /**
  *
  * @author Dennis
  */
-public class CraftCocoa extends CraftAgeableBlock implements Cocoa {
+public class CraftAgeableBlock extends CraftBlockData implements AgeableBlock {
 
-    private final BlockFace facing;
-    
-    public CraftCocoa(JSONObject json, Material mat) {
+    private final int age;
+
+    public CraftAgeableBlock(JSONObject json, Material mat) {
         super(json, mat);
-        facing = BlockFace.valueOf(getEnumString(json, "facing"));
+        age = getInt(json, "age");
     }
 
     @Override
-    public BlockFace getFacing() {
-        return facing;
+    public int getAge() {
+        return age;
     }
-        
+
 }
