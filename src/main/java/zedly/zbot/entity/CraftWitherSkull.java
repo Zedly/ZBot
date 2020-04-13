@@ -15,7 +15,7 @@ import zedly.zbot.event.Event;
  *
  * @author Dennis
  */
-public class CraftWitherSkull extends CraftFireball implements WitherSkull {
+public class CraftWitherSkull extends CraftAbstractFireball implements WitherSkull {
 
     protected boolean invulnerable = false;
 
