@@ -1,0 +1,1 @@
+java -Xmx2G -jar target/Zbot-jar-with-dependencies.jar

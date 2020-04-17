@@ -17,6 +17,39 @@ public class Util {
         jsonParser = new JsonParser();
     }
 
+    public static String interpretJsonAsANSI(String json) {
+        try {
+            JsonElement element = jsonParser.parse(json);
+            JsonObject obj = element.getAsJsonObject();
+            String result = "";
+            if (obj.has("extra")) {
+                JsonArray array = obj.getAsJsonArray("extra");
+                for (JsonElement e : array) {
+                    if (e.isJsonObject()) {
+                        JsonObject o = e.getAsJsonObject();
+                        if (o.has("color")) {
+                            ChatColor cc = ChatColor.valueOf((String) o.get("color").getAsString().toUpperCase());
+                            result += cc.getANSICode();
+                        }
+                        result += o.get("text").getAsString();
+                    } else {
+                        result += e.getAsString();
+                    }
+                }
+            }
+            if (obj.has("text")) {
+                if (obj.has("color")) {
+                    ChatColor cc = ChatColor.valueOf((String) obj.get("color").getAsString().toUpperCase());
+                    result += cc.getANSICode();
+                }
+                result += obj.get("text").getAsString();
+            }
+            return ChatColor.legacyToANSI(unescape(result));
+        } catch (IllegalStateException ex) {
+            return ChatColor.legacyToANSI(json);
+        }
+    }
+
     public static String interpretJson(String json) {
         try {
             JsonElement element = jsonParser.parse(json);

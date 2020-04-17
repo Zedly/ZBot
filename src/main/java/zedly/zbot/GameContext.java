@@ -30,6 +30,7 @@ public class GameContext {
     private final String serverIp;
     private final int serverPort;
     private final Session session;
+    private final YamlConfiguration yaml;
     private final CraftSelf self;
     private final PluginManager pluginManager;
 
@@ -44,9 +45,10 @@ public class GameContext {
     private final HashMap<ZBotPlugin, Future> taskFuturePlugins = new HashMap<>();
     private int futureIndex = 0;
 
-    public GameContext(String serverIp, int serverPort, Session session, ClientSettings clientSettings) {
-        this.serverIp = serverIp;
-        this.serverPort = serverPort;
+    public GameContext(YamlConfiguration yaml, Session session, ClientSettings clientSettings) {
+        this.yaml = yaml;
+        this.serverIp = yaml.getString("serverIp", "127.0.0.1");
+        this.serverPort = yaml.getInt("serverPort", 25565);
         this.session = session;
         connectionWatcher = new ThreadConnectionWatcher(this);
         pluginManager = new PluginManager();
@@ -136,6 +138,10 @@ public class GameContext {
 
     public synchronized Session getSession() {
         return session;
+    }
+    
+    public synchronized YamlConfiguration getClientConfig() {
+        return yaml;
     }
 
     public synchronized ThreadUp getUpThread() {
