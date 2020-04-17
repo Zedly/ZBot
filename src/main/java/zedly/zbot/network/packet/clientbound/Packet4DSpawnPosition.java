@@ -1,6 +1,7 @@
 package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
+import zedly.zbot.GameContext;
 import zedly.zbot.Location;
 import zedly.zbot.network.ExtendedDataInputStream;
 
@@ -25,6 +26,10 @@ public class Packet4DSpawnPosition implements ClientBoundPacket {
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         location = dis.readPosition();
+    }
+    
+    public void process(GameContext context) {
+        context.getSelf().getEnvironment().setSpawnPoint(location);
     }
 
 }

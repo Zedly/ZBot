@@ -33,6 +33,7 @@ public class CraftEnvironment implements Environment {
     private final HashMap<Integer, CraftEntity> entities = new HashMap<>();
     private final BiMap<UUID, String> playerNameCache = HashBiMap.create();
     private final HashMap<Long, CraftChunk> chunks = new HashMap<>();
+    private Location spawnPoint = null;
     private int worldType = 1;
     private int difficulty = 0;
     private long timeOfDay = 0;
@@ -369,5 +370,19 @@ public class CraftEnvironment implements Environment {
         entityTypeMap.put(99, CraftLightningBolt.class);
         entityTypeMap.put(100, CraftPlayer.class);
         entityTypeMap.put(101, CraftFishingHook.class);
+    }
+
+    /**
+     * @return the spawnPoint
+     */
+    public Location getSpawnPoint() {
+        return spawnPoint;
+    }
+
+    /**
+     * @param spawnPoint the spawnPoint to set
+     */
+    public void setSpawnPoint(Location spawnPoint) {
+        this.spawnPoint = spawnPoint;
     }
 }
