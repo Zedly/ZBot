@@ -6,6 +6,7 @@ import zedly.zbot.event.ChatEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 import java.io.IOException;
+import zedly.zbot.ChatColor;
 
 /**
  * Identifying the difference between Chat/System Message is important as it
@@ -34,7 +35,7 @@ public class Packet0EChatMessage implements ClientBoundPacket {
     public void process(GameContext context) {
         String message = Util.interpretJson(jSONData);
         if (context.getClientConfig().getBoolean("ansi", false)) {
-            System.out.println(Util.interpretJsonAsANSI(jSONData));
+            System.out.println(Util.interpretJsonAsANSI(jSONData) + ChatColor.WHITE.getANSICode());
         } else {
             System.out.println(Util.interpretJson(jSONData));
         }

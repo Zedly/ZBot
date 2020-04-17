@@ -46,9 +46,9 @@ public enum ChatColor {
 
     public static String legacyToANSI(String legacy) {
         for (ChatColor cc : values()) { 
-            legacy = legacy.replace(cc.getLegacyCode(), cc.getANSICode());
+            legacy = legacy.replace(cc.legacyCode, cc.ansiCode);
         }
-        return legacy + ChatColor.WHITE.ansiCode;
+        return legacy;
     }
 
 }
