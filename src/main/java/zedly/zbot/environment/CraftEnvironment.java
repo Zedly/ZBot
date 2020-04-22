@@ -74,6 +74,7 @@ public class CraftEnvironment implements Environment {
         return chunks.containsKey(chunkLong);
     }
 
+    @Override
     public int getDifficulty() {
         return difficulty;
     }
@@ -82,10 +83,12 @@ public class CraftEnvironment implements Environment {
         return chunks.size();
     }
 
+    @Override
     public long getTimeOfDay() {
         return timeOfDay;
     }
 
+    @Override
     public long getWorldAge() {
         return worldAge;
     }
