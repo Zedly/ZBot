@@ -32,5 +32,5 @@ public class Packet22Effect implements ClientBoundPacket {
         data = dis.readInt();
         disableRelativeVolume = dis.readBoolean();
     }
-
+    
 }
