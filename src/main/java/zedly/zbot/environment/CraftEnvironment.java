@@ -13,6 +13,7 @@ import java.util.Collections;
 import zedly.zbot.entity.CraftEntity;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 import net.minecraft.server.NBTBase;
 import net.minecraft.server.NBTTagCompound;
@@ -41,7 +42,9 @@ public class CraftEnvironment implements Environment {
 
     @Override
     public Collection<Entity> getEntities() {
-        return Collections.unmodifiableCollection(entities.values());
+        HashSet<Entity> ents = new HashSet<>();
+        ents.addAll(entities.values());
+        return ents;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class CraftEnvironment implements Environment {
     public String getPlayerNameByUUID(UUID uuid) {
         return playerNameCache.get(uuid);
     }
-    
+
     @Override
     public UUID getUUIDByPlayerName(String name) {
         return playerNameCache.inverse().get(name);
@@ -116,11 +119,11 @@ public class CraftEnvironment implements Environment {
     // Non-API methods start here
     public void loadChunkColumn(int x, int z, CraftChunk[] chunkArray, boolean completeWithAirChunks) {
         for (int i = 0; i < 16; i++) {
-            long chunkId = chunkCoordinatesToChunkLong(x, i, z);
+            long chunkLong = chunkCoordinatesToChunkLong(x, i, z);
             if (chunkArray[i] != null) {
-                chunks.put(chunkId, chunkArray[i]);
-            } else {
-                chunks.put(chunkId, new CraftChunk());
+                chunks.put(chunkLong, chunkArray[i]);
+            } else if (!chunks.containsKey(chunkLong)) {
+                chunks.put(chunkLong, new CraftChunk());
             }
         }
     }
@@ -128,14 +131,15 @@ public class CraftEnvironment implements Environment {
     public void loadChunkColumn(byte[] rawData, int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask, NBTBase[] blockEntities) {
         ExtendedDataInputStream edis = new ExtendedDataInputStream(new ByteArrayInputStream(rawData));
         for (int i = 0; i < 16; i++) {
+            long chunkLong = chunkCoordinatesToChunkLong(chunkX, i, chunkZ);
             if (((1 << i) & primaryBitMask) != 0) {
                 try {
-                    chunks.put(chunkCoordinatesToChunkLong(chunkX, i, chunkZ), edis.readChunkSection(worldType == 0));
+                    chunks.put(chunkLong, edis.readChunkSection(worldType == 0));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            } else {
-                chunks.put(chunkCoordinatesToChunkLong(chunkX, i, chunkZ), new CraftChunk());
+            } else if (!chunks.containsKey(chunkLong)) {
+                chunks.put(chunkLong, new CraftChunk());
             }
         }
 

@@ -133,8 +133,6 @@ public class ThreadConnectionWatcher extends Thread {
                 sleep(10000);
             } catch (Exception ex) {
                 System.err.println("Disconnected from " + serverIP + "! " + ex.getClass() + ": " + ex.getMessage());
-                ex.printStackTrace();
-
                 try {
                     sleep(10000);
                 } catch (InterruptedException ex2) {
