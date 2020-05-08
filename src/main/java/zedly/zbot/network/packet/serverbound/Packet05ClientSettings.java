@@ -21,15 +21,6 @@ public class Packet05ClientSettings implements ServerBoundPacket {
     private final int displayedSkinParts;  // Bit mask, see below
     private final int mainHand;  // 0: Left, 1: Right
 
-    public Packet05ClientSettings(ClientSettings clientSettings) {
-        this(clientSettings.getLocale(), 
-                clientSettings.getViewDistance(), 
-                clientSettings.getChatMode().ordinal(), 
-                clientSettings.isChatColorsEnabled(), 
-                clientSettings.getSkinFlags(), 
-                clientSettings.isLeftHanded() ? 0 : 1);
-    }
-
     public Packet05ClientSettings(String locale, int viewDistance, int chatMode, boolean chatColors, int displayedSkinParts, int mainHand) {
         this.locale = locale;
         this.viewDistance = viewDistance;
@@ -37,6 +28,15 @@ public class Packet05ClientSettings implements ServerBoundPacket {
         this.chatColors = chatColors;
         this.displayedSkinParts = displayedSkinParts;
         this.mainHand = mainHand;
+    }
+
+    public Packet05ClientSettings(ClientSettings clientSettings) {
+        this(clientSettings.getLocale(),
+                clientSettings.getViewDistance(),
+                clientSettings.getChatMode().ordinal(),
+                clientSettings.isChatColorsEnabled(),
+                clientSettings.getSkinFlags(),
+                clientSettings.isLeftHanded() ? 0 : 1);
     }
 
     @Override

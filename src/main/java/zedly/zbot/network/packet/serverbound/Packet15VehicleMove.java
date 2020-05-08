@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
@@ -8,11 +8,6 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  *
  * @author Dennis
  */
-
-/**
-* Sent when a player moves in a vehicle. Fields are the same as in <a href="#Player_Position_And_Look_.28serverbound.29">Player Position And Look</a>. Note that all fields use absolute positioning and do not allow for relative positioning.
-*/
-
 
 /**
 * Sent when a player moves in a vehicle. Fields are the same as in <a href="#Player_Position_And_Look_.28serverbound.29">Player Position And Look</a>. Note that all fields use absolute positioning and do not allow for relative positioning.

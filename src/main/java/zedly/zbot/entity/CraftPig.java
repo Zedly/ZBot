@@ -23,11 +23,11 @@ public class CraftPig extends CraftAnimal implements Pig {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            saddle = metaMap.get(15).asBoolean();
-        }
         if (metaMap.containsKey(16)) {
-            carrotBoostTime = metaMap.get(16).asInt();
+            saddle = metaMap.get(16).asBoolean();
+        }
+        if (metaMap.containsKey(17)) {
+            carrotBoostTime = metaMap.get(17).asInt();
         }
         return list;
     }

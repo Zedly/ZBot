@@ -23,8 +23,8 @@ public class CraftBlaze extends CraftMonster implements Blaze {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(14)) {
-            onFire = (metaMap.get(14).asInt() & 0x01) == 0x01;
+        if (metaMap.containsKey(15)) {
+            onFire = (metaMap.get(15).asInt() & 0x01) == 0x01;
             if (onFire) {
                 list.add(new BlazeChargeEvent(this));
             }

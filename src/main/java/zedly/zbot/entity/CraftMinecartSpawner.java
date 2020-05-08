@@ -15,7 +15,7 @@ public class CraftMinecartSpawner extends CraftMinecart implements MinecartSpawn
     
     @Override
     public EntityType getType() {
-        return EntityType.MINECART_MOB_SPAWNER;
+        return EntityType.SPAWNER_MINECART;
     }
     
 }

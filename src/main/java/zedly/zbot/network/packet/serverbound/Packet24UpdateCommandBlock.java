@@ -32,3 +32,4 @@ public class Packet24UpdateCommandBlock implements ServerBoundPacket {
     }
 
 }
+// Refactored ancestor. Review data strcuture

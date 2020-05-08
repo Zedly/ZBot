@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.inventory.ItemStack;
@@ -13,10 +13,6 @@ import zedly.zbot.network.ExtendedDataOutputStream;
 * While the user is in the standard inventory (i.e., not a crafting bench) in Creative mode, the player will send this packet.
 */
 
-
-/**
-* While the user is in the standard inventory (i.e., not a crafting bench) in Creative mode, the player will send this packet.
-*/
 
 public class Packet26CreativeInventoryAction implements ServerBoundPacket {
     private final int slot;  // Inventory slot

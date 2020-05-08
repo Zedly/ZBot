@@ -24,8 +24,8 @@ public abstract class CraftTameable extends CraftAnimal implements Tameable {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            int d = metaMap.get(15).asInt();
+        if (metaMap.containsKey(16)) {
+            int d = metaMap.get(16).asInt();
             sitting = (d & 0x01) != 0;
             angry = (d & 0x02) != 0;
             tamed = (d & 0x04) != 0;
@@ -33,8 +33,8 @@ public abstract class CraftTameable extends CraftAnimal implements Tameable {
                 list.add(new EntityTameEvent(this));
             }
         }
-        if (metaMap.containsKey(16)) {
-            owner = metaMap.get(16).asUUID();
+        if (metaMap.containsKey(17)) {
+            owner = metaMap.get(17).asUUID();
         }
         return list;
     }

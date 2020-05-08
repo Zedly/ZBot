@@ -22,8 +22,8 @@ public class CraftPufferfish extends CraftAbstractFish implements Pufferfish {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            puffState = metaMap.get(15).asInt();
+        if (metaMap.containsKey(16)) {
+            puffState = metaMap.get(16).asInt();
         }
         return list;
     }

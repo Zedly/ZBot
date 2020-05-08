@@ -21,8 +21,8 @@ public abstract class CraftChestedHorse extends CraftAbstractHorse implements Ch
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(17)) {
-            hasChest = metaMap.get(17).asBoolean();
+        if (metaMap.containsKey(18)) {
+            hasChest = metaMap.get(18).asBoolean();
         }
         return list;
     }

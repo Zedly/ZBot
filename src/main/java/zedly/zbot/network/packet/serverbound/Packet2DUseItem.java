@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
@@ -8,11 +8,6 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  *
  * @author Dennis
  */
-
-/**
-* Sent when pressing the Use Item key (default: right click) with an item in hand.
-*/
-
 
 /**
 * Sent when pressing the Use Item key (default: right click) with an item in hand.

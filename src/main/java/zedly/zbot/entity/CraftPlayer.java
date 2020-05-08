@@ -29,23 +29,23 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);       
-        if (metaMap.containsKey(13)) {
-            additionalHearts = metaMap.get(13).asFloat();
-        }
         if (metaMap.containsKey(14)) {
-            score = metaMap.get(14).asInt();
+            additionalHearts = metaMap.get(14).asFloat();
         }
         if (metaMap.containsKey(15)) {
-            skinFlags = metaMap.get(15).asInt();
+            score = metaMap.get(15).asInt();
         }
         if (metaMap.containsKey(16)) {
-            leftHanded = metaMap.get(16).asInt() == 0;
+            skinFlags = metaMap.get(16).asInt();
         }
         if (metaMap.containsKey(17)) {
-            leftShoulderEntity = metaMap.get(17).asNBT();
+            leftHanded = metaMap.get(17).asInt() == 0;
         }
         if (metaMap.containsKey(18)) {
-            rightShoulderEntity = metaMap.get(18).asNBT();
+            leftShoulderEntity = metaMap.get(18).asNBT();
+        }
+        if (metaMap.containsKey(19)) {
+            rightShoulderEntity = metaMap.get(19).asNBT();
         }
         return list;
     }

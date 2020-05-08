@@ -23,23 +23,23 @@ public class CraftTurtle extends CraftAnimal implements Turtle {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            homePos = metaMap.get(15).asLocation();
-        }
         if (metaMap.containsKey(16)) {
-            hasEgg = metaMap.get(16).asBoolean();
+            homePos = metaMap.get(16).asLocation();
         }
         if (metaMap.containsKey(17)) {
-            layingEgg = metaMap.get(17).asBoolean();
+            hasEgg = metaMap.get(17).asBoolean();
         }
         if (metaMap.containsKey(18)) {
-            travelPos = metaMap.get(18).asLocation();
+            layingEgg = metaMap.get(18).asBoolean();
         }
         if (metaMap.containsKey(19)) {
-            goingHome = metaMap.get(19).asBoolean();
+            travelPos = metaMap.get(19).asLocation();
         }
         if (metaMap.containsKey(20)) {
-            travelling = metaMap.get(20).asBoolean();
+            goingHome = metaMap.get(20).asBoolean();
+        }
+        if (metaMap.containsKey(21)) {
+            travelling = metaMap.get(21).asBoolean();
         }
         return list;
     }

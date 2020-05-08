@@ -21,8 +21,8 @@ public class CraftPolarBear extends CraftAnimal implements PolarBear {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            standingUp = metaMap.get(15).asBoolean();
+        if (metaMap.containsKey(16)) {
+            standingUp = metaMap.get(16).asBoolean();
         }
         return list;
     }

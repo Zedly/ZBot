@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
@@ -13,10 +13,6 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
 * Updates the player's XYZ position on the server.
 */
 
-
-/**
-* Updates the player's XYZ position on the server.
-*/
 
 public class Packet11PlayerPosition implements ServerBoundPacket {
     private final double x;  // Absolute position

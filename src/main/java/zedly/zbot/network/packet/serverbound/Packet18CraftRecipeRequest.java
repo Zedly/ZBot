@@ -1,10 +1,15 @@
-package  zedly.zbot.network.packet.serverbound;
+package   zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataInputStream;
 import zedly.zbot.network.ExtendedDataOutputStream;
 /**
 * A replacement for <a href="/Protocol#Prepare_Crafting_Grid" title="Protocol">Prepare Crafting Grid</a>.  It appears to behave more or less the same, but the client does not specify where to move the items.
+*/
+
+
+/**
+* This packet is sent when a player clicks a recipe in the crafting book that is craftable (white border).
 */
 
 

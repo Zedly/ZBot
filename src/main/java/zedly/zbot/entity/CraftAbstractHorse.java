@@ -25,8 +25,8 @@ public abstract class CraftAbstractHorse extends CraftAnimal implements Abstract
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            int d = metaMap.get(15).asInt();
+        if (metaMap.containsKey(16)) {
+            int d = metaMap.get(16).asInt();
             tame = (d & 0x02) != 0;
             saddled = (d & 0x04) != 0;
             bred = (d & 0x08) != 0;
@@ -34,8 +34,8 @@ public abstract class CraftAbstractHorse extends CraftAnimal implements Abstract
             rearing = (d & 0x20) != 0;
             mouthOpen = (d & 0x40) != 0;
         }
-        if (metaMap.containsKey(16)) {
-            owner = metaMap.get(16).asUUID();
+        if (metaMap.containsKey(17)) {
+            owner = metaMap.get(17).asUUID();
         }
         return list;
     }

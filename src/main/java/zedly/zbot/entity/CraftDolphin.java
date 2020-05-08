@@ -24,14 +24,14 @@ public class CraftDolphin extends CraftWaterMob implements Dolphin {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(14)) {
-            treasureLocation = metaMap.get(14).asLocation();
-        }
         if (metaMap.containsKey(15)) {
-            canFindTreasure = metaMap.get(15).asBoolean();
+            treasureLocation = metaMap.get(15).asLocation();
         }
         if (metaMap.containsKey(16)) {
-            hasFish = metaMap.get(16).asBoolean();
+            canFindTreasure = metaMap.get(16).asBoolean();
+        }
+        if (metaMap.containsKey(17)) {
+            hasFish = metaMap.get(17).asBoolean();
         }
         return list;
     }

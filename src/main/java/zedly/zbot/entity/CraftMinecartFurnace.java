@@ -21,8 +21,8 @@ public class CraftMinecartFurnace extends CraftMinecart implements MinecartFurna
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(14)) {
-            fuel = metaMap.get(14).asBoolean();
+        if (metaMap.containsKey(13)) {
+            fuel = metaMap.get(13).asBoolean();
         }
         return list;
     }
@@ -34,7 +34,7 @@ public class CraftMinecartFurnace extends CraftMinecart implements MinecartFurna
 
     @Override
     public EntityType getType() {
-        return EntityType.MINECART_FURNACE;
+        return EntityType.FURNACE_MINECART;
     }
 
 }

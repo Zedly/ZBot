@@ -21,8 +21,8 @@ public abstract class CraftAbstractFish extends CraftWaterMob implements Abstrac
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(14)) {
-            fromBucket = metaMap.get(14).asBoolean();
+        if (metaMap.containsKey(15)) {
+            fromBucket = metaMap.get(15).asBoolean();
         }
         return list;
     }

@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import zedly.zbot.network.ExtendedDataOutputStream;
 
@@ -7,10 +7,6 @@ import java.io.IOException;
 /**
  * @author Dennis
  */
-
-/**
-* */
-
 
 /**
 * */

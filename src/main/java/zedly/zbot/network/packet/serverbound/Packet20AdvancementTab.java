@@ -32,3 +32,5 @@ public class Packet20AdvancementTab implements ServerBoundPacket {
     }
 
 }
+
+// Refactored ancestor. Review data strcuture

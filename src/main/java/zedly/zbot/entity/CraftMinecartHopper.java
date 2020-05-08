@@ -15,7 +15,7 @@ public class CraftMinecartHopper extends CraftMinecartContainer implements Minec
     
     @Override
     public EntityType getType() {
-        return EntityType.MINECART_HOPPER;
+        return EntityType.HOPPER_MINECART;
     }
     
 }

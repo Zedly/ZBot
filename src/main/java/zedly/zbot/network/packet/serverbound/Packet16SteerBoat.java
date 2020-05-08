@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
@@ -8,10 +8,6 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  *
  * @author Dennis
  */
-
-/**
-* Used to <i>visually</i> update whether boat paddles are turning.  The server will update the <a href="/Entities#Boat" class="mw-redirect" title="Entities">Boat entity metadata</a> to match the values here.
-*/
 
 
 /**

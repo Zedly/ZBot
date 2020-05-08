@@ -68,3 +68,4 @@ public class Packet1DRecipeBookData implements ServerBoundPacket {
 }
 
 // This packet has never been implemented. If you find this in a stack trace: Congratulations, you played yourself
+// Refactored ancestor. Review data strcuture

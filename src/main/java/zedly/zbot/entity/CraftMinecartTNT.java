@@ -15,7 +15,7 @@ public class CraftMinecartTNT extends CraftMinecart implements MinecartTNT {
     
     @Override
     public EntityType getType() {
-        return EntityType.MINECART_TNT;
+        return EntityType.TNT_MINECART;
     }
     
 }

@@ -15,7 +15,7 @@ TCPStartup()
 
 $a = _http("wiki.vg", "protocol")
 $html = BinaryToString($a[0], 4)
-$relevantHtml = stringextract($html, '<span class="mw-headline" id="Clientbound_2">Clientbound</span>', '<span class="mw-headline" id="Status">Status</span>')
+$relevantHtml = stringextract($html, '<span class="mw-headline" id="Clientbound_2">Clientbound</span>', 'NewPP limit report')
 $tableHtml = stringextractall($relevantHtml, '<span class="mw-headline" id=', "</table>")
 
 

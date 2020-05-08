@@ -22,15 +22,15 @@ public class CraftMooshroom extends CraftCow implements Mooshroom {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            canonicalType = metaMap.get(15).asString();
+        if (metaMap.containsKey(16)) {
+            canonicalType = metaMap.get(16).asString();
         }
         return list;
     }
 
     @Override
     public EntityType getType() {
-        return EntityType.MUSHROOM_COW;
+        return EntityType.MOOSHROOM;
     }
 
     @Override

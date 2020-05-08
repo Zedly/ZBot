@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataInputStream;
@@ -11,17 +6,19 @@ import zedly.zbot.network.packet.clientbound.ClientBoundPacket;
 
 // Status, Clientbound
 
-public class Packet00Response implements ClientBoundPacket {
 
-    private String JSONResponse;
+/**
+* */
+
+public class Packet00Response implements ClientBoundPacket {
+    private int jSONLength;
+    private String jSONResponse;  // See <a href="/Server_List_Ping#Response" title="Server List Ping">Server List Ping#Response</a>
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        JSONResponse = dis.readString();
+        jSONLength = dis.readVarInt();
+        jSONResponse = dis.readString();
     }
 
-    public String getJSONResponse() {
-        return JSONResponse;
-    }
-    
 }

@@ -22,7 +22,7 @@ public class CraftThrownExperienceBottle extends CraftItemedThrowable implements
     
     @Override
     public EntityType getType() {
-        return EntityType.THROWN_EXP_BOTTLE;
+        return EntityType.EXPERIENCE_BOTTLE;
     }
 
     @Override

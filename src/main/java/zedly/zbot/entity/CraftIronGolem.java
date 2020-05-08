@@ -20,8 +20,8 @@ public class CraftIronGolem extends CraftGolem implements IronGolem {
     
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            playerCreated = metaMap.get(12).asBoolean();
+        if (metaMap.containsKey(15)) {
+            playerCreated = metaMap.get(15).asBoolean();
         }
         return list;
     }

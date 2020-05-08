@@ -14,9 +14,12 @@ import zedly.zbot.network.ExtendedDataInputStream;
  * @author Dennis
  */
 public class Packet07Statistics implements ClientBoundPacket {
+
     private int count;
     private HashMap<String, Integer> updates;
 
+    /*
+    // Disabled: Wiki is ambiguous
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         updates = new HashMap<>();
@@ -25,5 +28,6 @@ public class Packet07Statistics implements ClientBoundPacket {
             updates.put(dis.readString(), dis.readVarInt());
         }
     }
+     */
 }
-//Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture
+//Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture

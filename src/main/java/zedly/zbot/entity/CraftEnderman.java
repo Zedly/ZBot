@@ -23,23 +23,27 @@ public class CraftEnderman extends CraftMonster implements Enderman {
 
     protected ItemStack itemInHand;
     protected boolean screaming;
+    protected boolean staredAt;
 
     @Override
     public List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(14)) {
-            EntityMeta meta = metaMap.get(14);
+        if (metaMap.containsKey(15)) {
+            EntityMeta meta = metaMap.get(15);
             if (meta instanceof ItemStackMeta) {
                 ItemStack newItemInHand = ((ItemStackMeta) meta).asSlot();
                 list.add(new EndermanBlockChangeEvent(this, itemInHand, newItemInHand));
                 itemInHand = newItemInHand;
             }
         }
-        if (metaMap.containsKey(15)) {
-            screaming = metaMap.get(15).asBoolean();
+        if (metaMap.containsKey(16)) {
+            screaming = metaMap.get(16).asBoolean();
             if (screaming) {
                 list.add(new EndermanScreamEvent(this));
             }
+        }
+        if (metaMap.containsKey(17)) {
+            staredAt = metaMap.get(17).asBoolean();
         }
         return list;
     }

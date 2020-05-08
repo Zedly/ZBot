@@ -16,7 +16,7 @@ public class CraftPigZombie extends CraftMonster implements ZombiePig {
 
     @Override
     public EntityType getType() {
-        return EntityType.PIG_ZOMBIE;
+        return EntityType.ZOMBIE_PIGMAN;
     }
     
 }

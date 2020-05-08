@@ -23,11 +23,11 @@ public class CraftCat extends CraftTameable implements Cat {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(17)) {
-            typeId = metaMap.get(17).asInt();
+        if (metaMap.containsKey(18)) {
+            typeId = metaMap.get(18).asInt();
         }
-        if (metaMap.containsKey(20)) {
-            collarColor = metaMap.get(20).asInt();
+        if (metaMap.containsKey(21)) {
+            collarColor = metaMap.get(21).asInt();
         }
         return list;
     }

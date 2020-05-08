@@ -29,7 +29,7 @@ import zedly.zbot.network.mappings.InventoryType;
 import zedly.zbot.network.packet.serverbound.Packet03ChatMessage;
 import zedly.zbot.network.packet.serverbound.Packet04ClientStatus;
 import zedly.zbot.network.packet.serverbound.Packet05ClientSettings;
-import zedly.zbot.network.packet.serverbound.Packet0EUseEntity;
+import zedly.zbot.network.packet.serverbound.Packet0EInteractEntity;
 import zedly.zbot.network.packet.serverbound.*;
 import zedly.zbot.plugin.ZBotPlugin;
 
@@ -57,7 +57,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void attackEntity(Entity ent) {
-        context.getUpThread().sendPacket(new Packet0EUseEntity(ent.getEntityId()));
+        context.getUpThread().sendPacket(new Packet0EInteractEntity(ent.getEntityId()));
         swingArm(false);
     }
 
@@ -123,12 +123,12 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void interactWithEntity(Entity ent, boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet0EUseEntity(ent.getEntityId(), (leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet0EInteractEntity(ent.getEntityId(), (leftHand ? 1 : 0)));
     }
 
     @Override
     public void interactWithEntity(Entity ent, Location loc, boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet0EUseEntity(ent.getEntityId(), loc, (leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet0EInteractEntity(ent.getEntityId(), loc, (leftHand ? 1 : 0)));
     }
 
     @Override

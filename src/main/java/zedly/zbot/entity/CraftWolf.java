@@ -25,9 +25,6 @@ public class CraftWolf extends CraftTameable implements Wolf {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(17)) {
-            damageTaken = metaMap.get(17).asFloat();
-        }
         if (metaMap.containsKey(18)) {
             begging = metaMap.get(18).asBoolean();
         }

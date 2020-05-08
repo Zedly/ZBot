@@ -5,10 +5,18 @@
  */
 package zedly.zbot.entity;
 
+import zedly.zbot.EntityType;
+
 /**
  *
  * @author Dennis
  */
 public class CraftElderGuardian extends CraftGuardian implements ElderGuardian {
+
+    @Override
+    public EntityType getType() {
+        return EntityType.ELDER_GUARDIAN;
+    }
+
     
 }

@@ -24,11 +24,11 @@ public class CraftGuardian extends CraftMonster implements Guardian {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            elderly = metaMap.get(12).asBoolean();
+        if (metaMap.containsKey(15)) {
+            elderly = metaMap.get(15).asBoolean();
         }
-        if (metaMap.containsKey(13)) {
-            targetId = metaMap.get(13).asInt();
+        if (metaMap.containsKey(16)) {
+            targetId = metaMap.get(16).asInt();
         }
         return list;
     }

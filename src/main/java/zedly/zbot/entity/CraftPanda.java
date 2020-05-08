@@ -27,23 +27,23 @@ public class CraftPanda extends CraftAnimal implements Panda {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            breedTimer = metaMap.get(15).asInt();
-        }
         if (metaMap.containsKey(16)) {
-            sneezeTimer = metaMap.get(16).asInt();
+            breedTimer = metaMap.get(16).asInt();
         }
         if (metaMap.containsKey(17)) {
-            eatTimer = metaMap.get(17).asInt();
+            sneezeTimer = metaMap.get(17).asInt();
         }
         if (metaMap.containsKey(18)) {
-            mainGeneId = metaMap.get(18).asInt();
+            eatTimer = metaMap.get(18).asInt();
         }
         if (metaMap.containsKey(19)) {
-            hiddenGeneId = metaMap.get(19).asInt();
+            mainGeneId = metaMap.get(19).asInt();
         }
         if (metaMap.containsKey(20)) {
-            flags = metaMap.get(20).asInt();
+            hiddenGeneId = metaMap.get(20).asInt();
+        }
+        if (metaMap.containsKey(21)) {
+            flags = metaMap.get(21).asInt();
         }
         return list;
     }

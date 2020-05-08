@@ -21,8 +21,8 @@ public class CraftWitch extends CraftRaidParticipant implements Witch {
     
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(15)) {
-            drinking = metaMap.get(15).asBoolean();
+        if(metaMap.containsKey(16)) {
+            drinking = metaMap.get(16).asBoolean();
         }
         return list;
     }

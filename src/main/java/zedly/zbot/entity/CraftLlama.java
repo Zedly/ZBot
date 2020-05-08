@@ -23,14 +23,14 @@ public class CraftLlama extends CraftChestedHorse implements Llama {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(18)) {
-            strength = metaMap.get(18).asInt();
-        }
         if (metaMap.containsKey(19)) {
-            carpetColorId = metaMap.get(19).asInt();
+            strength = metaMap.get(19).asInt();
         }
         if (metaMap.containsKey(20)) {
-            variantId = metaMap.get(20).asInt();
+            carpetColorId = metaMap.get(20).asInt();
+        }
+        if (metaMap.containsKey(21)) {
+            variantId = metaMap.get(21).asInt();
         }
         return list;
     }

@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataOutputStream;
@@ -8,10 +8,6 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  *
  * @author Dennis
  */
-
-/**
-* The latter 2 bytes are used to indicate the walking and flying speeds respectively, while the first byte is used to determine the value of 4 booleans.
-*/
 
 
 /**

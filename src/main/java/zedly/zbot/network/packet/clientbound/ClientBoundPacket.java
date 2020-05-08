@@ -9,7 +9,7 @@ public interface ClientBoundPacket {
 
     default void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         byte[] data = new byte[packetLen];
-        dis.read(data);
+        dis.readFully(data);
     }
 
     default void process(GameContext context) {

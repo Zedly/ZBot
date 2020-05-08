@@ -40,7 +40,7 @@ public class CraftFirework extends CraftObject implements Firework {
 
     @Override
     public EntityType getType() {
-        return EntityType.FIREWORK;
+        return EntityType.FIREWORK_ROCKET;
     }
 
     @Override

@@ -12,4 +12,4 @@ public class Packet28UpdateStructureBlock implements ServerBoundPacket {
 
 }
 
-// This packet has never been implemented. If you find this in a stack trace: Congratulations, you played yourself
+// This packet has never been implemented. If you find this in a stack trace: Congratulations, you played yourselfRefactored ancestor. Review data strcuture

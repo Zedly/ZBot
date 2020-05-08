@@ -21,8 +21,8 @@ public class CraftPhantom extends CraftFlying implements Phantom {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(14)) {
-            size = metaMap.get(14).asInt();
+        if (metaMap.containsKey(15)) {
+            size = metaMap.get(15).asInt();
         }
         return list;
     }

@@ -22,8 +22,8 @@ public abstract class CraftInsentient extends CraftLivingEntity implements Insen
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if(metaMap.containsKey(13)) {
-            int d = metaMap.get(13).asInt();
+        if(metaMap.containsKey(14)) {
+            int d = metaMap.get(14).asInt();
             hasAI = (d & 0x01) == 0;
             leftHanded = (d & 0x02) != 0;
         }

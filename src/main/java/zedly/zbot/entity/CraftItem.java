@@ -31,7 +31,7 @@ public class CraftItem extends CraftObject implements Item {
 
     @Override
     public EntityType getType() {
-        return EntityType.DROPPED_ITEM;
+        return EntityType.ITEM;
     }
 
     @Override

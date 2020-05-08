@@ -1,4 +1,4 @@
-package zedly.zbot.network.packet.serverbound;
+package  zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.Location;
@@ -6,6 +6,7 @@ import zedly.zbot.network.ExtendedDataOutputStream;
 /**
 * Sent when Done is pressed on the <span class="plainlinks"><a rel="nofollow" class="external text" href="http://minecraft.gamepedia.com/Jigsaw_Block">Jigsaw Block</a></span> interface.
 */
+
 
 public class Packet27UpdateJigsawBlock implements ServerBoundPacket {
     private final Location location;  // Block entity location

@@ -29,7 +29,7 @@ public class CraftCaveSpider extends CraftMonster implements CaveSpider {
     
     @Override
     public EntityType getType() {
-        return EntityType.SPIDER;
+        return EntityType.CAVE_SPIDER;
     }
 
     @Override

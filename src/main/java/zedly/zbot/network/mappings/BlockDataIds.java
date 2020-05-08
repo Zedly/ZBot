@@ -32,7 +32,7 @@ public class BlockDataIds {
     private static final HashMap<Class<? extends BlockData>, Class<? extends CraftBlockData>> blockDataClassMap = new HashMap<>();
 
     public static BlockData fromId(int blockDataId) {
-        return blockDataMap.getOrDefault(blockDataId, new CraftBlockData(Material.AIR));
+        return blockDataMap.getOrDefault(blockDataId, new CraftBlockData(Material.ERROR));
     }
 
     private static void parseAllInstances() {
@@ -80,12 +80,12 @@ public class BlockDataIds {
                     System.err.println("Error: Malformed definition of " + materialName + "(No id)");
                     return;
                 }
-
-                int protocolId = (int) (long) (Long) state.get("id");  // Integers are parsed as Longs. This library sucks
-                Material mat = Material.valueOf(materialName);
-                BlockData data;
-
+                
                 try {
+                    int protocolId = (int) (long) (Long) state.get("id");  // Integers are parsed as Longs. This library sucks
+                    Material mat = Material.valueOf(materialName);
+                    BlockData data;
+
                     if (state.containsKey("properties")) {
                         Object q = state.get("properties");
                         if (!(q instanceof JSONObject)) {
@@ -100,11 +100,12 @@ public class BlockDataIds {
                         data = new CraftBlockData(mat);
                     }
                     blockDataMap.put(protocolId, data);
+                }catch (IllegalArgumentException ex) {
+                    System.err.println("Missing Material enum value for " + materialName + "!");
                 } catch (Exception ex) {
                     System.err.println("Error: Malformed definition of " + materialName + "(BlockData instantiation)");
                     ex.printStackTrace();
                 }
-
             }
         }
     }
@@ -116,6 +117,7 @@ public class BlockDataIds {
     static {
         blockDataClassMap.put(Bamboo.class, CraftBamboo.class);
         blockDataClassMap.put(Bed.class, CraftBed.class);
+        blockDataClassMap.put(BeeHome.class, CraftBeeHome.class);
         blockDataClassMap.put(Bell.class, CraftBell.class);
         blockDataClassMap.put(BrewingStand.class, CraftBrewingStand.class);
         blockDataClassMap.put(BubbleColumn.class, CraftBubbleColumn.class);

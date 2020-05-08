@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.Location;
@@ -8,11 +8,6 @@ import zedly.zbot.network.ExtendedDataOutputStream;
  *
  * @author Dennis
  */
-
-/**
-* <span id="Update_Sign_.28serverbound.29"></span>This message is sent from the client to the server when the “Done” button is pushed after placing a sign.
-*/
-
 
 /**
 * <span id="Update_Sign_.28serverbound.29"></span>This message is sent from the client to the server when the “Done” button is pushed after placing a sign.

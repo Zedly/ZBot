@@ -15,7 +15,7 @@ public class CraftLightningBolt extends CraftEntity implements LightningBolt {
 
     @Override
     public EntityType getType() {
-        return EntityType.LIGHTNING;
+        return EntityType.LIGHTNING_BOLT;
     }
     
 }

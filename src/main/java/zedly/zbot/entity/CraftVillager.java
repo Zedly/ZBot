@@ -23,8 +23,9 @@ public class CraftVillager extends CraftAbstractMerchant implements Villager {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(13)) {
-            type = VillagerProfession.getById(metaMap.get(13).asInt());
+        if (metaMap.containsKey(17)) {
+            // type = VillagerProfession.getById(metaMap.get(17).asInt());
+            // Is actually VillagerMeta, but who gives a shit right now
         }
         return list;
     }

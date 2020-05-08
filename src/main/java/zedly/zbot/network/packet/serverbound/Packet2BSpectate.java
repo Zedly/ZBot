@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -9,11 +9,6 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  *
  * @author Dennis
  */
-
-/**
-* Teleports the player to the given entity.  The player must be in spectator mode.
-*/
-
 
 /**
 * Teleports the player to the given entity.  The player must be in spectator mode.

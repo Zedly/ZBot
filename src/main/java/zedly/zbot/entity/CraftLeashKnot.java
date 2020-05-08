@@ -16,7 +16,7 @@ public class CraftLeashKnot extends CraftObject implements LeashKnot {
 
     @Override
     public EntityType getType() {
-        return EntityType.LEASH_HITCH;
+        return EntityType.LEASH_KNOT;
     }
     
 }

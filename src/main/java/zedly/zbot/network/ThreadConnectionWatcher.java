@@ -22,7 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
 import zedly.zbot.GameContext;
 import zedly.zbot.HTTP.HTTPResponse;
 import zedly.zbot.network.packet.clientbound.ClientBoundPacket;
-import zedly.zbot.network.packet.clientbound.Packet25JoinGame;
+import zedly.zbot.network.packet.clientbound.Packet26JoinGame;
 import zedly.zbot.network.packet.serverbound.Packet00Handshake;
 
 public class ThreadConnectionWatcher extends Thread {
@@ -54,7 +54,7 @@ public class ThreadConnectionWatcher extends Thread {
                 PacketInputStream dis = new PacketInputStream(is, StreamState.LOGIN);
                 PacketOutputStream dos = new PacketOutputStream(os, StreamState.LOGIN);
 
-                Packet00Handshake pack = new Packet00Handshake(498, serverIP, serverPort, 2);
+                Packet00Handshake pack = new Packet00Handshake(578, serverIP, serverPort, 2);
                 Packet00LoginStart loginStart = new Packet00LoginStart(session.getActualUsername());
 
                 dos.writePacket(pack);
@@ -114,10 +114,10 @@ public class ThreadConnectionWatcher extends Thread {
                             sleep(30000);
                         } else if (p instanceof Packet02LoginSuccess) {
                             System.out.print("\rLogging in.. [####]");
-                        } else if (p instanceof Packet25JoinGame) {
-                            Packet25JoinGame p25 = (Packet25JoinGame) p;
+                        } else if (p instanceof Packet26JoinGame) {
+                            Packet26JoinGame p26 = (Packet26JoinGame) p;
                             System.out.print("\rLogging in.. [ OK ]\r");
-                            p25.process(context);
+                            p26.process(context);
                             context.openConnection(dis, dos);
                             context.joinThreads();
                             break;

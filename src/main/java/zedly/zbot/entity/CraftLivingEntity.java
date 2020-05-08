@@ -27,6 +27,7 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
     protected int potionEffectColor = 0;
     protected boolean potionEffectAmbient = false;
     protected int arrowsStuck = 0;
+    protected int absorptionHealth = 0;
     protected Location bedLocation;
     private final HashMap<PotionEffect, Integer> potionEffects = new HashMap<>();
 
@@ -54,7 +55,10 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
             arrowsStuck = metaMap.get(11).asInt();
         }
         if (metaMap.containsKey(12)) {
-            bedLocation = metaMap.get(12).asLocation();
+            absorptionHealth = metaMap.get(12).asInt();
+        }
+        if (metaMap.containsKey(13)) {
+            bedLocation = metaMap.get(13).asLocation();
         }
         return list;
     }

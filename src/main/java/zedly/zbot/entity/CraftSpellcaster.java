@@ -20,8 +20,8 @@ public abstract class CraftSpellcaster extends CraftAbstractIllager implements S
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            spellState = metaMap.get(15).asInt();
+        if (metaMap.containsKey(16)) {
+            spellState = metaMap.get(16).asInt();
         }
         return list;
     }

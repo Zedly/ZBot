@@ -21,8 +21,8 @@ public class CraftOcelot extends CraftAgeable implements Ocelot {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            trusting = metaMap.get(15).asBoolean();
+        if (metaMap.containsKey(16)) {
+            trusting = metaMap.get(16).asBoolean();
         }
         return list;
     }

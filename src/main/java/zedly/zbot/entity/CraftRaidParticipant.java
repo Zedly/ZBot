@@ -21,8 +21,8 @@ public abstract class CraftRaidParticipant extends CraftMonster implements RaidP
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(14)) {
-            celebrating = metaMap.get(14).asBoolean();
+        if (metaMap.containsKey(15)) {
+            celebrating = metaMap.get(15).asBoolean();
         }
         return list;
     }

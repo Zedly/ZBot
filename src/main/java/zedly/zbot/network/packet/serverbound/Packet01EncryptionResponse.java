@@ -44,3 +44,4 @@ public class Packet01EncryptionResponse implements ServerBoundPacket {
     }
     
 }
+// Refactored ancestor. Review data strcuture

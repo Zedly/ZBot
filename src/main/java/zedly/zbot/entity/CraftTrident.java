@@ -17,12 +17,16 @@ import zedly.zbot.event.Event;
 public class CraftTrident extends CraftArrow implements Trident {
     
     protected int loyaltyLevel = 0;
+    protected boolean enchanted = false;
     
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(10)) {
             loyaltyLevel = metaMap.get(10).asInt();
+        }
+        if (metaMap.containsKey(11)) {
+            enchanted = metaMap.get(11).asBoolean();
         }
         return list;
     }

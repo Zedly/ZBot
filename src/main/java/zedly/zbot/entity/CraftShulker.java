@@ -29,17 +29,17 @@ public class CraftShulker extends CraftGolem implements Shulker {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            direction = metaMap.get(12).asDirection();
-        }
-        if (metaMap.containsKey(13)) {
-            attachedLocation = metaMap.get(13).asLocation();
-        }
-        if (metaMap.containsKey(14)) {
-            shieldHeight = metaMap.get(14).asInt();
-        }
         if (metaMap.containsKey(15)) {
-            colorId = metaMap.get(15).asInt();
+            direction = metaMap.get(15).asDirection();
+        }
+        if (metaMap.containsKey(16)) {
+            attachedLocation = metaMap.get(16).asLocation();
+        }
+        if (metaMap.containsKey(17)) {
+            shieldHeight = metaMap.get(17).asInt();
+        }
+        if (metaMap.containsKey(18)) {
+            colorId = metaMap.get(18).asInt();
         }
         return list;
     }

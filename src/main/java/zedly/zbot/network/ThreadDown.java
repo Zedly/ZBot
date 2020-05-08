@@ -28,6 +28,7 @@ public class ThreadDown extends Thread {
             }
         } catch (IOException ex) {
             System.err.println("Connection lost! Reconnecting");
+            ex.printStackTrace();
         } catch (InstantiationException | IllegalAccessException | DataFormatException ex) {
             Logger.getLogger(ThreadDown.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

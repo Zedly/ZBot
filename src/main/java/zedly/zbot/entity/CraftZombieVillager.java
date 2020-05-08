@@ -23,11 +23,11 @@ public class CraftZombieVillager extends CraftZombie implements ZombieVillager {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(19)) {
-            converting = metaMap.get(19).asBoolean();
+        if (metaMap.containsKey(18)) {
+            converting = metaMap.get(18).asBoolean();
         }
-        if (metaMap.containsKey(20)) {
-            villagerTypeId = metaMap.get(20).asInt();
+        if (metaMap.containsKey(19)) {
+            villagerTypeId = metaMap.get(19).asInt();
         }
         return list;
     }

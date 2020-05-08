@@ -21,8 +21,8 @@ public class CraftHorse extends CraftAbstractHorse implements Horse {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(17)) {
-            variant  = metaMap.get(17).asInt();
+        if (metaMap.containsKey(18)) {
+            variant  = metaMap.get(18).asInt();
         }
         return list;
     }

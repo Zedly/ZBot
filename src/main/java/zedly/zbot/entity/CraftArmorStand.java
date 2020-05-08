@@ -35,30 +35,30 @@ public class CraftArmorStand extends CraftLivingEntity implements ArmorStand {
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
         
-        if (metaMap.containsKey(13)) {
-            int d = metaMap.get(13).asInt();
+        if (metaMap.containsKey(14)) {
+            int d = metaMap.get(14).asInt();
             small = (d & 0x01) != 0;
             arms = (d & 0x04) != 0;
             basePlate = (d & 0x08) == 0;
             setMarker = (d & 0x10) != 0;
         }
-        if (metaMap.containsKey(14)) {
-            headRotation = metaMap.get(14).asVector();
-        }
         if (metaMap.containsKey(15)) {
-            bodyRotation = metaMap.get(15).asVector();
+            headRotation = metaMap.get(15).asVector();
         }
         if (metaMap.containsKey(16)) {
-            leftArmRotation = metaMap.get(16).asVector();
+            bodyRotation = metaMap.get(16).asVector();
         }
         if (metaMap.containsKey(17)) {
-            rightArmRotation = metaMap.get(17).asVector();
+            leftArmRotation = metaMap.get(17).asVector();
         }
         if (metaMap.containsKey(18)) {
-            leftLegRotation = metaMap.get(18).asVector();
+            rightArmRotation = metaMap.get(18).asVector();
         }
         if (metaMap.containsKey(19)) {
-            rightLegRotation = metaMap.get(19).asVector();
+            leftLegRotation = metaMap.get(19).asVector();
+        }
+        if (metaMap.containsKey(20)) {
+            rightLegRotation = metaMap.get(20).asVector();
         }
         return list;
     }

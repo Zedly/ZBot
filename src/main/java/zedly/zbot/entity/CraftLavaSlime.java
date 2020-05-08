@@ -21,8 +21,8 @@ public class CraftLavaSlime extends CraftInsentient implements MagmaCube {
 
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(12)) {
-            size = metaMap.get(12).asInt();
+        if (metaMap.containsKey(15)) {
+            size = metaMap.get(15).asInt();
         }
         return list;
     }

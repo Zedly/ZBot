@@ -13,7 +13,7 @@ public class CraftThrownPotion extends CraftItemedThrowable implements ThrownPot
 
     @Override
     public EntityType getType() {
-        return EntityType.SPLASH_POTION;
+        return EntityType.POTION;
     }
 
     @Override

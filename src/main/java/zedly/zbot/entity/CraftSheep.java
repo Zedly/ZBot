@@ -23,8 +23,8 @@ public class CraftSheep extends CraftAnimal implements Sheep {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            int d = metaMap.get(15).asInt();
+        if (metaMap.containsKey(16)) {
+            int d = metaMap.get(16).asInt();
             sheared = (d & 0x10) != 0;
             color = DyeColor.values()[d & 0xF];
         }

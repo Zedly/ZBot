@@ -24,17 +24,17 @@ public class CraftFox extends CraftAnimal implements Fox {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            typeId = metaMap.get(15).asInt();
-        }
         if (metaMap.containsKey(16)) {
-            flags = metaMap.get(16).asInt();
+            typeId = metaMap.get(16).asInt();
         }
         if (metaMap.containsKey(17)) {
-            firstUUID = metaMap.get(17).asUUID();
+            flags = metaMap.get(17).asInt();
         }
         if (metaMap.containsKey(18)) {
             firstUUID = metaMap.get(18).asUUID();
+        }
+        if (metaMap.containsKey(19)) {
+            firstUUID = metaMap.get(19).asUUID();
         }
         return list;
     }

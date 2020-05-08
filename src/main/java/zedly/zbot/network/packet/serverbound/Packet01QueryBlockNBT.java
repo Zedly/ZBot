@@ -1,8 +1,13 @@
-package zedly.zbot.network.packet.serverbound;
+package  zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.Location;
 import zedly.zbot.network.ExtendedDataOutputStream;
+/**
+* Used when <kbd>Shift</kbd>+<kbd>F3</kbd>+<kbd>I</kbd> is pressed while looking at a block.
+*/
+
+
 /**
 * Used when <kbd>Shift</kbd>+<kbd>F3</kbd>+<kbd>I</kbd> is pressed while looking at a block.
 */

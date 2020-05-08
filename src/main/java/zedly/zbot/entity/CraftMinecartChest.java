@@ -15,7 +15,7 @@ public class CraftMinecartChest extends CraftMinecartContainer implements Mineca
     
     @Override
     public EntityType getType() {
-        return EntityType.MINECART_CHEST;
+        return EntityType.CHEST_MINECART;
     }
     
 }

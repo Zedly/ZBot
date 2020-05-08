@@ -29,7 +29,7 @@ public class CraftPrimedTNT extends CraftObject implements PrimedTNT {
 
     @Override
     public EntityType getType() {
-        return EntityType.PRIMED_TNT;
+        return EntityType.TNT;
     }
 
     @Override

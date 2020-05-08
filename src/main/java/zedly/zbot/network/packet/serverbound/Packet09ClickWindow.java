@@ -1,4 +1,4 @@
-package   zedly.zbot.network.packet.serverbound;
+package    zedly.zbot.network.packet.serverbound;
 
 import java.io.IOException;
 import zedly.zbot.inventory.ItemStack;
@@ -8,11 +8,6 @@ import zedly.zbot.network.ExtendedDataOutputStream;
  *
  * @author Dennis
  */
-
-/**
-* This packet is sent by the player when it clicks on a slot in a window.
-*/
-
 
 /**
 * This packet is sent by the player when it clicks on a slot in a window.

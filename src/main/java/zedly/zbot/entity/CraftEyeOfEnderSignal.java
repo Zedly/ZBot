@@ -21,6 +21,6 @@ public class CraftEyeOfEnderSignal extends CraftItemedThrowable implements EyeOf
     
     @Override
     public EntityType getType() {
-        return EntityType.ENDER_SIGNAL;
+        return EntityType.EYE_OF_ENDER;
     }
 }
