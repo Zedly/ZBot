@@ -21,8 +21,8 @@ public class CraftParrot extends CraftTameable implements Parrot {
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
         List<Event> list = super.setMeta(metaMap);
-        if (metaMap.containsKey(15)) {
-            colorId = metaMap.get(15).asInt();
+        if (metaMap.containsKey(18)) {
+            colorId = metaMap.get(18).asInt();
         }
         return list;
     }
