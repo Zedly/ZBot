@@ -1,6 +1,7 @@
 package zedly.zbot;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class Session {
 
@@ -22,6 +23,18 @@ public class Session {
         onlineMode = true;
     }
 
+    public Session(YamlConfiguration yaml) {
+        if (!yaml.getBoolean("onlineMode", false) || yaml.getString("password", "").equals("")) {
+            this.username = yaml.getString("user", "ZBot");
+            this.actualUsername = username;
+            onlineMode = false;
+        } else {
+            this.username = yaml.getString("user", "ZBot");
+            this.password = yaml.getString("password", "");
+            onlineMode = true;
+        }
+    }
+
     public synchronized boolean renew() {
         try {
             //System.out.println("Logging in as " + username + "...");
@@ -33,7 +46,7 @@ public class Session {
                     + "\"username\": \"" + username + "\",\r\n"
                     + "\"password\": \"" + password + "\"\r\n"
                     + "}");
-            
+
             String response = new String(http.getContent());
             response = response.substring(16);
             int position = response.indexOf("\"");

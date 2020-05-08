@@ -7,7 +7,9 @@ package zedly.zbot.entity;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import zedly.zbot.Location;
+import zedly.zbot.PotionEffect;
 import zedly.zbot.entity.LivingEntity;
 import zedly.zbot.event.Event;
 import zedly.zbot.event.entity.EntityHealthChangeEvent;
@@ -26,6 +28,7 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
     protected boolean potionEffectAmbient = false;
     protected int arrowsStuck = 0;
     protected Location bedLocation;
+    private final HashMap<PotionEffect, Integer> potionEffects = new HashMap<>();
 
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
@@ -56,6 +59,14 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
         return list;
     }
 
+    public void setPotionEffect(PotionEffect effect, int level) {
+        if (level <= 0) {
+            potionEffects.remove(effect);
+        } else {
+            this.potionEffects.put(effect, level);
+        }
+    }
+
     @Override
     public synchronized boolean isHandActive() {
         return handActive;
@@ -77,6 +88,11 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
     }
 
     @Override
+    public Map<PotionEffect, Integer> getPotionEffects() {
+        return (Map<PotionEffect, Integer>) potionEffects.clone();
+    }
+
+    @Override
     public synchronized boolean isPotionEffectAmbient() {
         return potionEffectAmbient;
     }
@@ -90,5 +106,5 @@ public abstract class CraftLivingEntity extends CraftEntity implements LivingEnt
     public Location getBedLocation() {
         return bedLocation;
     }
-    
+
 }

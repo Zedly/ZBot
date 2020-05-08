@@ -50,7 +50,7 @@ public class ExtendedDataInputStream extends DataInputStream {
         } while (b < 0 && idx < 8);
         return longValue;
     }
-    
+
     public int readVarInt() throws IOException {
         return (int) readVarLong();
     }
@@ -65,7 +65,7 @@ public class ExtendedDataInputStream extends DataInputStream {
     }
 
     public CraftItemStack readSlot() throws IOException {
-        if(!readBoolean()) {
+        if (!readBoolean()) {
             return null;
         }
         CraftItemStack stack = new CraftItemStack();
@@ -124,48 +124,52 @@ public class ExtendedDataInputStream extends DataInputStream {
             }
         }
     }
-    
+
     public Advancement readAdvancement() throws IOException {
         boolean hasParent = readBoolean();
         String parent = null;
-        if(hasParent) {
+        if (hasParent) {
             parent = readString();
         }
         AdvancementDisplay displayData = null;
         boolean hasAdvancementDisplay = readBoolean();
-        if(hasAdvancementDisplay) {
+        if (hasAdvancementDisplay) {
             displayData = readAdvancementDisplay();
         }
         int numberOfCriteria = readVarInt();
         HashMap<String, Integer> criteria = new HashMap<>();
-        for(int i = 0; i < numberOfCriteria; i++) {
-            criteria.put(readString(), 0);
+        for (int i = 0; i < numberOfCriteria; i++) {
+            if (i >= 24) {
+                criteria.put(readString(), 0);
+            } else {
+                criteria.put(readString(), 0);
+            }
         }
         int arrayLength = readVarInt();
         List<List<String>> requirements = new LinkedList<>();
-        for(int i = 0; i < arrayLength; i++) {
+        for (int i = 0; i < arrayLength; i++) {
             int arrayLength1 = readVarInt();
             List<String> requirement = new LinkedList<>();
-            for(int j = 0; j < arrayLength1; j++) {
+            for (int j = 0; j < arrayLength1; j++) {
                 requirement.add(readString());
             }
             requirements.add(requirement);
         }
         return new Advancement(parent, displayData, criteria, requirements);
     }
-    
-    
+
     public AdvancementProgress readAdvancementProgress() throws IOException {
         int size = readVarInt();
         HashMap<String, Long> progresses = new HashMap<>();
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             String name = readString();
-            if(readBoolean()) {
+            if (readBoolean()) {
                 progresses.put(name, readLong());
             }
         }
         return new AdvancementProgress(progresses);
     }
+
     private AdvancementDisplay readAdvancementDisplay() throws IOException {
         String title = readString();
         String description = readString();
@@ -177,6 +181,5 @@ public class ExtendedDataInputStream extends DataInputStream {
         double yCoord = readFloat();
         return new AdvancementDisplay(title, description, icon, frameType, flags, backgroundTexture, xCoord, yCoord);
     }
-    
-    
+
 }

@@ -31,13 +31,23 @@ public final class PacketInputStream extends ExtendedDataInputStream {
 
     private final Inflater inflater = new Inflater();
     private final int[] lastOps = new int[16];
+    private final int[] lastBytes = new int[2048];
 
     private boolean compressionEnabled = false;
     private int lastOpPtr = 0;
+    private int lastBytePtr = 0;
     private StreamState state;
     private HashMap<Integer, Class<? extends ClientBoundPacket>> mapIn;
     //private HashMap<Integer, Class<? extends ServerBoundPacket>> mapOut;
 
+    @Override
+    public int read() throws IOException {
+        int nextByte = super.read();
+        lastBytes[lastBytePtr] = nextByte;
+        lastBytePtr = (lastBytePtr + 1) % 2048;
+        return nextByte;
+    }
+    
     private ClientBoundPacket newPacketForId(int op) throws InstantiationException, IllegalAccessException {
         Class<? extends ClientBoundPacket> clazz = mapIn.get(op);
         if (clazz == null) {
@@ -120,13 +130,15 @@ public final class PacketInputStream extends ExtendedDataInputStream {
                 //System.out.println("Play Debug: Op " + Integer.toHexString(op));
                 p = newPacketForId(op);
                 p.readPacket(this, packetLength - 2);
+                op = op;
             }
         } else {
             op = readVarInt();
             lastOps[(lastOpPtr++) % 16] = op;
             //System.out.println("Play Debug: Op " + Integer.toHexString(op));
             p = newPacketForId(op);
-            p.readPacket(this, packetLength - 1);
+            p.readPacket(this, packetLength - 2);
+            op = op;
         }
 
         checkStateChange(p);
@@ -159,9 +171,9 @@ public final class PacketInputStream extends ExtendedDataInputStream {
     public void printCrashInfo() {
         System.out.println("Crash Info:");
         System.out.println("Died after " + lastOpPtr + " packets");
-        System.out.print("Last received Packets: ");
+        System.out.print("\nLast received Packets: ");
         for (int i = lastOpPtr; i < lastOpPtr + 16; i++) {
-            System.out.print("0x" + Integer.toHexString(lastOps[i % 16]) + " ");
+            System.out.print(Integer.toHexString(lastOps[i % 16]).toUpperCase() + " ");
         }
         System.out.print("\r\n");
     }

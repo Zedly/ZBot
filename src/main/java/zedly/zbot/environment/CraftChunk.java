@@ -48,9 +48,16 @@ public class CraftChunk implements Chunk {
                 bitOffset += GLOBAL_PALETTE_ENTROPY;
             }
 
+            boolean empty = true;
             for (i = 0; i < 4096; i++) {
+                if (dataIds[i] != 0) {
+                    empty = false;
+                }
                 skyLight[i] = 0;
                 blockLight[i] = 0;
+            }
+            if (empty) {
+                System.out.println("Received empty chunk ");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -73,9 +80,16 @@ public class CraftChunk implements Chunk {
             bitOffset += bitsPerBlock;
         }
 
+        boolean empty = true;
         for (int i = 0; i < 4096; i++) {
+            if (dataIds[i] != 0) {
+                empty = false;
+            }
             skyLight[i] = 0;
             blockLight[i] = 0;
+        }
+        if (empty) {
+            System.out.println("Received empty chunk ");
         }
     }
 

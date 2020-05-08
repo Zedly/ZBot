@@ -16,22 +16,27 @@ public class Packet57Advancements implements ClientBoundPacket {
     private int progressSize;
     private HashMap<String, AdvancementProgress> progressMapping;
 
-    @Override
-    public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
+    
+    public void readPacket0(ExtendedDataInputStream dis, int packetLen) throws IOException {
         resetClear = dis.readBoolean();
         mappingSize = dis.readVarInt();
         advancementMapping = new HashMap<>();
-        for(int i = 0; i < mappingSize; i++) {
-            advancementMapping.put(dis.readString(), dis.readAdvancement());
+        for (int i = 0; i < mappingSize - 1; i++) {
+            System.out.println(i);
+            if (i == 164) {
+                advancementMapping.put(dis.readString(), dis.readAdvancement());
+            } else {
+                advancementMapping.put(dis.readString(), dis.readAdvancement());
+            }
         }
         listSize = dis.readVarInt();
         identifiers = new String[listSize];
-        for(int i = 0; i < listSize; i++) {
+        for (int i = 0; i < listSize; i++) {
             identifiers[i] = dis.readString();
         }
         progressSize = dis.readVarInt();
         progressMapping = new HashMap<>();
-        for(int i = 0; i < progressSize; i++) {
+        for (int i = 0; i < progressSize; i++) {
             progressMapping.put(dis.readString(), dis.readAdvancementProgress());
         }
     }
