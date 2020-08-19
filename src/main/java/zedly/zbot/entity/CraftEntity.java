@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import zedly.zbot.entity.Player;
 import zedly.zbot.event.Event;
+import zedly.zbot.event.PlayerFinishEatingEvent;
 import zedly.zbot.event.entity.EntityOnFireEvent;
 import zedly.zbot.event.entity.PlayerSneakEvent;
 import zedly.zbot.event.entity.PlayerSprintEvent;
