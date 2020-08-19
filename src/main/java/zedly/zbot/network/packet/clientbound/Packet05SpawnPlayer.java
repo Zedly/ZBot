@@ -41,7 +41,8 @@ public class Packet05SpawnPlayer implements ClientBoundPacket {
 
     @Override
     public void process(GameContext context) {
-        CraftEntity ent = context.getSelf().getEnvironment().spawnEntity(CraftPlayer.class, entityID, new Location(x, y, z, yaw, pitch));
+        CraftPlayer ent = context.getSelf().getEnvironment().spawnEntity(CraftPlayer.class, entityID, new Location(x, y, z, yaw, pitch));
+        ent.setUUID(playerUUID);
         //System.out.println("Spawned " + ent.getType() + " " + entityID);
         context.getMainThread().fireEvent(new EntitySpawnEvent(ent));
     }

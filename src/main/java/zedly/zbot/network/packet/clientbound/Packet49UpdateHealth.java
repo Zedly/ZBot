@@ -26,5 +26,12 @@ public class Packet49UpdateHealth implements ClientBoundPacket {
         food = dis.readVarInt();
         foodSaturation = dis.readFloat();
     }
+    
+    @Override
+    public void process(GameContext context) {
+        context.getSelf().setHealth(health);
+        context.getSelf().setFoodLevel(food);
+        context.getSelf().setSaturation(foodSaturation);
+    }
 
 }

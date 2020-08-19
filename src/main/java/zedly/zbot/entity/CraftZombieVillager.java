@@ -27,7 +27,7 @@ public class CraftZombieVillager extends CraftZombie implements ZombieVillager {
             converting = metaMap.get(18).asBoolean();
         }
         if (metaMap.containsKey(19)) {
-            villagerTypeId = metaMap.get(19).asInt();
+            //villagerTypeId = metaMap.get(19).asInt();
         }
         return list;
     }
