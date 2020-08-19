@@ -18,6 +18,7 @@ import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
 import zedly.zbot.BlockFace;
+import zedly.zbot.event.Event;
 import zedly.zbot.inventory.CraftChestInventory;
 import zedly.zbot.inventory.CraftCraftingTableInventory;
 import zedly.zbot.inventory.CraftEnchantingTableInventory;
@@ -240,17 +241,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void eatHeldItem(int usedHand) {
-        eatHeldItem(usedHand, () -> {
-        });
-    }
-
-    @Override
-    public void eatHeldItem(int usedHand, Runnable callback) {
         context.getUpThread().sendPacket(new Packet2DUseItem(usedHand));
-        context.getMainThread().schedule(() -> {
-            context.getUpThread().sendPacket(new Packet1APlayerDigging(5, new Location(0, 0, 0), 0));
-            callback.run();
-        }, 2000, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -317,6 +308,17 @@ public class CraftSelf extends CraftPlayer implements Self {
         context.getUpThread().sendPacket(new Packet19PlayerAbilities((byte) abilities, 0, 0));
     }
 
+    @Override
+    public Event setStatus(int status) {
+        stopEating();
+        return super.setStatus(status);
+    }
+    
+    @Override
+    public void stopEating() {
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(5, new Location(0, 0, 0), 0));
+    }
+    
     @Override
     public void shutdown() {
         context.closeConnection();
