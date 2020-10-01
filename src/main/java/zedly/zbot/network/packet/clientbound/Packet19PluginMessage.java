@@ -22,7 +22,7 @@ public class Packet19PluginMessage implements ClientBoundPacket {
         channel = dis.readString();
 
         
-        if (channel.equals("minecraft:register") && packetLen == 180) {
+        if (channel.equals("minecraft:register") && packetLen == 179) {
             packetLen--;
         }
         if (channel.startsWith("multichat:")) {
