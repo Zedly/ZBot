@@ -29,7 +29,7 @@ public class HTTP {
         return receiveContent(con);
     }
 
-    private static HTTPResponse receiveContent(URLConnection con) throws IOException {
+    private static HTTPResponse receiveContent(HttpURLConnection con) throws IOException {
         Map<String, List<String>> headers = con.getHeaderFields();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
@@ -39,6 +39,12 @@ public class HTTP {
             }
             input.close();
         } catch (IOException ignored) {
+            DataInputStream input = new DataInputStream(con.getErrorStream());
+            for (int c = input.read(); c != -1; c = input.read()) {
+                bos.write(c);
+            }
+            input.close();
+            int k = 0;
         }
         byte[] content = bos.toByteArray();
         return new HTTPResponse(headers, content);
