@@ -202,13 +202,13 @@ public class MicrosoftLoginHelper {
         MinecraftCredentials mcc = new MinecraftCredentials();
         mcc.username = xbox_response.getBody().getObject().getString("name");
         mcc.bearerToken = bearerToken;
+        mcc.dashlessUUID = xbox_response.getBody().getObject().getString("id");;
         
-        String dashlessUUID = xbox_response.getBody().getObject().getString("id");
-        String uuidString = dashlessUUID.substring(0, 8) + "-" + 
-                dashlessUUID.substring(8, 12) + "-" + 
-                dashlessUUID.substring(12, 16) + "-" + 
-                dashlessUUID.substring(16, 20) + "-" + 
-                dashlessUUID.substring(20, 32);
+        String uuidString = mcc.dashlessUUID.substring(0, 8) + "-" + 
+                mcc.dashlessUUID.substring(8, 12) + "-" + 
+                mcc.dashlessUUID.substring(12, 16) + "-" + 
+                mcc.dashlessUUID.substring(16, 20) + "-" + 
+                mcc.dashlessUUID.substring(20, 32);
          mcc.uuid = UUID.fromString(uuidString);
         
         return mcc;
@@ -217,6 +217,7 @@ public class MicrosoftLoginHelper {
     public static class MinecraftCredentials {
         public String bearerToken;
         public String username;
+        public String dashlessUUID;
         public UUID uuid;
     }
             
