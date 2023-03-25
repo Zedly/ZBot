@@ -13,6 +13,7 @@ import zedly.zbot.entity.Player;
 import java.util.UUID;
 import net.minecraft.server.NBTBase;
 import zedly.zbot.event.Event;
+import zedly.zbot.event.PlayerFinishEatingEvent;
 
 public class CraftPlayer extends CraftLivingEntity implements Player {
 
@@ -24,11 +25,10 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     protected int skinFlags = 0;
     NBTBase leftShoulderEntity;
     NBTBase rightShoulderEntity;
-    
-    
+
     @Override
     public synchronized List<Event> setMeta(HashMap<Integer, EntityMeta> metaMap) {
-        List<Event> list = super.setMeta(metaMap);       
+        List<Event> list = super.setMeta(metaMap);
         if (metaMap.containsKey(14)) {
             additionalHearts = metaMap.get(14).asFloat();
         }
@@ -51,6 +51,15 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     }
 
     @Override
+    public Event setStatus(int status) {
+        if (status == 9) {
+            return new PlayerFinishEatingEvent(this, getEntityId());
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public synchronized String getCustomName() {
         return name;
     }
@@ -59,11 +68,11 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     public synchronized UUID getUUID() {
         return uuid;
     }
-    
+
     public synchronized void setUUID(UUID uuid) {
         this.uuid = uuid;
     }
-    
+
     public synchronized void setName(String name) {
         this.name = name;
     }
@@ -72,7 +81,7 @@ public class CraftPlayer extends CraftLivingEntity implements Player {
     public synchronized String getName() {
         return name;
     }
-    
+
     @Override
     public EntityType getType() {
         return EntityType.PLAYER;

@@ -1,9 +1,12 @@
 package zedly.zbot;
 
-import java.io.IOException;
-import java.util.Map;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Session {
+
+    private static final JsonParser parser = new JsonParser();
 
     private String accessToken;
     private String actualUsername;
@@ -36,6 +39,9 @@ public class Session {
     }
 
     public synchronized boolean renew() {
+        if (!onlineMode) {
+            return true;
+        }
         try {
             //System.out.println("Logging in as " + username + "...");
             HTTP.HTTPResponse http = HTTP.https("https://authserver.mojang.com/authenticate", "{\r\n"
@@ -48,17 +54,12 @@ public class Session {
                     + "}");
 
             String response = new String(http.getContent());
-            response = response.substring(16);
-            int position = response.indexOf("\"");
-            accessToken = response.substring(0, position);
-            position = response.indexOf("\"id\":");
-            response = response.substring(position + 6);
-            position = response.indexOf("\"");
-            profileID = response.substring(0, position);
-            position = response.indexOf("\"name\":");
-            response = response.substring(position + 8);
-            position = response.indexOf("\"");
-            actualUsername = response.substring(0, position);
+            JsonElement element = parser.parse(response);
+            JsonObject obj = element.getAsJsonObject();
+            accessToken = obj.get("accessToken").getAsString();
+            JsonObject selectedProfile = obj.get("selectedProfile").getAsJsonObject();
+            profileID = selectedProfile.get("id").getAsString();
+            actualUsername = selectedProfile.get("name").getAsString();
         } catch (Exception ex) {
             System.out.println("Exception renewing Session:");
             ex.printStackTrace();
