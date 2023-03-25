@@ -44,6 +44,8 @@ public class CraftSelf extends CraftPlayer implements Self {
     private CraftEnvironment environment;
     private CraftInventory inventory;
     private ClientSettings clientSettings;
+    private int foodLevel = 0;
+    private double saturation = 0;
     private int xpLevels = 0;
     private double xpPercent = 0;
 
@@ -229,6 +231,26 @@ public class CraftSelf extends CraftPlayer implements Self {
             }
         }
         context.getUpThread().sendPacket(new Packet2CPlayerBlockPlacement(usedHand, loc, (byte) iFace, 0.5, 0.5, 0.5, false));
+    }
+
+    @Override
+    public void eatHeldItem() {
+        eatHeldItem(0);
+    }
+
+    @Override
+    public void eatHeldItem(int usedHand) {
+        eatHeldItem(usedHand, () -> {
+        });
+    }
+
+    @Override
+    public void eatHeldItem(int usedHand, Runnable callback) {
+        context.getUpThread().sendPacket(new Packet2DUseItem(usedHand));
+        context.getMainThread().schedule(() -> {
+            context.getUpThread().sendPacket(new Packet1APlayerDigging(5, new Location(0, 0, 0), 0));
+            callback.run();
+        }, 2000, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -444,6 +466,38 @@ public class CraftSelf extends CraftPlayer implements Self {
     @Override
     public double getXPPercent() {
         return xpPercent;
+    }
+
+    /**
+     * @return the foodlevel
+     */
+    public int getFoodLevel() {
+        return foodLevel;
+    }
+
+    /**
+     * @param foodlevel the foodlevel to set
+     */
+    public void setFoodLevel(int foodlevel) {
+        this.foodLevel = foodlevel;
+    }
+
+    /**
+     * @return the saturation
+     */
+    public double getSaturation() {
+        return saturation;
+    }
+
+    /**
+     * @param saturation the saturation to set
+     */
+    public void setSaturation(double saturation) {
+        this.saturation = saturation;
+    }
+
+    public void setHealth(double health) {
+        this.health = (float) health;
     }
 
 }

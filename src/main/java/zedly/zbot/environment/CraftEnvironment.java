@@ -48,6 +48,17 @@ public class CraftEnvironment implements Environment {
     }
 
     @Override
+    public <T extends Entity> Collection<T> getEntities(Class<T> cls) {
+        HashSet<T> ents = new HashSet<>();
+        entities.forEach((i, e) -> {
+            if (cls.isInstance(e)) {
+                ents.add(cls.cast(e));
+            }
+        });
+        return ents;
+    }
+
+    @Override
     public CraftEntity getEntityById(int entityId) {
         return entities.get(entityId);
     }
@@ -196,13 +207,13 @@ public class CraftEnvironment implements Environment {
         return ce;
     }
 
-    public CraftEntity spawnEntity(Class<? extends CraftEntity> cl, int entityId, Location loc) {
+    public <T extends CraftEntity> T spawnEntity(Class<T> cl, int entityId, Location loc) {
         try {
-            CraftEntity ce = (CraftEntity) cl.newInstance();
-            ce.setEntityId(entityId);
-            ce.setLocation(loc);
-            entities.put(entityId, ce);
-            return ce;
+            T craftEntity = (T) cl.newInstance();
+            craftEntity.setEntityId(entityId);
+            craftEntity.setLocation(loc);
+            entities.put(entityId, craftEntity);
+            return craftEntity;
         } catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace();
         }
