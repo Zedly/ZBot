@@ -6,4 +6,5 @@ target
 .git
 nbactions.xml
 config.yml
+session.yml
 hs_err_pid*
