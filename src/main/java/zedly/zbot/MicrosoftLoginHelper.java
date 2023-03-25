@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.UUID;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
@@ -23,7 +24,7 @@ public class MicrosoftLoginHelper {
 
     private static final File SESSION_FILE = new File("session.yml");
 
-    public static String getSessionToken() throws IOException {
+    public static MinecraftCredentials getSessionToken() throws IOException {
 
         YamlConfiguration sessionConf = YamlConfiguration.read(SESSION_FILE);
         AccessToken at = new AccessToken(sessionConf);
@@ -50,7 +51,9 @@ public class MicrosoftLoginHelper {
             String xstsToken = getXSTSToken(xblc);
             
             String minecraftBearerToken = getMinecraftBearerToken(xblc, xstsToken);
-            return minecraftBearerToken;
+            
+            MinecraftCredentials mcc = getProfileInfo(minecraftBearerToken);
+            return mcc;
             // get XSTS Token
             // Get MC token
             // return MC token
@@ -63,7 +66,7 @@ public class MicrosoftLoginHelper {
             + "<html><head></head><body><script type=\"text/javascript\">window.close();</script><h1>ZBot</h1>The response from Microsoft has been received. You can close this tab!</body></html>")
             .getBytes();
 
-    public static String getMicrosoftToken() throws IOException {
+    private static String getMicrosoftToken() throws IOException {
         System.out.println("");
         System.out.println("    ****    Authorize ZBot to log in to Microsoft with your account   ***    ");
         System.out.println("");
@@ -92,7 +95,7 @@ public class MicrosoftLoginHelper {
         return token;
     }
 
-    public static AccessToken getPasswordlessAccessCredentials(String msaToken) throws IOException {
+    private static AccessToken getPasswordlessAccessCredentials(String msaToken) throws IOException {
         HttpResponse<JsonNode> response = Unirest.post("https://login.microsoftonline.com/consumers/oauth2/v2.0/token")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .body("client_id=abbb8974-83d9-4162-93ba-bf9137790961"
@@ -101,7 +104,7 @@ public class MicrosoftLoginHelper {
                         + "&redirect_uri=http%3A%2F%2Flocalhost:2380%2Fauth-response"
                         + "&grant_type=authorization_code"
                         + "&code_verifier=YTFjNjI1OWYzMzA3MTI4ZDY2Njg5M2RkNmVjNDE5YmEy").asJson();
-        System.out.println(response.getBody());
+        //System.out.println(response.getBody());
         AccessToken at = new AccessToken(response.getBody().getObject());
         return at;
     }
@@ -113,12 +116,12 @@ public class MicrosoftLoginHelper {
                         + "&scope=XboxLive.signin%20offline_access"
                         + "&refresh_token=" + at.refreshToken
                         + "&grant_type=refresh_token").asJson();
-        System.out.println(response.getBody());
+        //System.out.println(response.getBody());
         at = new AccessToken(response.getBody().getObject());
         return at;
     }
 
-    public static XBLCredentials getXBLSessionData(String accessToken) throws IOException {
+    private static XBLCredentials getXBLSessionData(String accessToken) throws IOException {
         HttpResponse<JsonNode> xbox_response = Unirest.post("https://user.auth.xboxlive.com/user/authenticate")
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -134,7 +137,7 @@ public class MicrosoftLoginHelper {
                 .asJson();
         // checks for unsuccessful responses
         if (!xbox_response.isSuccess()) {
-            throw new IOException("Couldn't get xbox token :" + xbox_response.getStatusText());
+            throw new IOException("Couldn't get XBL token :" + xbox_response.getStatusText());
         }
 
         XBLCredentials xblc = new XBLCredentials();
@@ -160,7 +163,7 @@ public class MicrosoftLoginHelper {
                 .asJson();
         // checks for unsuccessful responses
         if (!xbox_response.isSuccess()) {
-            throw new IOException("Couldn't get xbox token :" + xbox_response.getStatusText());
+            throw new IOException("Couldn't get XSTS token :" + xbox_response.getStatusText());
         }
 
         return xbox_response.getBody().getObject().getString("Token");
@@ -177,12 +180,46 @@ public class MicrosoftLoginHelper {
                 .asJson();
         // checks for unsuccessful responses
         if (!xbox_response.isSuccess()) {
-            throw new IOException("Couldn't get xbox token :" + xbox_response.getStatusText());
+            throw new IOException("Couldn't get minecraft bearer token :" + xbox_response.getStatusText());
         }
-
+        
         return xbox_response.getBody().getObject().getString("access_token");
     }
+    
+    private static MinecraftCredentials getProfileInfo(String bearerToken) throws IOException {
+        HttpResponse<JsonNode> xbox_response = Unirest.get("https://api.minecraftservices.com/minecraft/profile")
+                .header("Authorization", "Bearer " + bearerToken)
+                .header("Accept", "application/json")
+                .asJson();
+        
+        // checks for unsuccessful responses
+        if (!xbox_response.isSuccess()) {
+            throw new IOException("Couldn't get profile info token :" + xbox_response.getStatusText());
+        }      
 
+        //System.out.println(xbox_response.getBody().toPrettyString());
+
+        MinecraftCredentials mcc = new MinecraftCredentials();
+        mcc.username = xbox_response.getBody().getObject().getString("name");
+        mcc.bearerToken = bearerToken;
+        
+        String dashlessUUID = xbox_response.getBody().getObject().getString("id");
+        String uuidString = dashlessUUID.substring(0, 8) + "-" + 
+                dashlessUUID.substring(8, 12) + "-" + 
+                dashlessUUID.substring(12, 16) + "-" + 
+                dashlessUUID.substring(16, 20) + "-" + 
+                dashlessUUID.substring(20, 32);
+         mcc.uuid = UUID.fromString(uuidString);
+        
+        return mcc;
+    }
+    
+    public static class MinecraftCredentials {
+        public String bearerToken;
+        public String username;
+        public UUID uuid;
+    }
+            
     private static class AccessToken {
 
         public String accessToken;
@@ -213,7 +250,6 @@ public class MicrosoftLoginHelper {
     }
 
     private static class XBLCredentials {
-
         public String token;
         public String userhash;
     }
