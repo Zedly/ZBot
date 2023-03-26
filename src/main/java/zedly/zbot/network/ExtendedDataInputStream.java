@@ -92,12 +92,20 @@ public class ExtendedDataInputStream extends DataInputStream {
 
     public CraftChunk readChunkSection() throws IOException {
         int blockCount = readShort();
+        
+        // Block information
         int bitsPerBlock = readUnsignedByte();
-
+        int valuesPerLong = bitsPerBlock == 0 ? 420 : 64 / bitsPerBlock;
         int[] palette;
         if (bitsPerBlock > 8) {
             palette = null;
+            
+        } else if(bitsPerBlock == 0) {
+            palette = new int[]{readVarInt()};
         } else {
+            if(bitsPerBlock < 4) {
+                bitsPerBlock = 4;
+            }
             int length = readVarInt();
             palette = new int[length];
             for (int i = 0; i < length; i++) {
@@ -105,13 +113,40 @@ public class ExtendedDataInputStream extends DataInputStream {
             }
         }
         int dataLength = readVarInt();
+        
         long[] blockData = new long[dataLength];
         for (int i = 0; i < dataLength; i++) {
             blockData[i] = readLong();
         }
+        
+        
+        // Biome information
+        int bitsPerBiome = readUnsignedByte();
+        int biomeValuesPerLong = bitsPerBiome == 0 ? 420 : 64 / bitsPerBiome;
+        int[] biomePalette;
+        if (bitsPerBiome > 8) {
+            biomePalette = null;
+        } else if(bitsPerBiome == 0) {
+            biomePalette = new int[]{readVarInt()};
+        } else {
+            int length = readVarInt();
+            biomePalette = new int[length];
+            for (int i = 0; i < length; i++) {
+                biomePalette[i] = readVarInt();
+            }
+        }
+        int biomeDataLength = readVarInt();
+        
+        long[] biomeData = new long[biomeDataLength];
+        for (int i = 0; i < biomeDataLength; i++) {
+            biomeData[i] = readLong();
+        }
+        
         if (bitsPerBlock > 8) {
             return new CraftChunk(blockData);
-        } else {
+        } else if (bitsPerBlock == 0) {
+            return new CraftChunk(palette[0]);
+        }else {
             return new CraftChunk(blockData, bitsPerBlock, palette);
         }
     }

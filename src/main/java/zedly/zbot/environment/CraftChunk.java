@@ -63,21 +63,29 @@ public class CraftChunk implements Chunk {
             ex.printStackTrace();
         }
     }
+    
+    public CraftChunk(int singleValue) {
+        this();
+        for (int i = 0; i < 4096; i++) {
+            dataIds[i] = singleValue;
+        }
+    }
 
     public CraftChunk(long[] packedBlockData, int bitsPerBlock, int[] palette) {
         this();
+        
         int bitOffset = 0;
+        int longIndex = 0;
 
         for (int i = 0; i < 4096; i++) {
             int blockField;
-            if (64 - (bitOffset % 64) >= bitsPerBlock) {
-                blockField = (int) (packedBlockData[bitOffset / 64] >>> (bitOffset % 64)) & ~(-1 << bitsPerBlock);
-            } else {
-                blockField = (int) ((packedBlockData[bitOffset / 64] >>> (bitOffset % 64))
-                        | packedBlockData[bitOffset / 64 + 1] << (64 - (bitOffset % 64))) & ~(-1 << bitsPerBlock);
-            }
+            blockField = (int) (packedBlockData[longIndex] >>> (bitOffset)) & ~(-1 << bitsPerBlock);
             dataIds[i] = palette[blockField];
             bitOffset += bitsPerBlock;
+            if (64 - bitOffset < bitsPerBlock) {
+                bitOffset = 0;
+                longIndex++;
+            }
         }
 
         boolean empty = true;

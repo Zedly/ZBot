@@ -19,31 +19,34 @@ import zedly.zbot.network.mappings.BlockDataIds;
 public class Packet3FMultiBlockChange implements ClientBoundPacket {
 
     private int chunkX;
+    private int chunkY;
     private int chunkZ;
-    private int[] blockPos;
-    private int[] blockIds;
+    private boolean invalidateTrustEdges;
+    private long[] blockUpdates;
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        chunkX = dis.readInt();
-        chunkZ = dis.readInt();
+        long sectionLong = dis.readLong();
+        chunkX = (int) (sectionLong >> 42);
+        chunkY = (int) (sectionLong << 44 >> 44);
+        chunkZ = (int) (sectionLong << 22 >> 42);
+        invalidateTrustEdges = dis.readBoolean();
         int recordCount = dis.readVarInt();
-        blockPos = new int[recordCount];
-        blockIds = new int[recordCount];
+        blockUpdates = new long[recordCount];
         for (int i = 0; i < recordCount; i++) {
-            blockPos[i] = ((dis.readUnsignedByte() << 8) + dis.readUnsignedByte());
-            blockIds[i] = dis.readVarInt();
+            blockUpdates[i] = dis.readVarLong();
         }
     }
 
     @Override
     public void process(GameContext context) {
-        for (int i = 0; i < blockPos.length; i++) {
-            int x = chunkX * 16 + ((blockPos[i] >> 12) & 0xF);
-            int y = blockPos[i] & 0xFF;
-            int z = chunkZ * 16 + ((blockPos[i] >> 8) & 0xF);
-            context.getMainThread().fireEvent(new BlockChangeEvent(new Location(x, y, z), BlockDataIds.fromId(blockIds[i])));
-            context.getSelf().getEnvironment().setBlockAt(x, y, z, blockIds[i]);
+        for (int i = 0; i < blockUpdates.length; i++) {
+            int x = chunkX * 16 + (int) ((blockUpdates[i] >> 8) & 0xF);
+            int y = (int) (blockUpdates[i] & 0xF);
+            int z = chunkZ * 16 + (int) ((blockUpdates[i] >> 4) & 0xF);
+            int blockId = (int)(blockUpdates[i] >>> 12);
+            context.getMainThread().fireEvent(new BlockChangeEvent(new Location(x, y, z), BlockDataIds.fromId(blockId)));
+            context.getSelf().getEnvironment().setBlockAt(x, y, z, blockId);
         }
     }
 }

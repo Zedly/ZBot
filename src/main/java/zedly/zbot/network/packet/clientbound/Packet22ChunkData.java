@@ -25,7 +25,7 @@ public class Packet22ChunkData implements ClientBoundPacket {
     private int chunkZ;
     private NBTBase heightmap;
     private byte[] blockData;
-    private NBTTagCompound[] blockEntities;
+    private NBTBase[] blockEntities;
     private boolean trustEdges;
     private BitSet skyLightMask;
     private BitSet blockLightMask;
@@ -49,10 +49,16 @@ public class Packet22ChunkData implements ClientBoundPacket {
             int packedXZ = dis.readByte();
             int Y = dis.readShort();
             int entityType = dis.readVarInt();
-            blockEntities[i] = (NBTTagCompound) dis.readNBT();
-            blockEntities[i].setInteger("x", (packedXZ >> 4) & 0xF);
-            blockEntities[i].setInteger("z", packedXZ & 0xF);
-            blockEntities[i].setInteger("y", Y);
+            NBTBase nbt = dis.readNBT();
+            if(!(nbt instanceof NBTTagCompound)) {
+                System.out.println("Chunk load: Tile entity is type " + nbt.getClass());
+                nbt = new NBTTagCompound();
+            }
+            NBTTagCompound nbtc = (NBTTagCompound) nbt;
+            nbtc.setInteger("x", (packedXZ >> 4) & 0xF);
+            nbtc.setInteger("z", packedXZ & 0xF);
+            nbtc.setInteger("y", Y);
+            blockEntities[i] = nbtc;
         }
         trustEdges = dis.readBoolean();
 
