@@ -1,4 +1,4 @@
-package zedly.zbot.network.packet.clientbound;
+package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import zedly.zbot.network.ExtendedDataInputStream;
@@ -17,9 +17,10 @@ import zedly.zbot.network.packet.clientbound.ClientBoundPacket;
  * also not be enabled (the notchian server does not send the packet when
  * compression is disabled).
  */
-public class Packet03SetCompression implements ClientBoundPacket {
 
-    private int threshold;  // Maximum size of a packet before it is compressed
+public class Packet03SetCompression implements ClientBoundPacket {
+    private int threshold;  // Maximum size of a packet before it is compressed.
+
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
@@ -29,5 +30,5 @@ public class Packet03SetCompression implements ClientBoundPacket {
     public int getThreshold() {
         return threshold;
     }
-
+    
 }

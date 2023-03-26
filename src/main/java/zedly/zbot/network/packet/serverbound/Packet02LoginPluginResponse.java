@@ -41,3 +41,4 @@ public class Packet02LoginPluginResponse implements ServerBoundPacket {
 
 }
 //Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture
+Refactored ancestor. Review data strcuture

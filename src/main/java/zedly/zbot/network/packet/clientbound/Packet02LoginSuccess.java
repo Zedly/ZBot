@@ -24,3 +24,4 @@ public class Packet02LoginSuccess implements ClientBoundPacket {
     }
 
 }
+Refactored ancestor. Review data strcuture
