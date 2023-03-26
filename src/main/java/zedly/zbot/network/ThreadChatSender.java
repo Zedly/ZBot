@@ -1,6 +1,5 @@
 package zedly.zbot.network;
 
-import zedly.zbot.network.packet.serverbound.Packet05ChatMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import zedly.zbot.StringUtil;
+import zedly.zbot.network.packet.serverbound.Packet03ChatMessage;
 
 public class ThreadChatSender extends Thread {
 
@@ -40,7 +40,7 @@ public class ThreadChatSender extends Thread {
 
     private synchronized void sendChat(String message) {
         if (up != null) {
-            up.sendPacket(new Packet05ChatMessage(message));
+            up.sendPacket(new Packet03ChatMessage(message));
         } else {
             System.err.println("No connection! Cannot send chat.");
         }

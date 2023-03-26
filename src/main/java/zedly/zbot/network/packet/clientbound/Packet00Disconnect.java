@@ -29,5 +29,9 @@ public class Packet00Disconnect implements ClientBoundPacket {
         String formattedReason = Util.interpretJson(reason);
         return formattedReason;
     }
+    
+    public void process(GameContext context) {
+        context.getEventDispatcher().dispatchEvent(new SelfKickEvent(reason, getFormattedReason()));
+    }
 
 }

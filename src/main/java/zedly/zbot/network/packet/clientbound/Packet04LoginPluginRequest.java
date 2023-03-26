@@ -36,4 +36,4 @@ public class Packet04LoginPluginRequest implements ClientBoundPacket {
         dis.readFully(data);
     }
 }
-//Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture
+//Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture

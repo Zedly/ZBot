@@ -6,7 +6,6 @@
 package zedly.zbot.self;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import zedly.zbot.ClientSettings;
 import zedly.zbot.GameContext;
@@ -19,7 +18,6 @@ import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
 import zedly.zbot.BlockFace;
-import zedly.zbot.CraftPlayerProperty;
 import zedly.zbot.event.Event;
 import zedly.zbot.inventory.CraftChestInventory;
 import zedly.zbot.inventory.CraftCraftingTableInventory;
@@ -29,6 +27,10 @@ import zedly.zbot.inventory.CraftPlayerInventory;
 import zedly.zbot.inventory.CraftVillagerInventory;
 import zedly.zbot.network.ThreadLocationUpdater;
 import zedly.zbot.network.mappings.InventoryType;
+import zedly.zbot.network.packet.serverbound.Packet03ChatMessage;
+import zedly.zbot.network.packet.serverbound.Packet04ClientStatus;
+import zedly.zbot.network.packet.serverbound.Packet05ClientSettings;
+import zedly.zbot.network.packet.serverbound.Packet0DInteractEntity;
 import zedly.zbot.network.packet.serverbound.*;
 import zedly.zbot.plugin.ZBotPlugin;
 
@@ -43,13 +45,11 @@ public class CraftSelf extends CraftPlayer implements Self {
     private CraftEnvironment environment;
     private CraftInventory inventory;
     private ClientSettings clientSettings;
-    private ArrayList<CraftPlayerProperty> playerProperties;
     private int foodLevel = 0;
     private double saturation = 0;
     private int xpLevels = 0;
     private double xpPercent = 0;
-    private int blockInteractionSequenceNr = 0;
-    
+
     public CraftSelf(GameContext context, CraftEnvironment env, ThreadLocationUpdater locationUpdater, ClientSettings clientSettings) {
         this.context = context;
         this.environment = env;
@@ -60,7 +60,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void attackEntity(Entity ent) {
-        context.getUpThread().sendPacket(new Packet10Interact(ent.getEntityId()));
+        context.getUpThread().sendPacket(new Packet0DInteractEntity(ent.getEntityId()));
         swingArm(false);
     }
 
@@ -76,7 +76,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     public void closeWindow(boolean sendPacket) {
         if (sendPacket) {
-            context.getUpThread().sendPacket(new Packet0CCloseContainer(inventory.windowId()));
+            context.getUpThread().sendPacket(new Packet09CloseWindow(inventory.windowId()));
         }
         CraftInventory newInventory = new CraftPlayerInventory(context);
         for (int i = 0; i < 36; i++) {
@@ -95,7 +95,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     public synchronized void setClientSettings(ClientSettings clientSettings) {
         this.clientSettings = clientSettings;
         if (context.getSession().isOnlineMode()) {
-            context.getUpThread().sendPacket(new Packet08ClientInformation(clientSettings));
+            context.getUpThread().sendPacket(new Packet05ClientSettings(clientSettings));
         }
     }
 
@@ -126,12 +126,12 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void interactWithEntity(Entity ent, boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet10Interact(ent.getEntityId(), (leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet0DInteractEntity(ent.getEntityId(), (leftHand ? 1 : 0)));
     }
 
     @Override
     public void interactWithEntity(Entity ent, Location loc, boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet10Interact(ent.getEntityId(), loc, (leftHand ? 1 : 0)));
+        context.getUpThread().sendPacket(new Packet0DInteractEntity(ent.getEntityId(), loc, (leftHand ? 1 : 0)));
     }
 
     @Override
@@ -156,63 +156,58 @@ public class CraftSelf extends CraftPlayer implements Self {
         context.getLocationUpdater().updatePosition(loc);
     }
 
-    //@Override
-    //public void performAction(int action) {
-    //    context.getUpThread().sendPacket(new Packet1DPlayerAction(getEntityId(), action, 0));
-    //}
-
     @Override
-    public int breakBlock(int x, int y, int z) {
-        return breakBlock(new Location(x, y, z));
+    public void performAction(int action) {
+        context.getUpThread().sendPacket(new Packet1BEntityAction(getEntityId(), action, 0));
     }
 
     @Override
-    public int breakBlock(int x, int y, int z, int millis, Runnable callback) {
-        return breakBlock(new Location(x, y, z), millis, callback);
+    public void breakBlock(int x, int y, int z) {
+        breakBlock(new Location(x, y, z));
     }
 
     @Override
-    public int breakBlock(Location loc) {
-        context.getUpThread().sendPacket(new Packet1DPlayerAction(Packet1DPlayerAction.Action.START_DIGGING, loc, 0, blockInteractionSequenceNr));
-        context.getUpThread().sendPacket(new Packet1DPlayerAction(Packet1DPlayerAction.Action.FINISH_DIGGING, loc, 0, blockInteractionSequenceNr));
-        return blockInteractionSequenceNr++;
+    public void breakBlock(int x, int y, int z, int millis, Runnable callback) {
+        breakBlock(new Location(x, y, z), millis, callback);
     }
 
     @Override
-    public int breakBlock(Location loc, int millis, Runnable callback) {
-        final int seq = blockInteractionSequenceNr;
-        context.getUpThread().sendPacket(new Packet1DPlayerAction(Packet1DPlayerAction.Action.START_DIGGING, loc, 1, seq));
+    public void breakBlock(Location loc) {
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(0, loc, 0));
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(2, loc, 0));
+    }
+
+    @Override
+    public void breakBlock(Location loc, int millis, Runnable callback) {
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(0, loc, 1));
         context.getMainThread().schedule(() -> {
-            context.getUpThread().sendPacket(new Packet1DPlayerAction(Packet1DPlayerAction.Action.FINISH_DIGGING, loc, 1, seq));
+            context.getUpThread().sendPacket(new Packet1APlayerDigging(2, loc, 1));
             callback.run();
         }, millis, TimeUnit.MILLISECONDS);
-        blockInteractionSequenceNr++;
-        return seq;
     }
 
     @Override
-    public int clickBlock(Location loc) {
-        context.getUpThread().sendPacket(new Packet1DPlayerAction(Packet1DPlayerAction.Action.START_DIGGING, loc, 0, blockInteractionSequenceNr));
-        context.getUpThread().sendPacket(new Packet1DPlayerAction(Packet1DPlayerAction.Action.CANCEL_DIGGING, loc, 0, blockInteractionSequenceNr));
-        return blockInteractionSequenceNr++;
+    public void clickBlock(Location loc) {
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(0, loc, 0));
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(1, loc, 0));
     }
 
     @Override
-    public int clickBlock(int x, int y, int z) {
-        return clickBlock(new Location(x, y, z));
+    public void clickBlock(int x, int y, int z) {
+        clickBlock(new Location(x, y, z));
     }
 
     @Override
-    public int placeBlock(int x, int y, int z, BlockFace face) {
-        return placeBlock(new Location(x, y, z), face);
+    public void placeBlock(int x, int y, int z, BlockFace face) {
+        placeBlock(new Location(x, y, z), face);
     }
 
     @Override
-    public int placeBlock(Location loc, BlockFace face) {
-        return placeBlock(loc, face, 0);
+    public void placeBlock(Location loc, BlockFace face) {
+        placeBlock(loc, face, 0);
     }
 
-    public int placeBlock(Location loc, BlockFace face, int usedHand) {
+    public void placeBlock(Location loc, BlockFace face, int usedHand) {
         int iFace = 255;
         if (face != null) {
             switch (face) {
@@ -236,35 +231,32 @@ public class CraftSelf extends CraftPlayer implements Self {
                     break;
             }
         }
-        context.getUpThread().sendPacket(new Packet31UseItemOn(usedHand, loc, (byte) iFace, 0.5, 0.5, 0.5, false, blockInteractionSequenceNr));
-        return blockInteractionSequenceNr++;
+        context.getUpThread().sendPacket(new Packet2EPlayerBlockPlacement(usedHand, loc, (byte) iFace, 0.5, 0.5, 0.5, false));
     }
 
     @Override
-    public int eatHeldItem() {
-        return eatHeldItem(0);
+    public void eatHeldItem() {
+        eatHeldItem(0);
     }
 
     @Override
-    public int eatHeldItem(int usedHand) {
-        return eatHeldItem(usedHand, () -> {
+    public void eatHeldItem(int usedHand) {
+        eatHeldItem(usedHand, () -> {
         });
     }
 
     @Override
-    public int eatHeldItem(int usedHand, Runnable callback) {
-        final int seq = blockInteractionSequenceNr;
-        context.getUpThread().sendPacket(new Packet32UseItem(usedHand, seq));
+    public void eatHeldItem(int usedHand, Runnable callback) {
+        context.getUpThread().sendPacket(new Packet2FUseItem(usedHand));
         context.getMainThread().schedule(() -> {
-            context.getUpThread().sendPacket(new Packet1DPlayerAction(5, new Location(0, 0, 0), 0, seq));
+            context.getUpThread().sendPacket(new Packet1APlayerDigging(5, new Location(0, 0, 0), 0));
             callback.run();
         }, 2000, TimeUnit.MILLISECONDS);
-        return blockInteractionSequenceNr++;
     }
 
     @Override
     public void recipeBookStatus(int bookType, boolean open, boolean filterActive) {
-        context.getUpThread().sendPacket(new Packet21ChangeRecipeBookSettings(bookType, open, filterActive));
+        context.getUpThread().sendPacket(new Packet1ESetRecipeBookState(bookType, open, filterActive));
     }
 
     @Override
@@ -274,12 +266,12 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void requestRecipe(String recipeId, boolean makeAll) {
-        context.getUpThread().sendPacket(new Packet1BPlaceRecipe(getInventory().windowId(), recipeId, makeAll));
+        context.getUpThread().sendPacket(new Packet18CraftRecipeRequest(getInventory().windowId(), recipeId, makeAll));
     }
 
     @Override
     public void respawn() {
-        context.getUpThread().sendPacket(new Packet07ClientCommand(0));
+        context.getUpThread().sendPacket(new Packet04ClientStatus(0));
     }
 
     @Override
@@ -300,20 +292,20 @@ public class CraftSelf extends CraftPlayer implements Self {
     @Override
     public void selectSlot(int i) {
         inventory.selectSlot(i);
-        context.getUpThread().sendPacket(new Packet28SetHeldItem(i));
+        context.getUpThread().sendPacket(new Packet25HeldItemChange(i));
     }
 
     @Override
     public void sendChat(String message) {
         ArrayList<String> lines = StringUtil.wrap(message, 240);
         for (String line : lines) {
-            context.getUpThread().sendPacket(new Packet05ChatMessage(line));
+            context.getUpThread().sendPacket(new Packet03ChatMessage(line));
         }
     }
 
     @Override
     public void setAbilities(int abilities) {
-        context.getUpThread().sendPacket(new Packet1CPlayerAbilities((byte) abilities));
+        context.getUpThread().sendPacket(new Packet19PlayerAbilities((byte) abilities));
     }
 
     @Override
@@ -323,9 +315,8 @@ public class CraftSelf extends CraftPlayer implements Self {
     }
     
     @Override
-    public int stopEating() {
-        context.getUpThread().sendPacket(new Packet1DPlayerAction(5, new Location(0, 0, 0), 0, blockInteractionSequenceNr));
-        return blockInteractionSequenceNr++;
+    public void stopEating() {
+        context.getUpThread().sendPacket(new Packet1APlayerDigging(5, new Location(0, 0, 0), 0));
     }
     
     @Override
@@ -337,23 +328,22 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void sneak(boolean sneak) {
-        context.getUpThread().sendPacket(new Packet1EPlayerCommand(entityId, (sneak ? 0 : 1), 0));
+        context.getUpThread().sendPacket(new Packet1BEntityAction(entityId, (sneak ? 0 : 1), 0));
     }
 
     @Override
     public void sprint(boolean sprint) {
-        context.getUpThread().sendPacket(new Packet1EPlayerCommand(entityId, (sprint ? 3 : 4), 0));
+        context.getUpThread().sendPacket(new Packet1BEntityAction(entityId, (sprint ? 3 : 4), 0));
     }
 
     @Override
     public void swingArm(boolean offHand) {
-        context.getUpThread().sendPacket(new Packet2FSwingArm(offHand ? 1 : 0));
+        context.getUpThread().sendPacket(new Packet2CAnimation(offHand ? 1 : 0));
     }
 
     @Override
-    public int useItem(boolean leftHand) {
-        context.getUpThread().sendPacket(new Packet32UseItem((leftHand ? 1 : 0), blockInteractionSequenceNr));
-        return blockInteractionSequenceNr++;
+    public void useItem(boolean leftHand) {
+        context.getUpThread().sendPacket(new Packet2FUseItem((leftHand ? 1 : 0)));
     }
 
     @Override
@@ -363,7 +353,7 @@ public class CraftSelf extends CraftPlayer implements Self {
 
     @Override
     public void writeToSign(Location loc, String line1, String line2, String line3, String line4) {
-        context.getUpThread().sendPacket(new Packet2EUpdateSign(loc, line1, line2, line3, line4));
+        context.getUpThread().sendPacket(new Packet2BUpdateSign(loc, line1, line2, line3, line4));
     }
 
     @Override
@@ -456,10 +446,6 @@ public class CraftSelf extends CraftPlayer implements Self {
             setInventory(inv);
         }
     }
-    
-    public void setPlayerProperties(ArrayList<CraftPlayerProperty> properties) {
-        this.playerProperties = properties;
-    }
 
     /**
      * @param inventory the Inventory to set
@@ -515,4 +501,5 @@ public class CraftSelf extends CraftPlayer implements Self {
     public void setHealth(double health) {
         this.health = (float) health;
     }
+
 }

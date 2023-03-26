@@ -43,4 +43,4 @@ public class Packet01EncryptionRequest implements ClientBoundPacket {
     }
     
 }
-// Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture
+// Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture

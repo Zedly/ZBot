@@ -13,6 +13,7 @@ import java.util.UUID;
 import zedly.zbot.Advancement;
 import zedly.zbot.AdvancementDisplay;
 import zedly.zbot.AdvancementProgress;
+import zedly.zbot.BitSet;
 import zedly.zbot.Location;
 import zedly.zbot.entity.EntityMeta;
 import zedly.zbot.inventory.CraftItemStack;
@@ -60,13 +61,13 @@ public class ExtendedDataInputStream extends DataInputStream {
         return new Location(raw);
     }
     
-    public long[] readBitField() throws IOException {
+    public BitSet readBitSet() throws IOException {
         int length = readVarInt();
         long[] bits = new long[length];
         for(int i = 0; i < length; i++) {
             bits[i] = readLong();
         }
-        return bits;
+        return new BitSet(bits);
     }
 
     public UUID readUUID() throws IOException {
@@ -89,7 +90,7 @@ public class ExtendedDataInputStream extends DataInputStream {
         return nbt;
     }
 
-    public CraftChunk readChunkSection(boolean readSkyLight) throws IOException {
+    public CraftChunk readChunkSection() throws IOException {
         int blockCount = readShort();
         int bitsPerBlock = readUnsignedByte();
 

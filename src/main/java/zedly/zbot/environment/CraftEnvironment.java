@@ -14,9 +14,11 @@ import zedly.zbot.entity.CraftEntity;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 import net.minecraft.server.NBTBase;
 import net.minecraft.server.NBTTagCompound;
+import zedly.zbot.BitSet;
 import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.*;
@@ -35,7 +37,7 @@ public class CraftEnvironment implements Environment {
     private final BiMap<UUID, String> playerNameCache = HashBiMap.create();
     private final HashMap<Long, CraftChunk> chunks = new HashMap<>();
     private Location spawnPoint = null;
-    private int worldType = 1;
+    private NBTBase worldType;
     private int difficulty = 0;
     private long timeOfDay = 0;
     private long worldAge = 0;
@@ -127,18 +129,14 @@ public class CraftEnvironment implements Environment {
         this.worldAge = worldAge;
     }
 
-    public void loadChunkColumn(byte[] rawData, int[] biomeData, int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask, NBTBase[] blockEntities) {
-        ExtendedDataInputStream edis = new ExtendedDataInputStream(new ByteArrayInputStream(rawData));
+    public void loadChunkColumn(byte[] blockData, int chunkX, int chunkZ, BitSet skyLightMask, BitSet blockLightMask, BitSet emptySkyLightMask, BitSet emptyBlockLightMask, List<byte[]> skyLightArrays, List<byte[]> blockLightArrays, NBTBase[] blockEntities) {
+        ExtendedDataInputStream edis = new ExtendedDataInputStream(new ByteArrayInputStream(blockData));
         for (int i = 0; i < 16; i++) {
             long chunkLong = chunkCoordinatesToChunkLong(chunkX, i, chunkZ);
-            if (((1 << i) & primaryBitMask) != 0) {
-                try {
-                    chunks.put(chunkLong, edis.readChunkSection(worldType == 0));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else if (!chunks.containsKey(chunkLong)) {
-                chunks.put(chunkLong, new CraftChunk());
+            try {
+                chunks.put(chunkLong, edis.readChunkSection());
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
 
@@ -150,11 +148,11 @@ public class CraftEnvironment implements Environment {
             setTileAt(x, y, z, compound);
         }
     }
-    
+
     public void reloadChunkBiomes(int chunkX, int chunkZ, byte[] biomeData) {
     }
 
-    public void reset(int worldType) {
+    public void reset(NBTBase worldType) {
         chunks.clear();
         this.worldType = worldType;
         System.out.println("Teleported to new world: Type " + worldType);

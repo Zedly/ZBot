@@ -2,11 +2,9 @@ package zedly.zbot.network;
 
 import zedly.zbot.HTTP;
 import zedly.zbot.network.packet.clientbound.Packet00Disconnect;
-import zedly.zbot.network.packet.serverbound.Packet00LoginStart;
 import zedly.zbot.network.packet.clientbound.Packet01EncryptionRequest;
 import zedly.zbot.network.packet.serverbound.Packet01EncryptionResponse;
 import zedly.zbot.network.packet.clientbound.Packet02LoginSuccess;
-import zedly.zbot.network.packet.clientbound.Packet03SetCompression;
 import zedly.zbot.Session;
 import zedly.zbot.Util;
 import java.io.IOException;
@@ -22,7 +20,7 @@ import javax.crypto.spec.SecretKeySpec;
 import zedly.zbot.GameContext;
 import zedly.zbot.HTTP.HTTPResponse;
 import zedly.zbot.network.packet.clientbound.ClientBoundPacket;
-import zedly.zbot.network.packet.clientbound.Packet28Join;
+import zedly.zbot.network.packet.clientbound.Packet26JoinGame;
 import zedly.zbot.network.packet.serverbound.Packet00Handshake;
 import zedly.zbot.network.packet.serverbound.Packet00LoginStart;
 
@@ -114,10 +112,10 @@ public class ThreadConnectionWatcher extends Thread {
                             sleep(30000);
                         } else if (p instanceof Packet02LoginSuccess) {
                             System.out.print("\rLogging in.. [####]");
-                        } else if (p instanceof Packet28Join) {
-                            Packet28Join p28 = (Packet28Join) p;
+                        } else if (p instanceof Packet26JoinGame) {
+                            Packet26JoinGame p26 = (Packet26JoinGame) p;
                             System.out.print("\rLogging in.. [ OK ]\r");
-                            p28.process(context);
+                            p26.process(context);
                             context.openConnection(dis, dos);
                             context.joinThreads();
                             break;

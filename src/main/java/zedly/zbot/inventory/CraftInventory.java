@@ -8,7 +8,7 @@ package zedly.zbot.inventory;
 import java.util.LinkedList;
 import org.apache.commons.lang3.tuple.Pair;
 import zedly.zbot.GameContext;
-import zedly.zbot.network.packet.serverbound.Packet0BClickContainer;
+import zedly.zbot.network.packet.serverbound.Packet08ClickWindow;
 
 /**
  *
@@ -38,7 +38,7 @@ public abstract class CraftInventory implements Inventory {
     public int size() {
         return items.length;
     }
-    
+
     public int windowId() {
         return windowId;
     }
@@ -47,7 +47,7 @@ public abstract class CraftInventory implements Inventory {
     public int getStaticOffset() {
         return staticBlockOffset;
     }
-    
+
     @Override
     public ItemStack getSlot(int i) {
         return items[i];
@@ -64,12 +64,12 @@ public abstract class CraftInventory implements Inventory {
     @Override
     public void click(int slot, int mode, int button) {
         if (slot == -999) {
-            context.getUpThread().sendPacket(new Packet0BClickContainer((byte) windowId, 0, (short) slot, (byte) button, (short) transactionId++, (byte) mode, new LinkedList<Pair<Integer, ItemStack>>(), null));
+            context.getUpThread().sendPacket(new Packet08ClickWindow((byte) windowId, 0, (short) slot, (byte) button, (short) transactionId++, (byte) mode, new LinkedList<Pair<Integer, ItemStack>>(), null));
         } else {
             ItemStack is = items[slot];
             items[slot] = itemOnCursor;
             itemOnCursor = is;
-            context.getUpThread().sendPacket(new Packet0BClickContainer((byte) windowId, 0, (short) slot, (byte) button, (short) transactionId++, (byte) mode, new LinkedList<Pair<Integer, ItemStack>>(), is));
+            context.getUpThread().sendPacket(new Packet08ClickWindow((byte) windowId, 0, (short) slot, (byte) button, (short) transactionId++, (byte) mode, new LinkedList<Pair<Integer, ItemStack>>(), is));
         }
         changed = true;
     }
@@ -118,19 +118,19 @@ public abstract class CraftInventory implements Inventory {
     public void close() {
         open = false;
     }
-    
+
     public boolean isInitialized() {
         return initialized;
     }
-    
+
     public abstract void setProperty(int property, int value);
 
     public void rollbackTransactionId() {
         transactionId--;
     }
-    
+
     public boolean changed() {
         return changed;
     }
-    
+
 }
