@@ -8,7 +8,7 @@ package zedly.zbot.inventory;
 import java.util.ArrayList;
 import java.util.List;
 import zedly.zbot.GameContext;
-import zedly.zbot.network.packet.serverbound.Packet21SelectTrade;
+import zedly.zbot.network.packet.serverbound.Packet26SelectTrade;
 
 /**
  *
@@ -72,7 +72,7 @@ public class CraftVillagerInventory extends CraftExternalInventory implements Vi
 
     @Override
     public void selectTrade(int i) {
-        context.getUpThread().sendPacket(new Packet21SelectTrade(i));
+        context.getUpThread().sendPacket(new Packet26SelectTrade(i));
     }
     
 }
