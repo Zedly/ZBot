@@ -1,6 +1,7 @@
 package  zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
+import zedly.zbot.Location;
 import zedly.zbot.entity.CraftEntityMeta.ParticleMeta;
 import zedly.zbot.network.ExtendedDataInputStream;
 

@@ -9,14 +9,6 @@ import java.io.IOException;
 /**
 * */
 
-
-/**
-* */
-
-
-/**
-* */
-
 public class Packet55SetEquipment implements ClientBoundPacket {
     private int entityID;  // Entity's EID
     private int slot;  // Equipment slot. 0: main hand, 1: off hand, 2–5: armor slot (2: boots, 3: leggings, 4: chestplate, 5: helmet)
@@ -26,9 +18,8 @@ public class Packet55SetEquipment implements ClientBoundPacket {
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         entityID = dis.readVarInt();
-        slot = dis.readVarInt();
+        slot = dis.readByte();
         item = dis.readSlot();
     }
 
 }
-Refactored ancestor. Review data strcuture

@@ -20,26 +20,12 @@ import zedly.zbot.ChatColor;
 */
 
 public class Packet19DeleteMessage implements ClientBoundPacket {
-    private String jSONData;  // Limited to 32767 bytes
-    private int position;  // 0: chat (chat box), 1: system message (chat box), 2: game info (above hotbar).
-
-
+    private byte[] signature;
+    
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        jSONData = dis.readString();
-        position = dis.readByte();
+        int length = dis.readVarInt();
+        signature = new byte[length];
+        dis.readFully(signature);
     }
-
-    @Override
-    public void process(GameContext context) {
-        String message = Util.interpretJson(jSONData);
-        if (context.getClientConfig().getBoolean("ansi", false)) {
-            System.out.println(Util.interpretJsonAsANSI(jSONData) + ChatColor.WHITE.getANSICode());
-        } else {
-            System.out.println(Util.interpretJson(jSONData));
-        }
-        context.getMainThread().fireEvent(new ChatEvent(jSONData, message));
-    }
-
 }
-Refactored ancestor. Review data strcuture

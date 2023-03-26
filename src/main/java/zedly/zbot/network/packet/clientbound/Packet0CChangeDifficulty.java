@@ -18,13 +18,13 @@ import java.io.IOException;
 
 public class Packet0CChangeDifficulty implements ClientBoundPacket {
     private int difficulty;  // 0: peaceful, 1: easy, 2: normal, 3: hard.
-    private boolean difficultylocked?;
+    private boolean difficultylocked;
 
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         difficulty = dis.readUnsignedByte();
-        difficultylocked? = dis.readBoolean();
+        difficultylocked = dis.readBoolean();
     }
 
 }

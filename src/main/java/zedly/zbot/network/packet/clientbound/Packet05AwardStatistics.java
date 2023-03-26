@@ -7,6 +7,8 @@ package zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import org.apache.commons.lang3.tuple.Triple;
 import zedly.zbot.network.ExtendedDataInputStream;
 
 /**
@@ -16,19 +18,13 @@ import zedly.zbot.network.ExtendedDataInputStream;
 public class Packet05AwardStatistics implements ClientBoundPacket {
 
     private int count;
-    private HashMap<String, Integer> updates;
+    private LinkedList<Triple<Integer, Integer, Integer>> updates = new LinkedList<>();
 
-    /*
-    // Disabled: Wiki is ambiguous
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
-        updates = new HashMap<>();
         count = dis.readVarInt();
         for (int i = 0; i < count; i++) {
-            updates.put(dis.readString(), dis.readVarInt());
+            updates.add(Triple.of(dis.readVarInt(), dis.readVarInt(), dis.readVarInt()));
         }
     }
-     */
 }
-//Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture
-Refactored ancestor. Review data strcuture

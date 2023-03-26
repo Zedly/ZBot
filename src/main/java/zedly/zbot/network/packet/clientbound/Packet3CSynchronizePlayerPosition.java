@@ -5,7 +5,7 @@ import zedly.zbot.GameContext;
 import zedly.zbot.Location;
 import zedly.zbot.event.SelfTeleportEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
-import zedly.zbot.network.packet.serverbound.Packet00TeleportConfirm;
+import zedly.zbot.network.packet.serverbound.Packet00ConfirmTeleportation;
 
 /**
  *
@@ -43,9 +43,10 @@ public class Packet3CSynchronizePlayerPosition implements ClientBoundPacket {
 
     @Override
     public void process(GameContext context) {
-        context.getUpThread().sendPacket(new Packet00TeleportConfirm(teleportID));
+        context.getUpThread().sendPacket(new Packet00ConfirmTeleportation(teleportID));
         Location l = new Location(x, y, z, yaw, pitch);
         context.getSelf().moveTo(l);
-        context.getMainThread().fireEvent(new SelfTeleportEvent(l, teleportID));    }
+        context.getMainThread().fireEvent(new SelfTeleportEvent(l, teleportID));
+    }
 
 }

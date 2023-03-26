@@ -37,12 +37,13 @@ public class Packet64SystemChatMessage implements ClientBoundPacket {
 
     @Override
     public void process(GameContext context) {
-        String message = Util.interpretJson(jSONData);
+        String message = Util.interpretJson(content);
         if (context.getClientConfig().getBoolean("ansi", false)) {
-            System.out.println(Util.interpretJsonAsANSI(jSONData) + ChatColor.WHITE.getANSICode());
+            System.out.println(Util.interpretJsonAsANSI(content) + ChatColor.WHITE.getANSICode());
         } else {
-            System.out.println(Util.interpretJson(jSONData));
+            System.out.println(Util.interpretJson(content));
         }
-        context.getMainThread().fireEvent(new ChatEvent(jSONData, message));    }
+        context.getMainThread().fireEvent(new ChatEvent(content, message));
+    }
 
 }

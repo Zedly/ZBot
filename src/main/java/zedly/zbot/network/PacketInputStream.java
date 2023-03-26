@@ -114,7 +114,7 @@ public final class PacketInputStream extends ExtendedDataInputStream {
 
                 op = bis.readVarInt();
                 lastOps[(lastOpPtr++) % 16] = op;
-                //System.out.println("Play Debug: Op " + Integer.toHexString(op));
+                System.out.println("Play Debug: Op " + Integer.toHexString(op));
                 p = newPacketForId(op);
                 p.readPacket(bis, (int) actualLength - 2);
                 if (bbis.available() != 0) {
@@ -123,7 +123,7 @@ public final class PacketInputStream extends ExtendedDataInputStream {
             } else {
                 op = readVarInt();
                 lastOps[(lastOpPtr++) % 16] = op;
-                //System.out.println("Play Debug: Op " + Integer.toHexString(op));
+                System.out.println("Play Debug: Op " + Integer.toHexString(op));
                 p = newPacketForId(op);
                 p.readPacket(this, packetLength - 2);
                 op = op;
@@ -131,7 +131,7 @@ public final class PacketInputStream extends ExtendedDataInputStream {
         } else {
             op = readVarInt();
             lastOps[(lastOpPtr++) % 16] = op;
-            //System.out.println("Play Debug: Op " + Integer.toHexString(op));
+            System.out.println("Play Debug: Op " + Integer.toHexString(op));
             p = newPacketForId(op);
             p.readPacket(this, packetLength - 2);
             op = op;

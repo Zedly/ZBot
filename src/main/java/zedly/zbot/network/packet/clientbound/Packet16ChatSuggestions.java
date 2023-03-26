@@ -1,4 +1,4 @@
-package  zedly.zbot.network.packet.clientbound;
+package zedly.zbot.network.packet.clientbound;
 
 import zedly.zbot.GameContext;
 import zedly.zbot.event.TabCompleteEvent;
@@ -12,26 +12,28 @@ import java.io.IOException;
  * parameters are also supported. The client sorts these alphabetically before
  * listing them.
  */
-
 /**
-* Unused by the Notchian server. Likely provided for custom servers to send chat message completions to clients.
-*/
-
+ * Unused by the Notchian server. Likely provided for custom servers to send
+ * chat message completions to clients.
+ */
 public class Packet16ChatSuggestions implements ClientBoundPacket {
+
     private int action;  // 0: Add, 1: Remove, 2: Set
     private int count;  // Number of elements in the following array.
-    private String entries;
-
+    private String[] entries;
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         action = dis.readVarInt();
         count = dis.readVarInt();
-        entries = dis.readString();
+        for (int i = 0; i < count; i++) {
+            entries[i] = dis.readString();
+        }
     }
 
     @Override
     public void process(GameContext context) {
-        context.getMainThread().fireEvent(new TabCompleteEvent(matches));    }
+        context.getMainThread().fireEvent(new TabCompleteEvent(entries));
+    }
 
 }

@@ -3,9 +3,8 @@ package     zedly.zbot.network.packet.clientbound;
 import zedly.zbot.GameContext;
 import zedly.zbot.event.KeepAliveEvent;
 import zedly.zbot.network.ExtendedDataInputStream;
-import zedly.zbot.network.packet.serverbound.Packet0FKeepAlive;
-
 import java.io.IOException;
+import zedly.zbot.network.packet.serverbound.Packet12KeepAlive;
 
 
 /**
@@ -28,7 +27,8 @@ public class Packet23KeepAlive implements ClientBoundPacket {
 
     @Override
     public void process(GameContext context) {
-        context.getUpThread().sendPacket(new Packet0FKeepAlive(keepAliveID));
-        context.getMainThread().fireEvent(new KeepAliveEvent(keepAliveID));    }
+        context.getUpThread().sendPacket(new Packet12KeepAlive(keepAliveID));
+        context.getMainThread().fireEvent(new KeepAliveEvent(keepAliveID));
+    }
 
 }

@@ -59,6 +59,15 @@ public class ExtendedDataInputStream extends DataInputStream {
         long raw = readLong();
         return new Location(raw);
     }
+    
+    public long[] readBitField() throws IOException {
+        int length = readVarInt();
+        long[] bits = new long[length];
+        for(int i = 0; i < length; i++) {
+            bits[i] = readLong();
+        }
+        return bits;
+    }
 
     public UUID readUUID() throws IOException {
         return new UUID(readLong(), readLong());

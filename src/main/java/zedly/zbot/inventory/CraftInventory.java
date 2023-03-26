@@ -5,6 +5,8 @@
  */
 package zedly.zbot.inventory;
 
+import java.util.LinkedList;
+import org.apache.commons.lang3.tuple.Pair;
 import zedly.zbot.GameContext;
 import zedly.zbot.network.packet.serverbound.Packet0BClickContainer;
 
@@ -62,12 +64,12 @@ public abstract class CraftInventory implements Inventory {
     @Override
     public void click(int slot, int mode, int button) {
         if (slot == -999) {
-            context.getUpThread().sendPacket(new Packet0BClickContainer((byte) windowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, null));
+            context.getUpThread().sendPacket(new Packet0BClickContainer((byte) windowId, 0, (short) slot, (byte) button, (short) transactionId++, (byte) mode, new LinkedList<Pair<Integer, ItemStack>>(), null));
         } else {
             ItemStack is = items[slot];
             items[slot] = itemOnCursor;
             itemOnCursor = is;
-            context.getUpThread().sendPacket(new Packet0BClickContainer((byte) windowId, (short) slot, (byte) button, (short) transactionId++, (byte) mode, is));
+            context.getUpThread().sendPacket(new Packet0BClickContainer((byte) windowId, 0, (short) slot, (byte) button, (short) transactionId++, (byte) mode, new LinkedList<Pair<Integer, ItemStack>>(), is));
         }
         changed = true;
     }

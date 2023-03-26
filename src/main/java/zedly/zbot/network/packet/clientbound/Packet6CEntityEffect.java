@@ -1,6 +1,7 @@
 package   zedly.zbot.network.packet.clientbound;
 
 import java.io.IOException;
+import net.minecraft.server.NBTBase;
 import zedly.zbot.GameContext;
 import zedly.zbot.PotionEffect;
 import zedly.zbot.entity.CraftLivingEntity;
@@ -11,16 +12,6 @@ import zedly.zbot.network.ExtendedDataInputStream;
  *
  * @author Dennis
  */
-/**
- *
- */
-/**
- *
- */
-
-/**
-* */
-
 
 /**
 * */

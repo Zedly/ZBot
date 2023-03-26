@@ -6,6 +6,7 @@
 package zedly.zbot.self;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import zedly.zbot.ClientSettings;
 import zedly.zbot.GameContext;
@@ -18,6 +19,7 @@ import zedly.zbot.Location;
 import zedly.zbot.entity.Entity;
 import zedly.zbot.entity.CraftPlayer;
 import zedly.zbot.BlockFace;
+import zedly.zbot.CraftPlayerProperty;
 import zedly.zbot.event.Event;
 import zedly.zbot.inventory.CraftChestInventory;
 import zedly.zbot.inventory.CraftCraftingTableInventory;
@@ -41,6 +43,7 @@ public class CraftSelf extends CraftPlayer implements Self {
     private CraftEnvironment environment;
     private CraftInventory inventory;
     private ClientSettings clientSettings;
+    private ArrayList<CraftPlayerProperty> playerProperties;
     private int foodLevel = 0;
     private double saturation = 0;
     private int xpLevels = 0;
@@ -452,6 +455,10 @@ public class CraftSelf extends CraftPlayer implements Self {
         } else {
             setInventory(inv);
         }
+    }
+    
+    public void setPlayerProperties(ArrayList<CraftPlayerProperty> properties) {
+        this.playerProperties = properties;
     }
 
     /**

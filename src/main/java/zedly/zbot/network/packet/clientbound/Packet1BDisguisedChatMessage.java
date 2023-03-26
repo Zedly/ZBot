@@ -16,11 +16,6 @@ import zedly.zbot.ChatColor;
  */
 
 /**
-* Identifying the difference between Chat/System Message is important as it helps respect the user's chat visibility options.  See <a href="/Chat#Processing_chat" title="Chat">processing chat</a> for more info about these positions.
-*/
-
-
-/**
 * Used to send system chat messages to the client.
 */
 
@@ -43,12 +38,13 @@ public class Packet1BDisguisedChatMessage implements ClientBoundPacket {
 
     @Override
     public void process(GameContext context) {
-        String message = Util.interpretJson(jSONData);
+        String interpretedMessage = Util.interpretJson(message);
         if (context.getClientConfig().getBoolean("ansi", false)) {
-            System.out.println(Util.interpretJsonAsANSI(jSONData) + ChatColor.WHITE.getANSICode());
+            System.out.println(Util.interpretJsonAsANSI(message) + ChatColor.WHITE.getANSICode());
         } else {
-            System.out.println(Util.interpretJson(jSONData));
+            System.out.println(Util.interpretJson(message));
         }
-        context.getMainThread().fireEvent(new ChatEvent(jSONData, message));    }
+        context.getMainThread().fireEvent(new ChatEvent(message, interpretedMessage));
+    }
 
 }

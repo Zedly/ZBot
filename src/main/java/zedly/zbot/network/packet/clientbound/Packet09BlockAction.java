@@ -23,21 +23,22 @@ import java.io.IOException;
 
 public class Packet09BlockAction implements ClientBoundPacket {
     private Location location;  // Block coordinates.
-    private int actionID(Byte1);  // Varies depending on block — see <a href="/Block_Actions" title="Block Actions">Block Actions</a>.
-    private int actionParameter(Byte2);  // Varies depending on block — see <a href="/Block_Actions" title="Block Actions">Block Actions</a>.
+    private int actionId;  // Varies depending on block — see <a href="/Block_Actions" title="Block Actions">Block Actions</a>.
+    private int actionParameter;  // Varies depending on block — see <a href="/Block_Actions" title="Block Actions">Block Actions</a>.
     private int blockType;  // The block type ID for the block.  This must match the block at the given coordinates.
 
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         location = dis.readPosition();
-        actionID(Byte1) = dis.readUnsignedByte();
-        actionParameter(Byte2) = dis.readUnsignedByte();
+        actionId = dis.readUnsignedByte();
+        actionParameter = dis.readUnsignedByte();
         blockType = dis.readVarInt();
     }
 
     @Override
     public void process(GameContext context) {
-        context.getMainThread().fireEvent(new BlockActionEvent(location, blockType));    }
+        context.getMainThread().fireEvent(new BlockActionEvent(location, blockType, actionId, actionParameter));
+    }
 
 }

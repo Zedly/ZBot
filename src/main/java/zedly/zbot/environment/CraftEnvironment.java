@@ -150,6 +150,9 @@ public class CraftEnvironment implements Environment {
             setTileAt(x, y, z, compound);
         }
     }
+    
+    public void reloadChunkBiomes(int chunkX, int chunkZ, byte[] biomeData) {
+    }
 
     public void reset(int worldType) {
         chunks.clear();

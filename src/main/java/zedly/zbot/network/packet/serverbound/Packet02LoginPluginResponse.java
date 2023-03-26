@@ -15,12 +15,12 @@ import zedly.zbot.network.packet.serverbound.ServerBoundPacket;
  */
 public class Packet02LoginPluginResponse implements ServerBoundPacket {
 
-    String channel;
+    int messageId;
     boolean successful;
     byte[] data;
 
-    public Packet02LoginPluginResponse(String channel, boolean succ, byte[] data) {
-        this.channel = channel;
+    public Packet02LoginPluginResponse(int messageId, boolean succ, byte[] data) {
+        this.messageId = messageId;
         this.successful = succ;
         this.data = data;
     }
@@ -32,13 +32,10 @@ public class Packet02LoginPluginResponse implements ServerBoundPacket {
 
     @Override
     public void writePacket(ExtendedDataOutputStream dos) throws IOException {
-        dos.writeString(channel);
+        dos.writeVarInt(messageId);
         dos.writeBoolean(successful);
         if (successful) {
             dos.write(data);
         }
     }
-
 }
-//Refactored ancestor. Review data strcutureRefactored ancestor. Review data strcutureRefactored ancestor. Review data strcuture
-Refactored ancestor. Review data strcuture

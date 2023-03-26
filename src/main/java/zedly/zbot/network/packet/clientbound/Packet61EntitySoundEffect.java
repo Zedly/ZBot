@@ -16,19 +16,30 @@ import zedly.zbot.network.ExtendedDataInputStream;
 
 public class Packet61EntitySoundEffect implements ClientBoundPacket {
     private int soundID;  // ID of hardcoded sound event (<a rel="nofollow" class="external text" href="https://pokechu22.github.io/Burger/1.15.2.html#sounds">events</a> as of 1.15.2)
+    private String soundName;  // ID of hardcoded sound event (<a rel="nofollow" class="external text" href="https://pokechu22.github.io/Burger/1.15.2.html#sounds">events</a> as of 1.15.2)
+    private float range;  // ID of hardcoded sound event (<a rel="nofollow" class="external text" href="https://pokechu22.github.io/Burger/1.15.2.html#sounds">events</a> as of 1.15.2)
     private int soundCategory;  // The category that this sound will be played from (<a rel="nofollow" class="external text" href="https://gist.github.com/konwboj/7c0c380d3923443e9d55">current categories</a>)
     private int entityID;
     private double volume;  // 1.0 is 100%, capped between 0.0 and 1.0 by Notchian clients
     private double pitch;  // Float between 0.5 and 2.0 by Notchian clients
+    private long seed;  // Float between 0.5 and 2.0 by Notchian clients
 
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         soundID = dis.readVarInt();
+        if(soundID == 0) {
+            soundName = dis.readString();
+            boolean fixedRange = dis.readBoolean();
+            if(fixedRange) {
+                range = dis.readFloat();
+            }
+        }
         soundCategory = dis.readVarInt();
         entityID = dis.readVarInt();
         volume = dis.readFloat();
         pitch = dis.readFloat();
+        seed = dis.readLong();
     }
 
     @Override
@@ -38,4 +49,3 @@ public class Packet61EntitySoundEffect implements ClientBoundPacket {
     }
 
 }
-Refactored ancestor. Review data strcuture

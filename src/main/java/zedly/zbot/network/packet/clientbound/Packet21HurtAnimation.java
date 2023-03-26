@@ -16,21 +16,19 @@ import zedly.zbot.network.ExtendedDataInputStream;
 public class Packet21HurtAnimation implements ClientBoundPacket {
 
     private int entityID;  // Player ID
-    private int animation;  // Animation ID (see below)
+    private float bobDirectionYaw;  // Animation ID (see below)
 
     @Override
     public void readPacket(ExtendedDataInputStream dis, int packetLen) throws IOException {
         entityID = dis.readVarInt();
-        animation = dis.readUnsignedByte();
+        bobDirectionYaw = dis.readFloat();
     }
 
     @Override
     public void process(GameContext context) {
         Entity ent = context.getSelf().getEnvironment().getEntityById(entityID);
         if (ent != null) {
-            context.getEventDispatcher().dispatchEvent(new EntityAnimationEvent(ent, animation));
+            //context.getEventDispatcher().dispatchEvent(new EntityAnimationEvent(ent, animation));
         }
     }
-
 }
-Refactored ancestor. Review data strcuture

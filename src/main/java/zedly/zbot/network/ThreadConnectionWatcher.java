@@ -55,7 +55,7 @@ public class ThreadConnectionWatcher extends Thread {
                 PacketInputStream dis = new PacketInputStream(is, StreamState.LOGIN);
                 PacketOutputStream dos = new PacketOutputStream(os, StreamState.LOGIN);
 
-                Packet00Handshake pack = new Packet00Handshake(578, serverIP, serverPort, 2);
+                Packet00Handshake pack = new Packet00Handshake(758, serverIP, serverPort, 2);
                 Packet00LoginStart loginStart = new Packet00LoginStart(session.getActualUsername());
 
                 dos.writePacket(pack);
@@ -65,8 +65,7 @@ public class ThreadConnectionWatcher extends Thread {
                     try {
                         ClientBoundPacket p = dis.readPacket();
                         if (p instanceof Packet01EncryptionRequest) {
-                            System.out.print("\rLogging in.. [##  ]");
-                            System.out.println("Exchanging keys...");
+                            System.out.println("\rExchanging keys...\n");
                             Packet01EncryptionRequest encReq = (Packet01EncryptionRequest) p;
                             System.out.println("Server Public Key " + Util.bytesToHex((encReq.getPublicKey())));
                             PublicKey publicKey = CryptManager.decodePublicKey(encReq.getPublicKey());
@@ -134,6 +133,7 @@ public class ThreadConnectionWatcher extends Thread {
                 sleep(10000);
             } catch (Exception ex) {
                 System.err.println("Disconnected from " + serverIP + "! " + ex.getClass() + ": " + ex.getMessage());
+                ex.printStackTrace();
                 try {
                     sleep(10000);
                 } catch (InterruptedException ex2) {

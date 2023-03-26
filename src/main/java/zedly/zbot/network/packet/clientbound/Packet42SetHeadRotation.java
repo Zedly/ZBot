@@ -35,9 +35,9 @@ public class Packet42SetHeadRotation implements ClientBoundPacket {
         CraftEntity ent = context.getSelf().getEnvironment().getEntityById(entityID);
         if (ent != null) {
             Location oloc = ent.getLocation();
-            Location loc = new Location(oloc.getX(), oloc.getY(), oloc.getZ(), yaw, pitch);
+            Location loc = new Location(oloc.getX(), oloc.getY(), oloc.getZ(), headYaw, oloc.getPitch());
             context.getMainThread().fireEvent(new EntityMoveEvent(ent, oloc, loc));
             ent.setLocation(loc);
-        }    }
-
+        }
+    }
 }
